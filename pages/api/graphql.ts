@@ -10,7 +10,7 @@ import { permissions } from '../../utils/api/permissions';
 
 const cors = Cors();
 
-const schema = applyMiddleware(makeExecutableSchema({ typeDefs, resolvers }), ...[permissions]);
+const schema = applyMiddleware(makeExecutableSchema({ typeDefs, resolvers }), permissions);
 
 export const config = {
   api: {

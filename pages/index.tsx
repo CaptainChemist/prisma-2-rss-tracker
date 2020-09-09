@@ -1,6 +1,8 @@
 import Link from 'next/link';
 import { FeedList } from '../components/feedList';
+import { BundleList } from '../components/bundleList';
 import { NewFeed } from '../components/newFeed';
+import { NewBundle } from '../components/newBundle';
 
 const Index = () => {
   return (
@@ -14,6 +16,8 @@ const Index = () => {
       </Link>
       <FeedList />
       <NewFeed />
+      <BundleList />
+      <NewBundle />
     </div>
   );
 };

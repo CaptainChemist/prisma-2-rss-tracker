@@ -12,6 +12,7 @@ export const typeDefs = gql`
   }
   type Bundle {
     id: Int
+    name: String
     feeds: [Feed]
     author: User
     tags: [BundleTag]
@@ -59,9 +60,14 @@ export const typeDefs = gql`
   input BundleCreateInput {
     name: String
     tags: NestedBundleTagCreateInput
+    feeds: NestedBundleFeedCreateInput
   }
   input NestedBundleTagCreateInput {
     create: [BundleTagCreateInput]
+    connect: [Int]
+  }
+  input NestedBundleFeedCreateInput {
+    create: [FeedCreateInput]
     connect: [Int]
   }
   input SavedArticleCreateInput {

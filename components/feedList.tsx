@@ -4,6 +4,10 @@ const FEEDS_QUERY = gql`
   query {
     feeds {
       id
+      name
+      tags {
+        id
+      }
     }
   }
 `;
@@ -21,8 +25,9 @@ export const FeedList = () => {
 
   return (
     <>
+      <p> Feeds:</p>
       {data.feeds.map(oneFeed => (
-        <p key={oneFeed.id}>{oneFeed.id}</p>
+        <p key={oneFeed.id}>{JSON.stringify(oneFeed)}</p>
       ))}
     </>
   );
