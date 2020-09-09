@@ -1,0 +1,59 @@
+datasource db {
+  provider = "postgres"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Feed {
+  id       Int       @id @default(autoincrement())
+  name     String
+  url      String
+  bundles  Bundle[]
+  author   User?     @relation(name: "FeedAuthor", fields: [authorId], references: [id])
+  authorId Int?
+  tags     FeedTag[]
+  likes    User[]    @relation(name: "FeedUserLikes")
+}
+
+model Bundle {
+  id       Int         @id @default(autoincrement())
+  feeds    Feed[]
+  name     String
+  author   User?       @relation(name: "BundleAuthor", fields: [authorId], references: [id])
+  authorId Int?
+  tags     BundleTag[]
+  likes    User[]      @relation(name: "BundleUserLikes")
+}
+
+model User {
+  id            Int            @id @default(autoincrement())
+  auth0         String         @unique
+  bundles       Bundle[]       @relation("BundleAuthor")
+  feeds         Feed[]         @relation("FeedAuthor")
+  savedArticles SavedArticle[]
+  feedLikes     Feed[]         @relation(name: "FeedUserLikes")
+  bundleLikes   Bundle[]       @relation(name: "BundleUserLikes")
+
+}
+
+model SavedArticle {
+  id       Int    @id @default(autoincrement())
+  author   User?  @relation(fields: [authorId], references: [id])
+  url      String
+  authorId Int?
+}
+
+model BundleTag {
+  id      Int      @id @default(autoincrement())
+  name    String   @unique
+  bundles Bundle[]
+}
+
+model FeedTag {
+  id    Int    @id @default(autoincrement())
+  name  String @unique
+  feeds Feed[]
+}
