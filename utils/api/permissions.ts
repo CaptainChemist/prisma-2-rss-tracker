@@ -7,7 +7,7 @@ const rules = {
   }),
   // not working yet
   // isOwner: rule()((_parent, _args, context) => {
-  //   return _.isEmpty(context.user) ? false : true;
+  //   return context.user.auth0 ===
   // })
 };
 

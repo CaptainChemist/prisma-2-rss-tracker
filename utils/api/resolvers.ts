@@ -28,30 +28,34 @@ export const resolvers = {
     },
   },
   Query: {
-    feeds: (parent, args, context) => context.prisma.feed.findMany(),
+    feeds: (parent, args, { prisma }) => prisma.feed.findMany(),
     // need to only return public and private by the current user
-    bundles: (parent, args, context) => context.prisma.bundle.findMany(),
+    bundles: (parent, args, { prisma }) => prisma.bundle.findMany(),
     //need to only return those by current user
-    savedArticles: (parent, args, context) => context.prisma.savedArticle.findMany(),
+    savedArticles: (parent, args, { prisma }) => prisma.savedArticle.findMany(),
     // hardcoding auth0 user return
-    me: (parent, args, context) => context.prisma.user.findOne({ where: { auth0: '1' } }),
+    me: (parent, args, { prisma, user: { id } }) => prisma.user.findOne({ where: { id } }),
   },
   Mutation: {
-    createFeed: async (parent, { data }, context) => {
+    createFeed: async (parent, { data }, { prisma, user }) => {
       console.log(data);
-      const result = await context.prisma.feed.create({ data });
+      const author = { author: user.id };
+      const result = await prisma.feed.create({ data, ...author });
       console.log('result');
       console.log(result);
       return result;
     },
-    createBundle: async (parent, { data }, context) => {
+    createBundle: async (parent, { data }, { prisma, user }) => {
       console.log(data);
-      const result = await context.prisma.bundle.create({ data });
+      const author = { author: user.id };
+      const result = await prisma.bundle.create({ data, ...author });
       console.log('result');
       console.log(result);
       return result;
     },
-    createSavedArticle: (parent, { data }, context) => context.prisma.savedArticle.create({ data }),
-    createUser: (parent, { data }, context) => context.prisma.user.create({ data }),
+    createSavedArticle: (parent, { data }, { prisma, user }) => {
+      const author = { author: user.id };
+      return prisma.savedArticle.create({ data, author });
+    },
   },
 };
