@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { FeedList } from '../components/feedList';
+import { NewFeed } from '../components/newFeed';
 
 const Index = () => {
   return (
@@ -12,6 +13,7 @@ const Index = () => {
         <button>Login</button>
       </Link>
       <FeedList />
+      <NewFeed />
     </div>
   );
 };
