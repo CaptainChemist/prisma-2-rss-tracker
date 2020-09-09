@@ -1,0 +1,21 @@
+import { rule, shield } from 'graphql-shield';
+import * as _ from 'lodash';
+
+const rules = {
+  isAuthenticated: rule()(async (_parent, _args, context) => {
+    return _.isEmpty(context.user) ? false : true;
+  }),
+  // not working yet
+  // isOwner: rule()((_parent, _args, context) => {
+  //   return _.isEmpty(context.user) ? false : true;
+  // })
+};
+
+export const permissions = shield({
+  Query: {
+    feeds: rules.isAuthenticated,
+  },
+  Mutation: {
+    createFeed: rules.isAuthenticated,
+  },
+});
