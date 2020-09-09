@@ -8,6 +8,9 @@ const FEEDS_QUERY = gql`
       tags {
         id
       }
+      author {
+        id
+      }
     }
   }
 `;

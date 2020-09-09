@@ -35,12 +35,12 @@ export const typeDefs = gql`
   type BundleTag {
     id: Int
     name: String
-    bundle: Bundle
+    bundles: [Bundle]
   }
   type FeedTag {
     id: Int
     name: String
-    feed: Feed
+    feeds: [Feed]
   }
   input FeedCreateInput {
     url: String
@@ -49,7 +49,7 @@ export const typeDefs = gql`
   }
   input NestedFeedTagCreateInput {
     create: [FeedTagCreateInput]
-    connect: [Int]
+    connect: [FeedTagWhereUniqueInput]
   }
   input FeedTagCreateInput {
     name: String
@@ -62,13 +62,26 @@ export const typeDefs = gql`
     tags: NestedBundleTagCreateInput
     feeds: NestedBundleFeedCreateInput
   }
+
   input NestedBundleTagCreateInput {
     create: [BundleTagCreateInput]
-    connect: [Int]
+    connect: [BundleTagWhereUniqueInput]
   }
   input NestedBundleFeedCreateInput {
     create: [FeedCreateInput]
-    connect: [Int]
+    connect: [FeedWhereUniqueInput]
+  }
+  input FeedTagWhereUniqueInput {
+    id: Int
+    name: String
+  }
+  input BundleTagWhereUniqueInput {
+    id: Int
+    name: String
+  }
+  input FeedWhereUniqueInput {
+    id: Int
+    url: String
   }
   input SavedArticleCreateInput {
     url: String
@@ -82,6 +95,8 @@ export const typeDefs = gql`
     bundles: [Bundle]
     savedArticles: [SavedArticle]
     me: [User]
+    feedTags: [FeedTag]
+    bundleTags: [BundleTag]
   }
   type Mutation {
     createFeed(data: FeedCreateInput): Feed

@@ -2,8 +2,12 @@ import { useMutation, gql } from '@apollo/client';
 
 const CREATE_BUNDLE = gql`
   mutation {
-    createBundle(data: { name: "hi" }) {
+    createBundle(data: { name: "hi", tags: { connect: [{ id: 18 }, { id: 19 }] }, feeds: { connect: [{ id: 9 }, { id: 11 }] } }) {
       id
+      tags {
+        id
+        name
+      }
     }
   }
 `;

@@ -1,6 +1,6 @@
 const createFieldResolver = (modelName, parName) => ({
-  [parName]: async ({ id }, args, context) => {
-    const modelResponse = await context.prisma[modelName].findOne({ where: { id }, include: { [parName]: true } });
+  [parName]: async ({ id }, args, { prisma }) => {
+    const modelResponse = await prisma[modelName].findOne({ where: { id }, include: { [parName]: true } });
     return modelResponse[parName];
   },
 });
@@ -21,14 +21,21 @@ export const resolvers = {
   SavedArticle: {
     ...createFieldResolver('savedArticle', 'author'),
   },
+  BundleTag: {
+    ...createFieldResolver('bundleTag', 'bundles'),
+  },
+  FeedTag: {
+    ...createFieldResolver('feedTag', 'feeds'),
+  },
   Query: {
     feeds: (parent, args, { prisma }) => prisma.feed.findMany(),
     // need to only return public and private by the current user
     bundles: (parent, args, { prisma }) => prisma.bundle.findMany(),
     //need to only return those by current user
     savedArticles: (parent, args, { prisma }) => prisma.savedArticle.findMany(),
-    // hardcoding auth0 user return
     me: (parent, args, { prisma, user: { id } }) => prisma.user.findOne({ where: { id } }),
+    feedTags: (parent, args, { prisma }) => prisma.feedTag.findMany(),
+    bundleTags: (parent, args, { prisma }) => prisma.bundleTag.findMany(),
   },
   Mutation: {
     createFeed: async (parent, { data }, { prisma, user }) => {
@@ -40,7 +47,7 @@ export const resolvers = {
       return result;
     },
     createBundle: async (parent, { data }, { prisma, user }) => {
-      console.log(data);
+      console.log(JSON.stringify(data));
       const author = { author: { connect: { id: user.id } } };
       const result = await prisma.bundle.create({ data: { ...data, ...author } });
       console.log('result');

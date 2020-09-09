@@ -12,6 +12,7 @@ const BUNDLES_QUERY = gql`
       }
       tags {
         id
+        name
       }
       author {
         id

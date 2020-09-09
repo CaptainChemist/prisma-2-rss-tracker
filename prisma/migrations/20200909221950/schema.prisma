@@ -1,6 +1,6 @@
 datasource db {
   provider = "postgres"
-  url      = env("DATABASE_URL")
+  url = "***"
 }
 
 generator client {
@@ -10,7 +10,7 @@ generator client {
 model Feed {
   id       Int       @id @default(autoincrement())
   name     String
-  url      String    @unique
+  url      String
   bundles  Bundle[]
   author   User?     @relation(name: "FeedAuthor", fields: [authorId], references: [id])
   authorId Int?
