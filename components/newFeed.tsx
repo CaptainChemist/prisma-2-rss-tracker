@@ -2,7 +2,13 @@ import { useMutation, gql } from '@apollo/client';
 
 const CREATE_FEED = gql`
   mutation {
-    createFeed(data: { name: "hi", url: "bla2", tags: { create: [{ name: "bla5" }, { name: "bla6" }] } }) {
+    createFeed(
+      data: {
+        name: "NY Times"
+        url: "https://archive.nytimes.com/www.nytimes.com/services/xml/rss/index.html"
+        tags: { create: [{ name: "News" }, { name: "New York" }] }
+      }
+    ) {
       id
     }
   }
