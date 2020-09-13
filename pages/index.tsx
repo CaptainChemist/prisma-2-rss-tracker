@@ -1,12 +1,13 @@
-import Link from 'next/link';
-import { FeedList } from '../components/feedList';
-import { BundleList } from '../components/bundleList';
-import { NewFeed } from '../components/newFeed';
-import { NewBundle } from '../components/newBundle';
+import Link from "next/link";
+import { FeedList } from "../components/feedList";
+import { BundleList } from "../components/bundleList";
+import { NewFeed } from "../components/newFeed";
+import { NewBundle } from "../components/newBundle";
+import { Layout } from "../components/layout";
 
 const Index = () => {
   return (
-    <div>
+    <Layout>
       <p>Index Page</p>
       <Link href="/api/logout">
         <button>Logout</button>
@@ -18,7 +19,7 @@ const Index = () => {
       <NewFeed />
       <BundleList />
       <NewBundle />
-    </div>
+    </Layout>
   );
 };
 export default Index;
