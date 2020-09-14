@@ -1,10 +1,15 @@
 import { gql, useQuery, NetworkStatus } from '@apollo/client';
+import { BundleListItem } from './bundleListItem';
 
 const BUNDLES_QUERY = gql`
   query {
     bundles {
       id
       name
+      likes {
+        id
+        auth0
+      }
       feeds {
         id
         name
@@ -16,6 +21,8 @@ const BUNDLES_QUERY = gql`
       }
       author {
         id
+        auth0
+        nickname
       }
     }
   }
@@ -35,8 +42,8 @@ export const BundleList = () => {
   return (
     <>
       <p> Bundles:</p>
-      {data.bundles.map(oneBundle => (
-        <p key={oneBundle.id}>{JSON.stringify(oneBundle)}</p>
+      {data.bundles.map((oneBundle) => (
+        <BundleListItem key={oneBundle.id} bundle={oneBundle} />
       ))}
     </>
   );

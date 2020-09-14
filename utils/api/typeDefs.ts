@@ -21,6 +21,8 @@ export const typeDefs = gql`
   type User {
     id: Int
     auth0: String
+    nickname: String
+    picture: String
     bundles: [Bundle]
     feeds: [Feed]
     savedArticles: [SavedArticle]
@@ -89,6 +91,14 @@ export const typeDefs = gql`
   input UserCreateInput {
     auth0: String
   }
+  input LikeBundleInput {
+    bundleId: Int
+    likeState: Boolean
+  }
+  input LikeFeedInput {
+    feedId: Int
+    likeState: Boolean
+  }
 
   type Query {
     feeds: [Feed]
@@ -103,5 +113,7 @@ export const typeDefs = gql`
     createBundle(data: BundleCreateInput): Bundle
     createSavedArticle(data: SavedArticleCreateInput): SavedArticle
     createUser(data: UserCreateInput): User
+    likeBundle(data: LikeBundleInput): Bundle
+    likeFeed(data: LikeFeedInput): Feed
   }
 `;
