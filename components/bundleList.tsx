@@ -23,6 +23,7 @@ const BUNDLES_QUERY = gql`
         id
         auth0
         nickname
+        picture
       }
     }
   }
@@ -42,9 +43,11 @@ export const BundleList = () => {
   return (
     <>
       <p> Bundles:</p>
-      {data.bundles.map((oneBundle) => (
-        <BundleListItem key={oneBundle.id} bundle={oneBundle} />
-      ))}
+      <div className="grid grid-cols-3 gap-4">
+        {data.bundles.map(oneBundle => (
+          <BundleListItem key={oneBundle.id} bundle={oneBundle} />
+        ))}
+      </div>
     </>
   );
 };
