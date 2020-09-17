@@ -1,5 +1,6 @@
 import { useMutation, gql } from '@apollo/client';
 import { useFetchUser } from '../utils/user';
+import React from 'react';
 
 const LIKE_FEED_MUTATION = gql`
   mutation likeFeedMutation($data: LikeFeedInput) {
@@ -37,7 +38,8 @@ export const FeedLike = ({ feed }) => {
 
   return (
     <div
-      onClick={() =>
+      onClick={e => {
+        e.stopPropagation();
         likeFeedMutation({
           variables: {
             data: {
@@ -45,8 +47,8 @@ export const FeedLike = ({ feed }) => {
               likeState: hasMatch ? false : true,
             },
           },
-        })
-      }
+        });
+      }}
       className="flex col-span-1 py-2 mx-2 z-10"
     >
       <p>{feed.likes.length} </p>

@@ -37,7 +37,8 @@ export const BundleLike = ({ bundle }) => {
 
   return (
     <div
-      onClick={() =>
+      onClick={e => {
+        e.stopPropagation();
         likeBundleMutation({
           variables: {
             data: {
@@ -45,8 +46,8 @@ export const BundleLike = ({ bundle }) => {
               likeState: hasMatch ? false : true,
             },
           },
-        })
-      }
+        });
+      }}
       className="flex col-span-1 py-2 mx-2 z-10"
     >
       <p>{bundle.likes.length} </p>
