@@ -1,5 +1,5 @@
-import { gql, useQuery, NetworkStatus } from '@apollo/client';
-import { BundleListItem } from './bundleListItem';
+import { gql, useQuery } from '@apollo/client';
+import { ListItem } from './listItem';
 
 const BUNDLES_QUERY = gql`
   query {
@@ -45,7 +45,7 @@ export const BundleList = () => {
       <p> Bundles:</p>
       <div className="grid grid-cols-3 gap-4">
         {data.bundles.map(oneBundle => (
-          <BundleListItem key={oneBundle.id} bundle={oneBundle} />
+          <ListItem item={oneBundle} type={'BUNDLE'} key={oneBundle.id} />
         ))}
       </div>
     </>

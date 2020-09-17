@@ -47,7 +47,7 @@ export const FeedLike = ({ feed }) => {
           },
         })
       }
-      className="flex col-span-1 py-2 mx-2"
+      className="flex col-span-1 py-2 mx-2 z-10"
     >
       <p>{feed.likes.length} </p>
       {likeFeedLoading || loading ? (
