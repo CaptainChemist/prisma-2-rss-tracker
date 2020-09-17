@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { FeedList } from '../components/feedList';
 import { BundleList } from '../components/bundleList';
 import { NewFeed } from '../components/newFeed';
@@ -7,11 +8,9 @@ import { Layout } from '../components/layout';
 const Index = () => {
   return (
     <Layout>
-      <p>Index Page</p>
+      <p>Feed Page</p>
       <FeedList />
       <NewFeed />
-      <BundleList />
-      <NewBundle />
     </Layout>
   );
 };

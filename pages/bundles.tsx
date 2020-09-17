@@ -7,9 +7,7 @@ import { Layout } from '../components/layout';
 const Index = () => {
   return (
     <Layout>
-      <p>Index Page</p>
-      <FeedList />
-      <NewFeed />
+      <p>Bundles Page</p>
       <BundleList />
       <NewBundle />
     </Layout>
