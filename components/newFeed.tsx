@@ -1,5 +1,6 @@
 import { useMutation, gql } from '@apollo/client';
 import { useState } from 'react';
+import { SearchFeedTags } from './searchFeedTags';
 
 const CREATE_FEED = gql`
   mutation createFeedMutation($data: FeedCreateInput) {
@@ -10,7 +11,7 @@ const CREATE_FEED = gql`
 `;
 
 export const NewFeed = () => {
-  const [currentFeed, setFeed] = useState({ name: '', url: '' });
+  const [currentFeed, setFeed] = useState({ name: '', url: '', tags: [] });
   const [createFeedMutation, { loading }] = useMutation(CREATE_FEED);
 
   if (loading) {
@@ -23,7 +24,7 @@ export const NewFeed = () => {
         onSubmit={e => {
           e.preventDefault();
           createFeedMutation({ variables: { data: currentFeed } });
-          setFeed({ name: '', url: '' });
+          setFeed({ name: '', url: '', tags: [] });
         }}
       >
         <label className="block">Name:</label>
@@ -44,6 +45,8 @@ export const NewFeed = () => {
             setFeed(curr => ({ ...curr, url: e.target.value }));
           }}
         />
+        <label className="block">Tags:</label>
+        <SearchFeedTags />
         <input className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" type="submit" />
       </form>
     </>
