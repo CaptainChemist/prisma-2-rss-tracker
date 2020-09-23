@@ -1,5 +1,7 @@
-import { useState } from 'react';
+import { Dispatch, SetStateAction, useState } from 'react';
 import { gql, useLazyQuery } from '@apollo/client';
+import { ActionType, OneTag, TagType } from './oneTag';
+import { FeedState } from './newFeed';
 
 const FIND_FEED_TAGS = gql`
   query findFeedTagsQuery($data: FindFeedTagsInput) {
@@ -10,11 +12,17 @@ const FIND_FEED_TAGS = gql`
   }
 `;
 
-export const SearchFeedTags = () => {
+export const SearchFeedTags = ({ currentFeed, setFeed }: { currentFeed: FeedState; setFeed: Dispatch<SetStateAction<FeedState>> }) => {
   const [search, setSearch] = useState('');
   const [findFeedTagsQuery, { loading, data, called }] = useLazyQuery(FIND_FEED_TAGS);
 
   const { findFeedTags } = data || {};
+  const filtFindFeedTags = findFeedTags ? findFeedTags.filter(oneTag => !currentFeed.tags.map(o => o.name).includes(oneTag.name)) : [];
+
+  const matchCurrent = filtFindFeedTags.filter(o => o.name === search);
+  const matchList = currentFeed.tags.filter(o => o.name === search);
+  const filtFindFeedTagsWithAdd =
+    matchCurrent.length === 0 && matchList.length === 0 ? [...filtFindFeedTags, { name: search }] : filtFindFeedTags;
 
   return (
     <div className="">
@@ -53,12 +61,22 @@ export const SearchFeedTags = () => {
           }}
         />
       </div>
-
-      {findFeedTags && findFeedTags.length > 0 ? (
-        findFeedTags.map(oneTag => <p key={oneTag.id}>{oneTag.name}</p>)
-      ) : called ? (
-        <p>No feeds found</p>
-      ) : null}
+      <div className="grid grid-cols-4 gap-1 flex m-2">
+        {search !== '' ? (
+          filtFindFeedTagsWithAdd.map(oneTag => (
+            <OneTag
+              key={oneTag.name}
+              tag={oneTag}
+              action={ActionType.ADD}
+              type={TagType.FeedTag}
+              setFeed={setFeed}
+              currentFeed={currentFeed}
+            />
+          ))
+        ) : called ? (
+          <p>No feeds found</p>
+        ) : null}
+      </div>
     </div>
   );
 };

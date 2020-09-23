@@ -17,7 +17,7 @@ export const ListItem = ({ item, type }) => {
 
         <div className="col-span-6 py-2">
           <h3>Tags</h3>
-          <div className="space-x-2 space-y-2">
+          <div className="grid grid-cols-4 gap-1">
             {item.tags.map(oneTag => (
               <span className="text-sm my-2 py-1 px-2 rounded align-middle bg-blue-100" key={oneTag.id}>
                 {oneTag.name}
@@ -27,7 +27,7 @@ export const ListItem = ({ item, type }) => {
         </div>
         <div className="col-span-6 py-2">
           <h3>{isFeed ? 'Bundles' : 'Feeds'}</h3>
-          <div className="space-x-2 space-y-2">
+          <div className="grid grid-cols-4 gap-1">
             {item[isFeed ? 'bundles' : 'feeds'].map(oneFeed => (
               <span className={`text-sm my-2 py-1 px-2 rounded align-middle bg-${isFeed ? 'purple' : 'green'}-100`} key={oneFeed.id}>
                 {oneFeed.name}

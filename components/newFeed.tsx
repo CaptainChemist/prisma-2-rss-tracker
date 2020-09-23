@@ -10,8 +10,14 @@ const CREATE_FEED = gql`
   }
 `;
 
+export type FeedState = {
+  name: string;
+  url: string;
+  tags: { name: string }[];
+};
+
 export const NewFeed = () => {
-  const [currentFeed, setFeed] = useState({ name: '', url: '', tags: [] });
+  const [currentFeed, setFeed] = useState<FeedState>({ name: '', url: '', tags: [] });
   const [createFeedMutation, { loading }] = useMutation(CREATE_FEED);
 
   if (loading) {
@@ -58,7 +64,32 @@ export const NewFeed = () => {
           <div className="col-span-6 py-4">
             <div className="py-2">
               <label className="block py-4">Tags:</label>
-              <SearchFeedTags />
+              <div className="grid grid-cols-4 gap-1">
+                {currentFeed.tags.map(oneTag => (
+                  <span
+                    className={`flex text-sm my-2 py-1 px-2 rounded align-middle bg-${true ? 'purple' : 'green'}-100`}
+                    key={oneTag.name}
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      className={`h-5 w-5 text-gray-500`}
+                      onClick={() => {
+                        setFeed(feed => ({ ...feed, tags: feed.tags.filter(o => oneTag.name !== o.name) }));
+                      }}
+                    >
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4" />
+                    </svg>
+                    {oneTag.name}
+                  </span>
+                ))}
+              </div>
+            </div>
+            <div className="py-2">
+              <label className="block py-4">Add New Tag:</label>
+              <SearchFeedTags setFeed={setFeed} currentFeed={currentFeed} />
             </div>
           </div>
         </div>
