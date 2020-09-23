@@ -6,6 +6,7 @@ const LIKE_BUNDLE_MUTATION = gql`
     likeBundle(data: $data) {
       id
       name
+      description
       likes {
         id
         auth0

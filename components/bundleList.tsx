@@ -6,6 +6,7 @@ const BUNDLES_QUERY = gql`
     bundles {
       id
       name
+      description
       likes {
         id
         auth0

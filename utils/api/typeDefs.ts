@@ -13,6 +13,7 @@ export const typeDefs = gql`
   type Bundle {
     id: Int
     name: String
+    description: String
     feeds: [Feed]
     author: User
     tags: [BundleTag]
@@ -61,6 +62,7 @@ export const typeDefs = gql`
   }
   input BundleCreateInput {
     name: String
+    description: String
     tags: NestedBundleTagCreateInput
     feeds: NestedBundleFeedCreateInput
   }

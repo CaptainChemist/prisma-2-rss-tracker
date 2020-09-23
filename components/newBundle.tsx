@@ -5,6 +5,7 @@ const CREATE_BUNDLE = gql`
   mutation createBundleMutation($data: BundleCreateInput) {
     createBundle(data: $data) {
       id
+      description
       tags {
         id
         name
@@ -14,7 +15,7 @@ const CREATE_BUNDLE = gql`
 `;
 
 export const NewBundle = () => {
-  const [currentBundle, setBundle] = useState({ name: '' });
+  const [currentBundle, setBundle] = useState({ name: '', description: '' });
   const [createBundleMutation, { loading }] = useMutation(CREATE_BUNDLE);
 
   if (loading) {
@@ -27,7 +28,7 @@ export const NewBundle = () => {
         onSubmit={e => {
           e.preventDefault();
           createBundleMutation({ variables: { data: currentBundle } });
-          setBundle({ name: '' });
+          setBundle({ name: '', description: '' });
         }}
       >
         <label className="block">Name:</label>
@@ -36,7 +37,16 @@ export const NewBundle = () => {
           value={currentBundle.name}
           onChange={e => {
             e.persist();
-            setBundle({ name: e.target.value });
+            setBundle(currentState => ({ ...currentState, name: e.target.value }));
+          }}
+        />
+        <label className="block">Description:</label>
+        <input
+          className="shadow rounded w-full py-2 px-3"
+          value={currentBundle.description}
+          onChange={e => {
+            e.persist();
+            setBundle(currentState => ({ ...currentState, description: e.target.value }));
           }}
         />
         <input type="submit" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" />

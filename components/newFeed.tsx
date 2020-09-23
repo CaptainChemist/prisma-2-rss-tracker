@@ -13,7 +13,7 @@ const CREATE_FEED = gql`
 export type FeedState = {
   name: string;
   url: string;
-  tags: { name: string }[];
+  tags: { name: string; id: number }[];
 };
 
 export const NewFeed = () => {
@@ -29,7 +29,11 @@ export const NewFeed = () => {
       <form
         onSubmit={e => {
           e.preventDefault();
-          createFeedMutation({ variables: { data: currentFeed } });
+          const connect = currentFeed.tags.map(({ id }) => ({ id })).filter(({ id }) => id !== undefined);
+          const create = currentFeed.tags.filter(({ id }) => id === undefined);
+          const data = { ...currentFeed, tags: { connect, create } };
+
+          createFeedMutation({ variables: { data } });
           setFeed({ name: '', url: '', tags: [] });
         }}
       >
