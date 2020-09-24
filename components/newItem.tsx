@@ -1,6 +1,6 @@
 import { useMutation } from '@apollo/client';
 import { useState } from 'react';
-import { CREATE_BUNDLE, CREATE_FEED } from '../utils/graphql';
+import { CREATE_BUNDLE, CREATE_FEED, BUNDLES_QUERY, FEEDS_QUERY } from '../utils/graphql';
 import { ActionType, BundleState, FeedState, ItemType, TagType } from '../utils/types';
 import { GenerateInputField } from './generateInputField';
 import { OneTag } from './oneTag';
@@ -25,9 +25,12 @@ export const NewItem = ({ type }: { type: ItemType }) => {
           e.preventDefault();
           const connect = currentItem.tags.map(({ id }) => ({ id })).filter(({ id }) => id !== undefined);
           const create = currentItem.tags.filter(({ id }) => id === undefined);
-          const data = { ...currentItem, tags: { connect, create }, feeds: { connect: [{ id: 46 }, { id: 47 }] } };
+          const data = { ...currentItem, tags: { connect, create } };
 
-          createItemMutation({ variables: { data } });
+          createItemMutation({
+            refetchQueries: [{ query: isFeed ? FEEDS_QUERY : BUNDLES_QUERY }],
+            variables: { data },
+          });
           setItem(initialState);
         }}
       >
@@ -51,7 +54,7 @@ export const NewItem = ({ type }: { type: ItemType }) => {
             </div>
             <div className="py-2">
               <label className="block py-4">Add New Tag:</label>
-              <SearchTags type={TagType.FeedTag} setItem={setItem} currentItem={currentItem} />
+              <SearchTags type={isFeed ? TagType.FeedTag : TagType.BundleTag} setItem={setItem} currentItem={currentItem} />
             </div>
           </div>
         </div>

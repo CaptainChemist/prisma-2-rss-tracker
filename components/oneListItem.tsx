@@ -7,7 +7,7 @@ import { ActionType, BundleObject, FeedObject, ItemType } from '../utils/types';
 export const OneListItem = ({ item, type }: { type: ItemType; item: FeedObject | BundleObject }) => {
   const isFeed = type === ItemType.FeedType;
   const childItem = item[isFeed ? 'bundles' : 'feeds'];
-  console.log(item);
+
   return (
     <Link href={`/bundle/${item.id}`}>
       <div className={`grid grid-cols-6 rounded py-2 px-2 border-2 bg-${isFeed ? 'green' : 'purple'}-100`}>
