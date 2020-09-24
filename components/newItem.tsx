@@ -25,7 +25,7 @@ export const NewItem = ({ type }: { type: ItemType }) => {
           e.preventDefault();
           const connect = currentItem.tags.map(({ id }) => ({ id })).filter(({ id }) => id !== undefined);
           const create = currentItem.tags.filter(({ id }) => id === undefined);
-          const data = { ...currentItem, tags: { connect, create } };
+          const data = { ...currentItem, tags: { connect, create }, feeds: { connect: [{ id: 46 }, { id: 47 }] } };
 
           createItemMutation({ variables: { data } });
           setItem(initialState);

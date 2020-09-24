@@ -16,15 +16,17 @@ export const ItemLike = ({ item, type }: { item: FeedObject | BundleObject; type
     <div
       onClick={e => {
         e.stopPropagation();
-        const idObj = isFeed ? { feedId: item.id } : { bundleId: item.id };
-        likeItemMutation({
-          variables: {
-            data: {
-              ...idObj,
-              likeState: hasMatch ? false : true,
+        if (user) {
+          const idObj = isFeed ? { feedId: item.id } : { bundleId: item.id };
+          likeItemMutation({
+            variables: {
+              data: {
+                ...idObj,
+                likeState: hasMatch ? false : true,
+              },
             },
-          },
-        });
+          });
+        }
       }}
       className="flex col-span-1 py-2 mx-2 z-10"
     >

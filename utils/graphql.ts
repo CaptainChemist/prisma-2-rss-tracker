@@ -110,6 +110,7 @@ export const FEEDS_QUERY = gql`
     feeds {
       id
       name
+      url
       likes {
         id
         auth0

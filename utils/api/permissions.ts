@@ -3,8 +3,6 @@ import * as _ from 'lodash';
 
 const rules = {
   isAuthenticated: rule()(async (_parent, _args, context) => {
-    // console.log(context);
-    console.log(_.isEmpty(context.user) ? false : true);
     return _.isEmpty(context.user) ? false : true;
   }),
   // not working yet
@@ -14,10 +12,11 @@ const rules = {
 };
 
 export const permissions = shield({
-  Query: {
-    feeds: rules.isAuthenticated,
-  },
+  Query: {},
   Mutation: {
-    createFeed: rules.isAuthenticated,
+    // createFeed: rules.isAuthenticated,
+    // createBundle: rules.isAuthenticated,
+    // likeBundle: rules.isAuthenticated,
+    // likeFeed: rules.isAuthenticated,
   },
 });
