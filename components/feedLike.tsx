@@ -1,33 +1,7 @@
-import { useMutation, gql } from '@apollo/client';
+import { useMutation } from '@apollo/client';
 import { useFetchUser } from '../utils/user';
 import React from 'react';
-
-const LIKE_FEED_MUTATION = gql`
-  mutation likeFeedMutation($data: LikeFeedInput) {
-    likeFeed(data: $data) {
-      id
-      name
-      url
-      likes {
-        id
-        auth0
-      }
-      bundles {
-        id
-        name
-      }
-      tags {
-        id
-        name
-      }
-      author {
-        id
-        auth0
-        nickname
-      }
-    }
-  }
-`;
+import { LIKE_FEED_MUTATION } from '../utils/graphql';
 
 export const FeedLike = ({ feed }) => {
   const [likeFeedMutation, { loading: likeFeedLoading }] = useMutation(LIKE_FEED_MUTATION);

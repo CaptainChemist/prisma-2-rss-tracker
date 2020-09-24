@@ -1,25 +1,8 @@
-import { useMutation, gql } from '@apollo/client';
+import { useMutation } from '@apollo/client';
 import { useState } from 'react';
+import { CREATE_BUNDLE } from '../utils/graphql';
+import { BundleState } from '../utils/types';
 import { GenerateInputField } from './generateInputField';
-
-const CREATE_BUNDLE = gql`
-  mutation createBundleMutation($data: BundleCreateInput) {
-    createBundle(data: $data) {
-      id
-      description
-      tags {
-        id
-        name
-      }
-    }
-  }
-`;
-
-export type BundleState = {
-  name: string;
-  description: string;
-  tags: { name: string; id: number }[];
-};
 
 export const NewBundle = () => {
   const [currentBundle, setBundle] = useState<BundleState>({ name: '', description: '', tags: [] });

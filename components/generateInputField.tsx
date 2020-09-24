@@ -1,6 +1,5 @@
 import { Dispatch, SetStateAction } from 'react';
-import { BundleState } from './newBundle';
-import { FeedState } from './newFeed';
+import { BundleState, FeedState } from '../utils/types';
 
 export const GenerateInputField = ({
   currentItem,

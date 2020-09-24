@@ -1,28 +1,29 @@
 import { Dispatch, SetStateAction, useState } from 'react';
-import { gql, useLazyQuery } from '@apollo/client';
-import { ActionType, OneTag, TagType } from './oneTag';
-import { FeedState } from './newFeed';
+import { useLazyQuery } from '@apollo/client';
+import { OneTag } from './oneTag';
+import { ActionType, BundleState, FeedState, TagType } from '../utils/types';
+import { FIND_BUNDLE_TAGS, FIND_FEED_TAGS } from '../utils/graphql';
 
-const FIND_FEED_TAGS = gql`
-  query findFeedTagsQuery($data: FindFeedTagsInput) {
-    findFeedTags(data: $data) {
-      id
-      name
-    }
-  }
-`;
-
-export const SearchFeedTags = ({ currentFeed, setFeed }: { currentFeed: FeedState; setFeed: Dispatch<SetStateAction<FeedState>> }) => {
+export const SearchTags = ({
+  currentItem,
+  setItem,
+  type,
+}: {
+  currentItem: FeedState | BundleState;
+  setItem: Dispatch<SetStateAction<FeedState | BundleState>>;
+  type: TagType;
+}) => {
   const [search, setSearch] = useState('');
-  const [findFeedTagsQuery, { loading, data, called }] = useLazyQuery(FIND_FEED_TAGS);
+  const [findTagsQuery, { loading, data, called }] = useLazyQuery(type === TagType.FeedTag ? FIND_FEED_TAGS : FIND_BUNDLE_TAGS);
 
-  const { findFeedTags } = data || {};
-  const filtFindFeedTags = findFeedTags ? findFeedTags.filter(oneTag => !currentFeed.tags.map(o => o.name).includes(oneTag.name)) : [];
+  const { findFeedTags, findBundleTags } = data || {};
+  const currentTags = type === TagType.FeedTag ? findFeedTags : findBundleTags;
+  const filtFindTags = currentTags ? currentTags.filter(oneTag => !currentItem.tags.map(o => o.name).includes(oneTag.name)) : [];
 
-  const matchCurrent = filtFindFeedTags.filter(o => o.name === search);
-  const matchList = currentFeed.tags.filter(o => o.name === search);
+  const matchCurrent = filtFindTags.filter(o => o.name === search);
+  const matchList = currentItem.tags.filter(o => o.name === search);
   const filtFindFeedTagsWithAdd =
-    matchCurrent.length === 0 && matchList.length === 0 ? [...filtFindFeedTags, { name: search }] : filtFindFeedTags;
+    matchCurrent.length === 0 && matchList.length === 0 ? [...filtFindTags, { name: search }] : filtFindTags;
 
   return (
     <div className="">
@@ -57,21 +58,14 @@ export const SearchFeedTags = ({ currentFeed, setFeed }: { currentFeed: FeedStat
           onChange={async e => {
             e.persist();
             setSearch(() => e.target.value);
-            await findFeedTagsQuery({ variables: { data: { search: e.target.value } } });
+            await findTagsQuery({ variables: { data: { search: e.target.value } } });
           }}
         />
       </div>
       <div className="grid grid-cols-4 gap-1 flex m-2">
         {search !== '' ? (
           filtFindFeedTagsWithAdd.map(oneTag => (
-            <OneTag
-              key={oneTag.name}
-              tag={oneTag}
-              action={ActionType.ADD}
-              type={TagType.FeedTag}
-              setFeed={setFeed}
-              currentFeed={currentFeed}
-            />
+            <OneTag key={oneTag.name} tag={oneTag} action={ActionType.ADD} setItem={setItem} currentItem={currentItem} />
           ))
         ) : called ? (
           <p>No feeds found</p>

@@ -2,7 +2,8 @@ import { BundleLike } from './bundleLike';
 import { ProfilePic } from './profilePic';
 import Link from 'next/link';
 import { FeedLike } from './feedLike';
-import { ActionType, OneTag, TagType } from './oneTag';
+import { OneTag } from './oneTag';
+import { ActionType, TagType } from '../utils/types';
 
 export const ListItem = ({ item, type }: { type: TagType }) => {
   const isFeed = type === TagType.FeedTag;

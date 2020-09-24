@@ -1,35 +1,7 @@
-import { gql, useQuery } from '@apollo/client';
+import { useQuery } from '@apollo/client';
+import { BUNDLES_QUERY } from '../utils/graphql';
+import { TagType } from '../utils/types';
 import { ListItem } from './listItem';
-import { TagType } from './oneTag';
-
-const BUNDLES_QUERY = gql`
-  query {
-    bundles {
-      id
-      name
-      description
-      likes {
-        id
-        auth0
-      }
-      feeds {
-        id
-        name
-        url
-      }
-      tags {
-        id
-        name
-      }
-      author {
-        id
-        auth0
-        nickname
-        picture
-      }
-    }
-  }
-`;
 
 export const BundleList = () => {
   const { loading, error, data } = useQuery(BUNDLES_QUERY);

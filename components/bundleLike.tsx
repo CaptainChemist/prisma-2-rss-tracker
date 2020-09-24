@@ -1,33 +1,6 @@
-import { useMutation, gql } from '@apollo/client';
+import { useMutation } from '@apollo/client';
 import { useFetchUser } from '../utils/user';
-
-const LIKE_BUNDLE_MUTATION = gql`
-  mutation likeBundleMutation($data: LikeBundleInput) {
-    likeBundle(data: $data) {
-      id
-      name
-      description
-      likes {
-        id
-        auth0
-      }
-      feeds {
-        id
-        name
-        url
-      }
-      tags {
-        id
-        name
-      }
-      author {
-        id
-        auth0
-        nickname
-      }
-    }
-  }
-`;
+import { LIKE_BUNDLE_MUTATION } from '../utils/graphql';
 
 export const BundleLike = ({ bundle }) => {
   const [likeBundleMutation, { loading: likeBundleLoading }] = useMutation(LIKE_BUNDLE_MUTATION);

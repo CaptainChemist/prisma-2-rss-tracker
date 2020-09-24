@@ -1,32 +1,7 @@
-import { gql, useQuery } from '@apollo/client';
+import { useQuery } from '@apollo/client';
+import { FEEDS_QUERY } from '../utils/graphql';
+import { TagType } from '../utils/types';
 import { ListItem } from './listItem';
-import { TagType } from './oneTag';
-
-const FEEDS_QUERY = gql`
-  query {
-    feeds {
-      id
-      name
-      likes {
-        id
-        auth0
-      }
-      tags {
-        id
-        name
-      }
-      author {
-        id
-        nickname
-        picture
-      }
-      bundles {
-        id
-        name
-      }
-    }
-  }
-`;
 
 export const FeedList = () => {
   const { loading, error, data } = useQuery(FEEDS_QUERY);
