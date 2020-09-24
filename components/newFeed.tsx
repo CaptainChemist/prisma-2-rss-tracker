@@ -1,5 +1,6 @@
 import { useMutation, gql } from '@apollo/client';
 import { useState } from 'react';
+import { GenerateInputField } from './generateInputField';
 import { ActionType, OneTag, TagType } from './oneTag';
 import { SearchFeedTags } from './searchFeedTags';
 
@@ -16,20 +17,6 @@ export type FeedState = {
   url: string;
   tags: { name: string; id: number }[];
 };
-
-export const GenerateInputField = ({ currentFeed, name, changeHandler }) => (
-  <div className="py-2">
-    <label className="block py-4">{name.charAt(0).toUpperCase() + name.slice(1)}:</label>
-    <input
-      className="shadow rounded w-full py-2 px-3"
-      value={currentFeed[name]}
-      onChange={e => {
-        e.persist();
-        changeHandler(curr => ({ ...curr, [name]: e.target.value }));
-      }}
-    />
-  </div>
-);
 
 export const NewFeed = () => {
   const [currentFeed, setFeed] = useState<FeedState>({ name: '', url: '', tags: [] });
@@ -54,8 +41,8 @@ export const NewFeed = () => {
       >
         <div className="grid grid-cols-12 gap-4">
           <div className="col-span-6 py-4">
-            <GenerateInputField currentFeed={currentFeed} name={'name'} changeHandler={setFeed} />
-            <GenerateInputField currentFeed={currentFeed} name={'url'} changeHandler={setFeed} />
+            <GenerateInputField currentItem={currentFeed} name={'name'} changeHandler={setFeed} />
+            <GenerateInputField currentItem={currentFeed} name={'url'} changeHandler={setFeed} />
             <div className="py-2">
               <input className="py-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" type="submit" />
             </div>

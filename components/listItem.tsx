@@ -19,9 +19,11 @@ export const ListItem = ({ item, type }: { type: TagType }) => {
         <div className="col-span-6 py-2">
           <h3>Tags</h3>
           <div className="grid grid-cols-4 gap-1">
-            {item.tags.map(oneTag => (
-              <OneTag key={oneTag.id} tag={oneTag} action={ActionType.NONE} type={type} />
-            ))}
+            {item.tags.length > 0 ? (
+              item.tags.map(oneTag => <OneTag key={oneTag.id} tag={oneTag} action={ActionType.NONE} type={type} />)
+            ) : (
+              <p>No tags found</p>
+            )}
           </div>
         </div>
         <div className="col-span-6 py-2">

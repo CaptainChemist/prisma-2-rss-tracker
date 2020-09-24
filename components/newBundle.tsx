@@ -1,5 +1,6 @@
 import { useMutation, gql } from '@apollo/client';
 import { useState } from 'react';
+import { GenerateInputField } from './generateInputField';
 
 const CREATE_BUNDLE = gql`
   mutation createBundleMutation($data: BundleCreateInput) {
@@ -14,8 +15,14 @@ const CREATE_BUNDLE = gql`
   }
 `;
 
+export type BundleState = {
+  name: string;
+  description: string;
+  tags: { name: string; id: number }[];
+};
+
 export const NewBundle = () => {
-  const [currentBundle, setBundle] = useState({ name: '', description: '' });
+  const [currentBundle, setBundle] = useState<BundleState>({ name: '', description: '', tags: [] });
   const [createBundleMutation, { loading }] = useMutation(CREATE_BUNDLE);
 
   if (loading) {
@@ -28,27 +35,11 @@ export const NewBundle = () => {
         onSubmit={e => {
           e.preventDefault();
           createBundleMutation({ variables: { data: currentBundle } });
-          setBundle({ name: '', description: '' });
+          setBundle({ name: '', description: '', tags: [] });
         }}
       >
-        <label className="block">Name:</label>
-        <input
-          className="shadow rounded w-full py-2 px-3"
-          value={currentBundle.name}
-          onChange={e => {
-            e.persist();
-            setBundle(currentState => ({ ...currentState, name: e.target.value }));
-          }}
-        />
-        <label className="block">Description:</label>
-        <input
-          className="shadow rounded w-full py-2 px-3"
-          value={currentBundle.description}
-          onChange={e => {
-            e.persist();
-            setBundle(currentState => ({ ...currentState, description: e.target.value }));
-          }}
-        />
+        <GenerateInputField currentItem={currentBundle} name={'name'} changeHandler={setBundle} />
+        <GenerateInputField currentItem={currentBundle} name={'description'} changeHandler={setBundle} />
         <input type="submit" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" />
       </form>
     </>
