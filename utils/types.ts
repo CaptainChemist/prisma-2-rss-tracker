@@ -14,14 +14,46 @@ export enum ItemType {
   FeedType = 'FeedType',
 }
 
+export type TagObject = {
+  name: string;
+  id: number;
+};
+
 export type BundleState = {
   name: string;
   description: string;
-  tags: { name: string; id: number }[];
+  tags: TagObject[];
 };
 
 export type FeedState = {
   name: string;
   url: string;
-  tags: { name: string; id: number }[];
+  tags: TagObject[];
+};
+
+export type AuthorObject = {
+  id: string;
+  auth0: string;
+  picture: string;
+  nickname: string;
+};
+
+export type FeedObject = {
+  id: number;
+  name: string;
+  url: string;
+  tags: TagObject[];
+  bundles: BundleObject[];
+  author: AuthorObject;
+  likes: AuthorObject[];
+};
+
+export type BundleObject = {
+  id: number;
+  name: string;
+  description: string;
+  tags: TagObject[];
+  feeds: FeedObject[];
+  author: AuthorObject;
+  likes: AuthorObject[];
 };

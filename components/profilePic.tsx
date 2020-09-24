@@ -1,4 +1,6 @@
-export const ProfilePic = ({ author }) => (
+import { AuthorObject } from '../utils/types';
+
+export const ProfilePic = ({ author }: { author: AuthorObject }) => (
   <>
     {author.picture ? (
       <img className="rounded w-6 h-6" src={author.picture} />

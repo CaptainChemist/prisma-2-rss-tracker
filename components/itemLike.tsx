@@ -1,22 +1,26 @@
 import { useMutation } from '@apollo/client';
 import { useFetchUser } from '../utils/user';
-import { LIKE_BUNDLE_MUTATION } from '../utils/graphql';
+import * as React from 'react';
+import { LIKE_BUNDLE_MUTATION, LIKE_FEED_MUTATION } from '../utils/graphql';
+import { BundleObject, FeedObject, ItemType } from '../utils/types';
 
-export const BundleLike = ({ bundle }) => {
-  const [likeBundleMutation, { loading: likeBundleLoading }] = useMutation(LIKE_BUNDLE_MUTATION);
+export const ItemLike = ({ item, type }: { item: FeedObject | BundleObject; type: ItemType }) => {
+  const isFeed = type === ItemType.FeedType;
+  const [likeItemMutation, { loading: likeItemLoading }] = useMutation(isFeed ? LIKE_FEED_MUTATION : LIKE_BUNDLE_MUTATION);
   const { user, loading } = useFetchUser();
 
-  const likeMatches = bundle.likes.filter(oneLike => oneLike.auth0 === (user ? user.sub : ''));
+  const likeMatches = item.likes.filter(oneLike => oneLike.auth0 === (user ? user.sub : ''));
   const hasMatch = likeMatches.length > 0 ? true : false;
 
   return (
     <div
       onClick={e => {
         e.stopPropagation();
-        likeBundleMutation({
+        const idObj = isFeed ? { feedId: item.id } : { bundleId: item.id };
+        likeItemMutation({
           variables: {
             data: {
-              bundleId: bundle.id,
+              ...idObj,
               likeState: hasMatch ? false : true,
             },
           },
@@ -24,8 +28,8 @@ export const BundleLike = ({ bundle }) => {
       }}
       className="flex col-span-1 py-2 mx-2 z-10"
     >
-      <p>{bundle.likes.length} </p>
-      {likeBundleLoading || loading ? (
+      <p>{item.likes.length} </p>
+      {likeItemLoading || loading ? (
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="h-6 w-6 text-gray-500 animate-spin">
           <path
             fillRule="evenodd"

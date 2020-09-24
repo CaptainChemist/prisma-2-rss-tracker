@@ -7,11 +7,12 @@ import { OneTag } from './oneTag';
 import { SearchTags } from './searchTags';
 
 export const NewItem = ({ type }: { type: ItemType }) => {
-  const initialState = type === ItemType.FeedType ? { name: '', url: '', tags: [] } : { name: '', description: '', tags: [] };
-  const inputFields = type === ItemType.FeedType ? ['name', 'url'] : ['name', 'description'];
+  const isFeed = type === ItemType.FeedType;
+  const initialState = isFeed ? { name: '', url: '', tags: [] } : { name: '', description: '', tags: [] };
+  const inputFields = isFeed ? ['name', 'url'] : ['name', 'description'];
 
   const [currentItem, setItem] = useState<FeedState | BundleState>(initialState);
-  const [createItemMutation, { loading }] = useMutation(type === ItemType.FeedType ? CREATE_FEED : CREATE_BUNDLE);
+  const [createItemMutation, { loading }] = useMutation(isFeed ? CREATE_FEED : CREATE_BUNDLE);
 
   if (loading) {
     return <p>Loading</p>;
