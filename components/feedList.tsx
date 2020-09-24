@@ -1,5 +1,6 @@
 import { gql, useQuery } from '@apollo/client';
 import { ListItem } from './listItem';
+import { TagType } from './oneTag';
 
 const FEEDS_QUERY = gql`
   query {
@@ -43,7 +44,7 @@ export const FeedList = () => {
       <p> Feeds:</p>
       <div className="grid grid-cols-3 gap-4">
         {data.feeds.map(oneFeed => (
-          <ListItem item={oneFeed} type={'FEED'} key={oneFeed.id} />
+          <ListItem item={oneFeed} type={TagType.FeedTag} key={oneFeed.id} />
         ))}
       </div>
     </>

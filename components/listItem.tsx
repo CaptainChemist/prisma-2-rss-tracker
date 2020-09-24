@@ -2,9 +2,10 @@ import { BundleLike } from './bundleLike';
 import { ProfilePic } from './profilePic';
 import Link from 'next/link';
 import { FeedLike } from './feedLike';
+import { ActionType, OneTag, TagType } from './oneTag';
 
-export const ListItem = ({ item, type }) => {
-  const isFeed = type === 'FEED';
+export const ListItem = ({ item, type }: { type: TagType }) => {
+  const isFeed = type === TagType.FeedTag;
   return (
     <Link href={`/bundle/${item.id}`}>
       <div className={`grid grid-cols-6 rounded py-2 px-2 border-2 bg-${isFeed ? 'green' : 'purple'}-100`}>
@@ -19,9 +20,7 @@ export const ListItem = ({ item, type }) => {
           <h3>Tags</h3>
           <div className="grid grid-cols-4 gap-1">
             {item.tags.map(oneTag => (
-              <span className="text-sm my-2 py-1 px-2 rounded align-middle bg-blue-100" key={oneTag.id}>
-                {oneTag.name}
-              </span>
+              <OneTag key={oneTag.id} tag={oneTag} action={ActionType.NONE} type={type} />
             ))}
           </div>
         </div>

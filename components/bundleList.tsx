@@ -1,5 +1,6 @@
 import { gql, useQuery } from '@apollo/client';
 import { ListItem } from './listItem';
+import { TagType } from './oneTag';
 
 const BUNDLES_QUERY = gql`
   query {
@@ -46,7 +47,7 @@ export const BundleList = () => {
       <p> Bundles:</p>
       <div className="grid grid-cols-3 gap-4">
         {data.bundles.map(oneBundle => (
-          <ListItem item={oneBundle} type={'BUNDLE'} key={oneBundle.id} />
+          <ListItem item={oneBundle} type={TagType.BundleTag} key={oneBundle.id} />
         ))}
       </div>
     </>
