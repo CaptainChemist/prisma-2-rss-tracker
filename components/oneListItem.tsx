@@ -4,8 +4,9 @@ import Link from 'next/link';
 import { FeedLike } from './feedLike';
 import { OneTag } from './oneTag';
 import { ActionType, TagType } from '../utils/types';
+import { Bundle, Feed } from '@prisma/client';
 
-export const ListItem = ({ item, type }: { type: TagType }) => {
+export const OneListItem = ({ item, type }: { type: TagType; item: Feed | Bundle }) => {
   const isFeed = type === TagType.FeedTag;
   return (
     <Link href={`/bundle/${item.id}`}>
