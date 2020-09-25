@@ -41,6 +41,7 @@ export const resolvers = {
     bundleTags: (parent, args, { prisma }) => prisma.bundleTag.findMany(),
     findFeedTags: (parent, { data }, { prisma }) => prisma.feedTag.findMany({ where: { name: { contains: data.search } } }),
     findBundleTags: (parent, { data }, { prisma }) => prisma.bundleTag.findMany({ where: { name: { contains: data.search } } }),
+    findFeeds: (parent, { data }, { prisma }) => prisma.feed.findMany({ where: { name: { contains: data.search } } }),
   },
   Mutation: {
     createFeed: async (parent, { data }, { prisma, user }) => {

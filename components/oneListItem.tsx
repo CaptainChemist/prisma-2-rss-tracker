@@ -1,8 +1,8 @@
 import { ProfilePic } from './profilePic';
 import Link from 'next/link';
 import { ItemLike } from './itemLike';
-import { OneTag } from './oneTag';
-import { ActionType, BundleObject, FeedObject, ItemType } from '../utils/types';
+import { OneBadge } from './oneBadge';
+import { ActionType, BadgeFieldName, BundleObject, FeedObject, ItemType } from '../utils/types';
 
 export const OneListItem = ({ item, type }: { type: ItemType; item: FeedObject | BundleObject }) => {
   const isFeed = type === ItemType.FeedType;
@@ -23,7 +23,9 @@ export const OneListItem = ({ item, type }: { type: ItemType; item: FeedObject |
           <h3>Tags</h3>
           <div className="grid grid-cols-4 gap-1">
             {item.tags.length > 0 ? (
-              item.tags.map(oneTag => <OneTag key={oneTag.id} tag={oneTag} action={ActionType.NONE} />)
+              item.tags.map(oneTag => (
+                <OneBadge key={oneTag.id} fieldName={BadgeFieldName.tags} item={oneTag} action={ActionType.NONE} />
+              ))
             ) : (
               <p>None found</p>
             )}

@@ -14,6 +14,23 @@ export enum ItemType {
   FeedType = 'FeedType',
 }
 
+export enum SearchType {
+  FeedTag = 'FeedTag',
+  BundleTag = 'BundleTag',
+  FeedType = 'FeedType',
+}
+
+export enum SearchQueryName {
+  findFeedTags = 'findFeedTags',
+  findBundleTags = 'findBundleTags',
+  findFeeds = 'findFeeds',
+}
+
+export enum BadgeFieldName {
+  tags = 'tags',
+  feeds = 'feeds',
+}
+
 export type TagObject = {
   name: string;
   id: number;

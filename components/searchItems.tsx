@@ -1,29 +1,35 @@
 import { Dispatch, SetStateAction, useState } from 'react';
-import { useLazyQuery } from '@apollo/client';
-import { OneTag } from './oneTag';
-import { ActionType, BundleState, FeedState, TagType } from '../utils/types';
-import { FIND_BUNDLE_TAGS, FIND_FEED_TAGS } from '../utils/graphql';
+import { DocumentNode, useLazyQuery } from '@apollo/client';
+import { OneBadge } from './oneBadge';
+import * as _ from 'lodash';
+import { ActionType, BadgeFieldName, BundleState, FeedState, SearchQueryName } from '../utils/types';
 
-export const SearchTags = ({
+export const SearchItems = ({
   currentItem,
   setItem,
-  type,
+  queryName,
+  query,
+  fieldName,
 }: {
   currentItem: FeedState | BundleState;
   setItem: Dispatch<SetStateAction<FeedState | BundleState>>;
-  type: TagType;
+  queryName: SearchQueryName;
+  query: DocumentNode;
+  fieldName: BadgeFieldName;
 }) => {
   const [search, setSearch] = useState('');
-  const [findTagsQuery, { loading, data, called }] = useLazyQuery(type === TagType.FeedTag ? FIND_FEED_TAGS : FIND_BUNDLE_TAGS);
+  const [findItemsQuery, { loading, data, called }] = useLazyQuery(query);
+  const fetchedItems = _.get(data, queryName);
+  const filtFindItems = fetchedItems
+    ? fetchedItems.filter(oneItem => !currentItem[fieldName].map(o => o.name).includes(oneItem.name))
+    : [];
 
-  const { findFeedTags, findBundleTags } = data || {};
-  const currentTags = type === TagType.FeedTag ? findFeedTags : findBundleTags;
-  const filtFindTags = currentTags ? currentTags.filter(oneTag => !currentItem.tags.map(o => o.name).includes(oneTag.name)) : [];
-
-  const matchCurrent = filtFindTags.filter(o => o.name === search);
-  const matchList = currentItem.tags.filter(o => o.name === search);
-  const filtFindFeedTagsWithAdd =
-    matchCurrent.length === 0 && matchList.length === 0 ? [...filtFindTags, { name: search }] : filtFindTags;
+  const matchCurrent = filtFindItems.filter(o => o.name === search);
+  const matchList = currentItem[fieldName].filter(o => o.name === search);
+  const filtFindItemsWithAdd =
+    matchCurrent.length === 0 && matchList.length === 0 && queryName !== 'findFeeds'
+      ? [...filtFindItems, { name: search }]
+      : filtFindItems;
 
   return (
     <div className="">
@@ -58,17 +64,24 @@ export const SearchTags = ({
           onChange={async e => {
             e.persist();
             setSearch(() => e.target.value);
-            await findTagsQuery({ variables: { data: { search: e.target.value } } });
+            await findItemsQuery({ variables: { data: { search: e.target.value } } });
           }}
         />
       </div>
       <div className="grid grid-cols-4 gap-1 flex m-2">
         {search !== '' ? (
-          filtFindFeedTagsWithAdd.map(oneTag => (
-            <OneTag key={oneTag.name} tag={oneTag} action={ActionType.ADD} setItem={setItem} currentItem={currentItem} />
+          filtFindItemsWithAdd.map(oneItem => (
+            <OneBadge
+              key={oneItem.name}
+              fieldName={fieldName}
+              item={oneItem}
+              action={ActionType.ADD}
+              setItem={setItem}
+              currentItem={currentItem}
+            />
           ))
         ) : called ? (
-          <p>No feeds found</p>
+          <p>No matches</p>
         ) : null}
       </div>
     </div>

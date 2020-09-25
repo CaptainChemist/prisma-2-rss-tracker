@@ -132,6 +132,33 @@ export const FEEDS_QUERY = gql`
   }
 `;
 
+export const FIND_FEEDS_QUERY = gql`
+  query findFeedsQuery($data: FindFeedsInput) {
+    findFeeds(data: $data) {
+      id
+      name
+      url
+      likes {
+        id
+        auth0
+      }
+      tags {
+        id
+        name
+      }
+      author {
+        id
+        nickname
+        picture
+      }
+      bundles {
+        id
+        name
+      }
+    }
+  }
+`;
+
 export const FIND_FEED_TAGS = gql`
   query findFeedTagsQuery($data: FindFeedTagsInput) {
     findFeedTags(data: $data) {

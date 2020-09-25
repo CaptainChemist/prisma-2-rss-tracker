@@ -1,19 +1,21 @@
 import { BundleTag, FeedTag } from '@prisma/client';
 import { Dispatch, SetStateAction } from 'react';
-import { ActionType, BundleState, FeedState } from '../utils/types';
+import { ActionType, BadgeFieldName, BundleState, FeedObject, FeedState } from '../utils/types';
 
-export const OneTag = ({
-  tag,
+export const OneBadge = ({
+  item,
   action,
   setItem,
   currentItem,
+  fieldName,
 }: {
-  tag: FeedTag | BundleTag;
+  item: FeedTag | BundleTag | FeedObject;
   action: ActionType;
   currentItem?: FeedState | BundleState;
+  fieldName: BadgeFieldName;
   setItem?: Dispatch<SetStateAction<FeedState | BundleState>>;
 }) => {
-  const currentMatches = currentItem ? currentItem.tags.filter(oneTag => oneTag.name === tag.name) : [];
+  const currentMatches = currentItem ? currentItem.tags.filter(oneItem => oneItem.name === item.name) : [];
   return (
     <span className={`flex text-sm py-1 px-1 rounded align-middle bg-blue-100`}>
       {action === ActionType.ADD ? (
@@ -24,7 +26,7 @@ export const OneTag = ({
           stroke="currentColor"
           className={`h-5 w-5 text-gray-500`}
           onClick={() => {
-            currentMatches.length === 0 ? setItem(feed => ({ ...feed, tags: [...feed.tags, { ...tag }] })) : null;
+            currentMatches.length === 0 ? setItem(feed => ({ ...feed, [fieldName]: [...feed[fieldName], { ...item }] })) : null;
           }}
         >
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
@@ -38,13 +40,13 @@ export const OneTag = ({
           stroke="currentColor"
           className={`h-5 w-5 text-gray-500`}
           onClick={() => {
-            setItem(feed => ({ ...feed, tags: feed.tags.filter(o => tag.name !== o.name) }));
+            setItem(feed => ({ ...feed, [fieldName]: feed[fieldName].filter(o => item.name !== o.name) }));
           }}
         >
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4" />
         </svg>
       ) : null}
-      {tag.name}
+      {item.name}
     </span>
   );
 };
