@@ -159,6 +159,75 @@ export const FIND_FEEDS_QUERY = gql`
   }
 `;
 
+export const FEED_QUERY = gql`
+  query feedQuery($data: FeedInput) {
+    feed(data: $data) {
+      id
+      name
+      url
+      likes {
+        id
+        auth0
+      }
+      tags {
+        id
+        name
+      }
+      author {
+        id
+        nickname
+        picture
+      }
+      bundles {
+        id
+        name
+      }
+    }
+  }
+`;
+
+export const BUNDLE_QUERY = gql`
+  query bundleQuery($data: BundleInput) {
+    bundle(data: $data) {
+      id
+      name
+      description
+      likes {
+        id
+        auth0
+      }
+      feeds {
+        id
+        name
+        url
+        tags {
+          id
+          name
+        }
+        likes {
+          id
+          auth0
+          picture
+        }
+        bundles {
+          id
+          name
+        }
+      }
+      tags {
+        id
+        name
+      }
+      author {
+        id
+        auth0
+        nickname
+        picture
+      }
+    }
+  }
+`;
+
 export const FIND_FEED_TAGS = gql`
   query findFeedTagsQuery($data: FindFeedTagsInput) {
     findFeedTags(data: $data) {

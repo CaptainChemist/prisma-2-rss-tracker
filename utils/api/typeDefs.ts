@@ -112,7 +112,16 @@ export const typeDefs = gql`
     search: String
   }
 
+  input FeedInput {
+    id: Int
+  }
+  input BundleInput {
+    id: Int
+  }
+
   type Query {
+    feed(data: FeedInput): Feed
+    bundle(data: BundleInput): Bundle
     feeds: [Feed]
     bundles: [Bundle]
     savedArticles: [SavedArticle]

@@ -31,6 +31,8 @@ export const resolvers = {
     ...createFieldResolver('feedTag', 'feeds'),
   },
   Query: {
+    feed: (parent, { data: { id } }, { prisma }) => prisma.feed.findOne({ where: { id } }),
+    bundle: (parent, { data: { id } }, { prisma }) => prisma.bundle.findOne({ where: { id } }),
     feeds: (parent, args, { prisma }) => prisma.feed.findMany(),
     // need to only return public and private by the current user
     bundles: (parent, args, { prisma }) => prisma.bundle.findMany(),
