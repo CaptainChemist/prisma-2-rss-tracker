@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import * as _ from 'lodash';
 import { OneArticle } from './oneArticle';
+import Pagination from 'react-js-pagination';
 const Parser = require('rss-parser');
 const parser = new Parser();
 
@@ -8,7 +9,7 @@ const CORS_PROXY = 'https://cors-anywhere.herokuapp.com/';
 
 export const ArticleList = ({ rssFeeds }: { rssFeeds: string[] }) => {
   const [{ loading, error, data }, setGet] = useState({ error: false, loading: false, data: [] });
-  const [currentPagination, setPagination] = useState({ currentPage: 1, articlesPerPage: 10 });
+  const [currentPagination, setPagination] = useState({ currentPage: 1, articlesPerPage: 8 });
 
   useEffect(() => {
     (async () => {
@@ -43,8 +44,6 @@ export const ArticleList = ({ rssFeeds }: { rssFeeds: string[] }) => {
   const indexOfFirstArticle = indexOfLastArticle - articlesPerPage;
   const currentArticles = data.slice(indexOfFirstArticle, indexOfLastArticle);
 
-  const pageNumbers = _.range(Math.ceil(data.length / articlesPerPage)).map(i => i + 1);
-
   return (
     <>
       <p className="p-2">Articles</p>
@@ -52,20 +51,18 @@ export const ArticleList = ({ rssFeeds }: { rssFeeds: string[] }) => {
         {currentArticles.map(oneArticle => (
           <OneArticle article={oneArticle} key={oneArticle.guid} />
         ))}
-        <div className="grid grid-cols-12 rounded py-1 px-1 border-2">
-          {pageNumbers.map(onePageNumber => (
-            <div
-              key={onePageNumber}
-              id={onePageNumber}
-              onClick={event => {
-                event.persist();
-                setPagination(currState => ({ ...currState, currentPage: parseInt(event.target.id) }));
-              }}
-            >
-              {onePageNumber}
-            </div>
-          ))}
-        </div>
+        <Pagination
+          innerClass="rounded py-2 px-2 flex"
+          itemClass=" px-2"
+          activePage={currentPage}
+          itemCountPerPage={articlesPerPage}
+          totalItemsCount={data.length}
+          pageRangeDisplayed={5}
+          onChange={clickedNumber => {
+            console.log(clickedNumber);
+            setPagination(currState => ({ ...currState, currentPage: parseInt(clickedNumber) }));
+          }}
+        />
       </div>
     </>
   );
