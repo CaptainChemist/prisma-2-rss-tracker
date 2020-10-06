@@ -8,6 +8,7 @@ const CORS_PROXY = 'https://cors-anywhere.herokuapp.com/';
 
 export const ArticleList = ({ rssFeeds }: { rssFeeds: string[] }) => {
   const [{ loading, error, data }, setGet] = useState({ error: false, loading: false, data: [] });
+  const [currentPagination, setPagination] = useState({ currentPage: 1, articlesPerPage: 10 });
 
   useEffect(() => {
     (async () => {
@@ -36,14 +37,35 @@ export const ArticleList = ({ rssFeeds }: { rssFeeds: string[] }) => {
   if (error) {
     return <p>Error</p>;
   }
-  console.log(data);
+
+  const { currentPage, articlesPerPage } = currentPagination;
+  const indexOfLastArticle = currentPage * articlesPerPage;
+  const indexOfFirstArticle = indexOfLastArticle - articlesPerPage;
+  const currentArticles = data.slice(indexOfFirstArticle, indexOfLastArticle);
+
+  const pageNumbers = _.range(Math.ceil(data.length / articlesPerPage)).map(i => i + 1);
+
   return (
     <>
       <p className="p-2">Articles</p>
       <div className="grid grid-cols-1 gap-4">
-        {data.map(oneArticle => (
+        {currentArticles.map(oneArticle => (
           <OneArticle article={oneArticle} key={oneArticle.guid} />
         ))}
+        <div className="grid grid-cols-12 rounded py-1 px-1 border-2">
+          {pageNumbers.map(onePageNumber => (
+            <div
+              key={onePageNumber}
+              id={onePageNumber}
+              onClick={event => {
+                event.persist();
+                setPagination(currState => ({ ...currState, currentPage: parseInt(event.target.id) }));
+              }}
+            >
+              {onePageNumber}
+            </div>
+          ))}
+        </div>
       </div>
     </>
   );
