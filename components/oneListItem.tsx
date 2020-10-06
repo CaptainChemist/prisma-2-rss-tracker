@@ -11,8 +11,8 @@ export const OneListItem = ({ item, type }: { type: ItemType; item: FeedObject |
   return (
     <div className={`grid grid-cols-6 rounded py-2 px-2 border-2 bg-${isFeed ? 'green' : 'purple'}-100`}>
       <div className="col-span-5">
-        <h3>{item.name}</h3>
-        <p>{isFeed ? item['url'] : item['description']}</p>
+        <h4 className="font-bold">{item.name}</h4>
+        {!isFeed ? <p>{item['description']}</p> : null}
       </div>
       <ItemLike item={item} type={type} />
 

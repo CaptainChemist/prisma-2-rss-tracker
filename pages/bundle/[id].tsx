@@ -1,4 +1,5 @@
 import { useQuery } from '@apollo/client';
+import { ArticleList } from '../../components/articleList';
 import { Layout } from '../../components/layout';
 import { OneListItem } from '../../components/oneListItem';
 import { BUNDLE_QUERY } from '../../utils/graphql';
@@ -31,6 +32,7 @@ const Bundle = ({ id }) => {
           <p>None are present. Why not add one?</p>
         )}
       </div>
+      <ArticleList rssFeeds={bundle.feeds.map(feed => feed.url)} />
     </Layout>
   );
 };
