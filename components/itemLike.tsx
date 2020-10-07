@@ -1,8 +1,8 @@
 import { useMutation } from '@apollo/client';
 import { useFetchUser } from '../utils/user';
 import * as React from 'react';
-import { LIKE_BUNDLE_MUTATION, LIKE_FEED_MUTATION } from '../utils/graphql';
 import { BundleObject, FeedObject, ItemType } from '../utils/types';
+import { LIKE_BUNDLE_MUTATION, LIKE_FEED_MUTATION } from '../utils/api/graphql/mutations';
 
 export const ItemLike = ({ item, type }: { item: FeedObject | BundleObject; type: ItemType }) => {
   const isFeed = type === ItemType.FeedType;

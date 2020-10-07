@@ -1,14 +1,13 @@
 import { useMutation } from '@apollo/client';
 import { useState } from 'react';
+import { CREATE_BUNDLE_MUTATION, CREATE_FEED_MUTATION } from '../utils/api/graphql/mutations';
 import {
-  CREATE_BUNDLE,
-  CREATE_FEED,
   BUNDLES_QUERY,
   FEEDS_QUERY,
-  FIND_BUNDLE_TAGS,
-  FIND_FEED_TAGS,
+  FIND_BUNDLE_TAGS_QUERY,
   FIND_FEEDS_QUERY,
-} from '../utils/graphql';
+  FIND_FEED_TAGS_QUERY,
+} from '../utils/api/graphql/queries';
 import { ActionType, BadgeFieldName, BundleState, FeedState, ItemType, SearchQueryName } from '../utils/types';
 import { GenerateInputField } from './generateInputField';
 import { OneBadge } from './oneBadge';
@@ -20,7 +19,7 @@ export const NewItem = ({ type }: { type: ItemType }) => {
   const inputFields = isFeed ? ['name', 'url'] : ['name', 'description'];
 
   const [currentItem, setItem] = useState<FeedState | BundleState>(initialState);
-  const [createItemMutation, { loading }] = useMutation(isFeed ? CREATE_FEED : CREATE_BUNDLE);
+  const [createItemMutation, { loading }] = useMutation(isFeed ? CREATE_FEED_MUTATION : CREATE_BUNDLE_MUTATION);
 
   if (loading) {
     return <p>Loading</p>;
@@ -86,7 +85,7 @@ export const NewItem = ({ type }: { type: ItemType }) => {
               <label className="block py-4">Add New Tag:</label>
               <SearchItems
                 queryName={isFeed ? SearchQueryName.findFeedTags : SearchQueryName.findBundleTags}
-                query={isFeed ? FIND_FEED_TAGS : FIND_BUNDLE_TAGS}
+                query={isFeed ? FIND_FEED_TAGS_QUERY : FIND_BUNDLE_TAGS_QUERY}
                 setItem={setItem}
                 currentItem={currentItem}
                 fieldName={BadgeFieldName.tags}

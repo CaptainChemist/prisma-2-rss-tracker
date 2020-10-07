@@ -2,7 +2,7 @@ import { useQuery } from '@apollo/client';
 import { ArticleList } from '../../components/articleList';
 import { Layout } from '../../components/layout';
 import { OneListItem } from '../../components/oneListItem';
-import { BUNDLE_QUERY } from '../../utils/graphql';
+import { BUNDLE_QUERY } from '../../utils/api/graphql/queries';
 import { FeedObject, ItemType } from '../../utils/types';
 
 const Bundle = ({ id }) => {

@@ -1,5 +1,5 @@
 import { useQuery } from '@apollo/client';
-import { BUNDLES_QUERY, FEEDS_QUERY } from '../utils/graphql';
+import { BUNDLES_QUERY, FEEDS_QUERY } from '../utils/api/graphql/queries';
 import { BundleObject, FeedObject, ItemType } from '../utils/types';
 import { OneListItem } from './oneListItem';
 

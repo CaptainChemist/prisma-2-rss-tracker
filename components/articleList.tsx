@@ -23,7 +23,6 @@ export const ArticleList = ({ rssFeeds }: { rssFeeds: string[] }) => {
           ),
           (sum, n) => [...sum, ...n]
         );
-        console.log(items);
         setGet(o => ({ ...o, data: items, loading: false }));
       } catch (error) {
         setGet(o => ({ ...o, error, loading: false }));
