@@ -9,7 +9,7 @@ const Index = () => {
 
   return (
     <Layout>
-      <p>Bundles Page</p>
+      <h3 className="text-lg font-medium py-4">Bundles Page</h3>
       <ItemList type={ItemType.BundleType} />
       {user ? <NewItem type={ItemType.BundleType} /> : null}
     </Layout>

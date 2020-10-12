@@ -11,7 +11,7 @@ export const GenerateInputField = ({
   changeHandler: Dispatch<SetStateAction<FeedState | BundleState>>;
 }) => (
   <div className="py-2">
-    <label className="block py-4">{name.charAt(0).toUpperCase() + name.slice(1)}:</label>
+    <label className="block py-2">{name.charAt(0).toUpperCase() + name.slice(1)}:</label>
     <input
       className="shadow rounded w-full py-2 px-3"
       value={currentItem[name]}

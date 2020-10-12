@@ -5,9 +5,9 @@ import { ActionType, BadgeFieldName, BundleState, FeedObject, FeedState } from '
 export const OneBadge = ({
   item,
   action,
-  setItem,
   currentItem,
   fieldName,
+  setItem,
 }: {
   item: FeedTag | BundleTag | FeedObject;
   action: ActionType;
@@ -17,7 +17,11 @@ export const OneBadge = ({
 }) => {
   const currentMatches = currentItem ? currentItem.tags.filter(oneItem => oneItem.name === item.name) : [];
   return (
-    <span className={`flex text-sm py-1 px-1 rounded align-middle bg-blue-100`}>
+    <span
+      className={`flex text-sm py-1 px-1 rounded align-middle bg-${
+        fieldName === BadgeFieldName.tags ? `blue` : fieldName === BadgeFieldName.feeds ? `green` : `purple`
+      }-300`}
+    >
       {action === ActionType.ADD ? (
         <svg
           xmlns="http://www.w3.org/2000/svg"

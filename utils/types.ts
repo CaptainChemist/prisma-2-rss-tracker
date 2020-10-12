@@ -29,6 +29,7 @@ export enum SearchQueryName {
 export enum BadgeFieldName {
   tags = 'tags',
   feeds = 'feeds',
+  bundles = 'bundles',
 }
 
 export type TagObject = {
@@ -40,9 +41,11 @@ export type BundleState = {
   name: string;
   description: string;
   tags: TagObject[];
+  feeds: FeedState[];
 };
 
 export type FeedState = {
+  id?: number;
   name: string;
   url: string;
   tags: TagObject[];

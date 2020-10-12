@@ -18,7 +18,9 @@ const Bundle = ({ id }) => {
     );
   }
 
-  if (error) {
+  const { bundle } = data || {};
+
+  if (error || !bundle) {
     return (
       <Layout>
         <NotifyError />
@@ -26,13 +28,11 @@ const Bundle = ({ id }) => {
     );
   }
 
-  const { bundle } = data || {};
-
   return (
     <Layout>
-      <h1>{bundle.name}</h1>
-      <p>{bundle.description}</p>
-      <p>Feeds</p>
+      <h3 className="text-lg font-medium pt-4">{bundle.name}</h3>
+      <p className="pb-4">{bundle.description}</p>
+      <h3 className="pb-4 font-medium">Feeds</h3>
       <div className="grid grid-cols-3 gap-4">
         {bundle.feeds.length > 0 ? (
           bundle.feeds.map((item: FeedObject) => <OneListItem item={item} type={ItemType.FeedType} key={item.id} />)

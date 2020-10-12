@@ -45,7 +45,7 @@ export const ArticleList = ({ rssFeeds }: { rssFeeds: string[] }) => {
 
   return (
     <>
-      <p className="p-2">Articles</p>
+      <h3 className="py-4 font-medium">Articles</h3>
       <div className="grid grid-cols-1 gap-4">
         {currentArticles.map(oneArticle => (
           <OneArticle article={oneArticle} key={oneArticle.guid} />

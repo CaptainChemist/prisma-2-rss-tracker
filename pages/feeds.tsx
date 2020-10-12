@@ -9,7 +9,7 @@ const Index = () => {
 
   return (
     <Layout>
-      <p>Feed Page</p>
+      <h3 className="text-lg font-medium py-4">Feeds Page</h3>
       <ItemList type={ItemType.FeedType} />
       {user ? <NewItem type={ItemType.FeedType} /> : null}
     </Layout>

@@ -10,21 +10,26 @@ import {
 } from '../utils/api/graphql/queries';
 import { ActionType, BadgeFieldName, BundleState, FeedState, ItemType, SearchQueryName } from '../utils/types';
 import { GenerateInputField } from './generateInputField';
-import { OneBadge } from './oneBadge';
 import { SearchItems } from './searchItems';
+import { BadgeList } from './badgeList';
+
+type NewItemState = FeedState | BundleState;
 
 export const NewItem = ({ type }: { type: ItemType }) => {
   const isFeed = type === ItemType.FeedType;
-  const initialState = isFeed ? { name: '', url: '', tags: [] } : { name: '', description: '', tags: [], feeds: [] };
+  const initialFeed: FeedState = { name: '', url: '', tags: [] };
+  const initialBundle: BundleState = { name: '', description: '', tags: [], feeds: [] };
+  const initialState: NewItemState = isFeed ? initialFeed : initialBundle;
   const inputFields = isFeed ? ['name', 'url'] : ['name', 'description'];
 
-  const [currentItem, setItem] = useState<FeedState | BundleState>(initialState);
+  const [currentItem, setItem] = useState<NewItemState>(initialState);
   const [createItemMutation, { loading }] = useMutation(isFeed ? CREATE_FEED_MUTATION : CREATE_BUNDLE_MUTATION);
 
   if (loading) {
     return <p>Loading</p>;
   }
 
+  console.log(currentItem);
   return (
     <>
       <form
@@ -56,33 +61,23 @@ export const NewItem = ({ type }: { type: ItemType }) => {
           setItem(initialState);
         }}
       >
-        <div className="grid grid-cols-12 gap-4">
-          <div className="col-span-6 py-4">
+        <div className="grid grid-cols-12 gap-4 rounded-md border mt-8 py-2 px-2">
+          <h3 className="col-span-12 text-lg font-medium py-2">{isFeed ? `New Feed` : `New Bundle`}</h3>
+
+          <div className="col-span-6">
             {inputFields.map(name => (
               <GenerateInputField key={`${type}-${name}`} currentItem={currentItem} name={name} changeHandler={setItem} />
             ))}
-            <div className="py-2">
-              <input className="py-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" type="submit" />
-            </div>
           </div>
-          <div className="col-span-6 py-4">
+          <div className="col-span-6">
             <div className="py-2">
-              <label className="block py-4">Tags:</label>
+              <label className="block py-2">Tags:</label>
               <div className="grid grid-cols-4 gap-1">
-                {currentItem.tags.map(oneTag => (
-                  <OneBadge
-                    key={oneTag.name}
-                    fieldName={BadgeFieldName.tags}
-                    item={oneTag}
-                    action={ActionType.CREATE}
-                    setItem={setItem}
-                    currentItem={currentItem}
-                  />
-                ))}
+                <BadgeList fieldName={BadgeFieldName.tags} action={ActionType.CREATE} setItem={setItem} item={currentItem} />
               </div>
             </div>
             <div className="py-2">
-              <label className="block py-4">Add New Tag:</label>
+              <label className="block py-2">Add New Tag:</label>
               <SearchItems
                 queryName={isFeed ? SearchQueryName.findFeedTags : SearchQueryName.findBundleTags}
                 query={isFeed ? FIND_FEED_TAGS_QUERY : FIND_BUNDLE_TAGS_QUERY}
@@ -91,36 +86,32 @@ export const NewItem = ({ type }: { type: ItemType }) => {
                 fieldName={BadgeFieldName.tags}
               />
             </div>
-          </div>
-          {isFeed ? null : (
-            <div className="col-span-6 py-4">
-              <div className="py-2">
-                <label className="block py-4">Feeds:</label>
-                <div className="grid grid-cols-4 gap-1">
-                  {currentItem.feeds.map(oneFeed => (
-                    <OneBadge
-                      key={oneFeed.name}
-                      fieldName={BadgeFieldName.feeds}
-                      item={oneFeed}
-                      action={ActionType.CREATE}
-                      setItem={setItem}
-                      currentItem={currentItem}
-                    />
-                  ))}
+            {isFeed ? null : (
+              <>
+                <div className="py-2">
+                  <label className="block py-4">Feeds:</label>
+                  <div className="grid grid-cols-4 gap-1">
+                    <BadgeList fieldName={BadgeFieldName.feeds} action={ActionType.CREATE} setItem={setItem} item={currentItem} />
+                  </div>
                 </div>
-              </div>
-              <div className="py-2">
-                <label className="block py-4">Add New Feed:</label>
-                <SearchItems
-                  queryName={SearchQueryName.findFeeds}
-                  query={FIND_FEEDS_QUERY}
-                  setItem={setItem}
-                  currentItem={currentItem}
-                  fieldName={BadgeFieldName.feeds}
-                />
-              </div>
+                <div className="py-2">
+                  <label className="block py-4">Add New Feed:</label>
+                  <SearchItems
+                    queryName={SearchQueryName.findFeeds}
+                    query={FIND_FEEDS_QUERY}
+                    setItem={setItem}
+                    currentItem={currentItem}
+                    fieldName={BadgeFieldName.feeds}
+                  />
+                </div>
+              </>
+            )}
+          </div>
+          <div className="col-span-12">
+            <div className="py-2">
+              <input className="py-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" type="submit" />
             </div>
-          )}
+          </div>
         </div>
       </form>
     </>

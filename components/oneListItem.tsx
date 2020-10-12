@@ -1,14 +1,13 @@
 import { ProfilePic } from './profilePic';
 import Link from 'next/link';
 import { ItemLike } from './itemLike';
-import { OneBadge } from './oneBadge';
 import { ActionType, BadgeFieldName, BundleObject, FeedObject, ItemType } from '../utils/types';
 import { ItemDelete } from './itemDelete';
 import { useFetchUser } from '../utils/user';
+import { BadgeList } from './badgeList';
 
 export const OneListItem = ({ item, type }: { type: ItemType; item: FeedObject | BundleObject }) => {
   const isFeed = type === ItemType.FeedType;
-  const childItem = item[isFeed ? 'bundles' : 'feeds'];
   const { user, loading } = useFetchUser();
 
   if (loading) {
@@ -32,27 +31,13 @@ export const OneListItem = ({ item, type }: { type: ItemType; item: FeedObject |
         <div className="col-span-6 py-2">
           <h3>Tags</h3>
           <div className="grid grid-cols-4 gap-1">
-            {item.tags.length > 0 ? (
-              item.tags.map(oneTag => (
-                <OneBadge key={oneTag.id} fieldName={BadgeFieldName.tags} item={oneTag} action={ActionType.NONE} />
-              ))
-            ) : (
-              <p>None found</p>
-            )}
+            <BadgeList fieldName={BadgeFieldName.tags} action={ActionType.NONE} item={item} />
           </div>
         </div>
         <div className="col-span-6 py-2">
           <h3>{isFeed ? 'Bundles' : 'Feeds'}</h3>
           <div className="grid grid-cols-4 gap-1">
-            {childItem.length > 0 ? (
-              childItem.map(oneFeed => (
-                <span className={`text-sm my-2 py-1 px-2 rounded align-middle bg-${isFeed ? 'purple' : 'green'}-100`} key={oneFeed.id}>
-                  {oneFeed.name}
-                </span>
-              ))
-            ) : (
-              <p>None found</p>
-            )}
+            <BadgeList fieldName={isFeed ? BadgeFieldName.bundles : BadgeFieldName.feeds} action={ActionType.NONE} item={item} />
           </div>
         </div>
       </div>

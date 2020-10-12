@@ -1,8 +1,8 @@
 import { Dispatch, SetStateAction, useState } from 'react';
 import { DocumentNode, useLazyQuery } from '@apollo/client';
-import { OneBadge } from './oneBadge';
 import * as _ from 'lodash';
 import { ActionType, BadgeFieldName, BundleState, FeedState, SearchQueryName } from '../utils/types';
+import { BadgeList } from './badgeList';
 
 export const SearchItems = ({
   currentItem,
@@ -30,6 +30,8 @@ export const SearchItems = ({
     matchCurrent.length === 0 && matchList.length === 0 && queryName !== 'findFeeds'
       ? [...filtFindItems, { name: search }]
       : filtFindItems;
+
+  const dummyNewItem = { ...currentItem, [fieldName]: filtFindItemsWithAdd };
 
   return (
     <div className="">
@@ -70,16 +72,7 @@ export const SearchItems = ({
       </div>
       <div className="grid grid-cols-4 gap-1 flex m-2">
         {search !== '' ? (
-          filtFindItemsWithAdd.map(oneItem => (
-            <OneBadge
-              key={oneItem.name}
-              fieldName={fieldName}
-              item={oneItem}
-              action={ActionType.ADD}
-              setItem={setItem}
-              currentItem={currentItem}
-            />
-          ))
+          <BadgeList fieldName={fieldName} action={ActionType.ADD} setItem={setItem} item={dummyNewItem} />
         ) : called ? (
           <p>No matches</p>
         ) : null}

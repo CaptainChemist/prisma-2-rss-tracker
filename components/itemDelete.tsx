@@ -14,7 +14,7 @@ export const ItemDelete = ({ item, type }: { item: FeedObject | BundleObject; ty
   return (
     <>
       {modalVisibility ? (
-        <div className="fixed z-12 inset-0 overflow-y-auto">
+        <div className="fixed z-20 inset-0 overflow-y-auto">
           <div className="flex items-end justify-center min-h-screen px-4 pb-20 text-center sm:block sm:p-0">
             <div className="fixed inset-0 transition-opacity">
               <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
@@ -69,10 +69,10 @@ export const ItemDelete = ({ item, type }: { item: FeedObject | BundleObject; ty
       ) : null}
       <div
         onClick={e => {
-          e.preventDefault(0);
+          e.preventDefault();
           setVisibility(true);
         }}
-        className="flex col-span-1 py-2 mx-2 z-10"
+        className="flex col-span-1 py-2 z-10"
       >
         {deleteItemLoading || loading ? (
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="h-6 w-6 text-gray-500 animate-spin">
