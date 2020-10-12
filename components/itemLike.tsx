@@ -28,7 +28,7 @@ export const ItemLike = ({ item, type }: { item: FeedObject | BundleObject; type
           });
         }
       }}
-      className="flex col-span-1 py-2 mx-2 z-10"
+      className="flex py-2 mx-2 z-10"
     >
       <p>{item.likes.length} </p>
       {likeItemLoading || loading ? (

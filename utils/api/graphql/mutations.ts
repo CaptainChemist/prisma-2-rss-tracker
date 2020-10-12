@@ -42,3 +42,19 @@ export const CREATE_FEED_MUTATION = gql`
     }
   }
 `;
+
+export const DELETE_BUNDLE_MUTATION = gql`
+  mutation deleteBundleMutation($data: BundleInput) {
+    deleteBundle(data: $data) {
+      id
+    }
+  }
+`;
+
+export const DELETE_FEED_MUTATION = gql`
+  mutation deleteFeedMutation($data: FeedInput) {
+    deleteFeed(data: $data) {
+      id
+    }
+  }
+`;

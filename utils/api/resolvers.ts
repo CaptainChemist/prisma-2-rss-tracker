@@ -1,3 +1,5 @@
+import { verifyOwnership } from './verifyOwnership';
+
 const createFieldResolver = (modelName, parName) => ({
   [parName]: async ({ id }, args, { prisma }) => {
     const modelResponse = await prisma[modelName].findOne({
@@ -47,21 +49,15 @@ export const resolvers = {
   },
   Mutation: {
     createFeed: async (parent, { data }, { prisma, user }) => {
-      console.log(data);
       const author = { author: { connect: { id: user.id } } };
       const result = await prisma.feed.create({ data: { ...data, ...author } });
-      console.log('result');
-      console.log(result);
       return result;
     },
     createBundle: async (parent, { data }, { prisma, user }) => {
-      console.log(JSON.stringify(data));
       const author = { author: { connect: { id: user.id } } };
       const result = await prisma.bundle.create({
         data: { ...data, ...author },
       });
-      console.log('result');
-      console.log(result);
       return result;
     },
     createSavedArticle: (parent, { data }, { prisma, user }) => {
@@ -83,6 +79,18 @@ export const resolvers = {
         where: { id: feedId },
         data: { likes: { [connectState]: { id: user.id } } },
       });
+    },
+    deleteBundle: async (parent, { data: { id } }, { prisma, user }) => {
+      const bundle = await prisma.bundle.findOne({ where: { id }, include: { author: true, likes: true } });
+      await verifyOwnership(bundle, user);
+      await prisma.bundle.delete({ where: { id: bundle.id } });
+      return bundle;
+    },
+    deleteFeed: async (parent, { data: { id } }, { prisma, user }) => {
+      const feed = await prisma.feed.findOne({ where: { id }, include: { author: true, likes: true } });
+      await verifyOwnership(feed, user);
+      await prisma.feed.delete({ where: { id: feed.id } });
+      return feed;
     },
   },
 };

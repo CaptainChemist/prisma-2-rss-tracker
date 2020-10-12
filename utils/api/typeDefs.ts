@@ -139,5 +139,7 @@ export const typeDefs = gql`
     createUser(data: UserCreateInput): User
     likeBundle(data: LikeBundleInput): Bundle
     likeFeed(data: LikeFeedInput): Feed
+    deleteBundle(data: BundleInput): Bundle
+    deleteFeed(data: FeedInput): Feed
   }
 `;

@@ -1,6 +1,8 @@
 import { useQuery } from '@apollo/client';
 import { ArticleList } from '../../components/articleList';
 import { Layout } from '../../components/layout';
+import { NotifyError } from '../../components/notifyError';
+import { NotifyLoading } from '../../components/notifyLoading';
 import { OneListItem } from '../../components/oneListItem';
 import { FEED_QUERY } from '../../utils/api/graphql/queries';
 import { BundleObject, ItemType } from '../../utils/types';
@@ -9,11 +11,19 @@ const Feed = ({ id }) => {
   const { loading, error, data } = useQuery(FEED_QUERY, { variables: { data: { id: parseInt(id) } } });
 
   if (loading) {
-    return <p>Loading</p>;
+    return (
+      <Layout>
+        <NotifyLoading />
+      </Layout>
+    );
   }
 
   if (error) {
-    return <p>Error</p>;
+    return (
+      <Layout>
+        <NotifyError />
+      </Layout>
+    );
   }
 
   const { feed } = data || {};

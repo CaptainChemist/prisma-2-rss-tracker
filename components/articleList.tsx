@@ -58,7 +58,6 @@ export const ArticleList = ({ rssFeeds }: { rssFeeds: string[] }) => {
           totalItemsCount={data.length}
           pageRangeDisplayed={5}
           onChange={clickedNumber => {
-            console.log(clickedNumber);
             setPagination(currState => ({ ...currState, currentPage: parseInt(clickedNumber) }));
           }}
         />

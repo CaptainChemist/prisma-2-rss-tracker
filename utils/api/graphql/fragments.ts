@@ -18,6 +18,8 @@ export const AUTHOR_FRAGMENT = gql`
   fragment AuthorFragment on User {
     id
     auth0
+    picture
+    nickname
   }
 `;
 
