@@ -77,3 +77,8 @@ export type BundleObject = {
   author: AuthorObject;
   likes: AuthorObject[];
 };
+
+export type SelectedFeedState = {
+  id: number;
+  feeds: string[];
+};

@@ -1,13 +1,27 @@
 import { ProfilePic } from './profilePic';
 import Link from 'next/link';
 import { ItemLike } from './itemLike';
-import { ActionType, BadgeFieldName, BundleObject, FeedObject, ItemType } from '../utils/types';
+import { ActionType, BadgeFieldName, BundleObject, FeedObject, ItemType, SelectedFeedState } from '../utils/types';
 import { ItemDelete } from './itemDelete';
 import { useFetchUser } from '../utils/user';
 import { BadgeList } from './badgeList';
+import { Dispatch, SetStateAction } from 'react';
 
-export const OneListItem = ({ item, type }: { type: ItemType; item: FeedObject | BundleObject }) => {
+export const OneListItem = ({
+  item,
+  type,
+  selected,
+  setSelected,
+  useSelected = false,
+}: {
+  type: ItemType;
+  item: FeedObject | BundleObject;
+  selected?: SelectedFeedState;
+  setSelected?: Dispatch<SetStateAction<SelectedFeedState>>;
+  useSelected?: boolean;
+}) => {
   const isFeed = type === ItemType.FeedType;
+  const isSelected = useSelected && selected && selected.id === item.id;
   const { user, loading } = useFetchUser();
 
   if (loading) {
@@ -16,7 +30,11 @@ export const OneListItem = ({ item, type }: { type: ItemType; item: FeedObject |
 
   return (
     <Link href={`/${isFeed ? `feed` : `bundle`}/${item.id}`}>
-      <div className={`grid grid-cols-6 rounded py-2 px-2 border-2 bg-${isFeed ? 'green' : 'purple'}-100`}>
+      <div
+        className={`grid grid-cols-6 rounded py-2 px-2 ${isSelected ? `border-4 border-red-300` : `border-2`} bg-${
+          isFeed ? 'green' : 'purple'
+        }-100`}
+      >
         <div className="col-span-5">
           <h4 className="font-bold">{item.name}</h4>
           {!isFeed ? <p>{item['description']}</p> : null}
@@ -40,6 +58,49 @@ export const OneListItem = ({ item, type }: { type: ItemType; item: FeedObject |
             <BadgeList fieldName={isFeed ? BadgeFieldName.bundles : BadgeFieldName.feeds} action={ActionType.NONE} item={item} />
           </div>
         </div>
+        {useSelected ? (
+          <div className="grid grid-cols-2 gap-4 col-span-6 py-2">
+            {isSelected ? (
+              <p
+                onClick={e => {
+                  e.preventDefault();
+                  setSelected({ id: null, feeds: [] });
+                }}
+                className="flex rounded align-middle bg-blue-100 p-2 z-10"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  className={`h-5 w-5 text-gray-500 mr-2 mt-1`}
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 13l-7 7-7-7m14-8l-7 7-7-7" />
+                </svg>
+                {` Hide ${isFeed ? `Feed` : `Bundle`} Articles`}
+              </p>
+            ) : (
+              <p
+                onClick={e => {
+                  e.preventDefault();
+                  setSelected({ id: item.id, feeds: isFeed ? [item['url']] : item['feeds'].map(feed => feed.url) });
+                }}
+                className="flex rounded align-middle bg-blue-100 p-2 z-10"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  className={`h-5 w-5 text-gray-500 mr-2 mt-1`}
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 5l7 7-7 7M5 5l7 7-7 7" />
+                </svg>
+                {` Show ${isFeed ? `Feed` : `Bundle`} Articles`}
+              </p>
+            )}
+          </div>
+        ) : null}
       </div>
     </Link>
   );
