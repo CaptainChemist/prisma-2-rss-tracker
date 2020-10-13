@@ -30,7 +30,7 @@ export const OneBadge = ({
           stroke="currentColor"
           className={`h-5 w-5 text-gray-500`}
           onClick={() => {
-            currentMatches.length === 0 ? setItem(feed => ({ ...feed, [fieldName]: [...feed[fieldName], { ...item }] })) : null;
+            setItem(feed => ({ ...feed, [fieldName]: [...feed[fieldName], { ...item }] }));
           }}
         >
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
