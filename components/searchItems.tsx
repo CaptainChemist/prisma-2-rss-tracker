@@ -18,7 +18,7 @@ export const SearchItems = ({
   fieldName: BadgeFieldName;
 }) => {
   const [search, setSearch] = useState('');
-  const [findItemsQuery, { loading, data, called }] = useLazyQuery(query);
+  const [findItemsQuery, { loading, data, called }] = useLazyQuery(query, { fetchPolicy: 'network-only' });
   const fetchedItems = _.get(data, queryName);
   const filtFindItems = fetchedItems
     ? fetchedItems.filter(oneItem => !currentItem[fieldName].map(o => o.name).includes(oneItem.name))
@@ -65,8 +65,10 @@ export const SearchItems = ({
           value={search}
           onChange={async e => {
             e.persist();
-            setSearch(() => e.target.value);
-            await findItemsQuery({ variables: { data: { search: e.target.value } } });
+            if (e.target.value !== search) {
+              setSearch(() => e.target.value);
+              await findItemsQuery({ variables: { data: { search: e.target.value } } });
+            }
           }}
         />
       </div>
