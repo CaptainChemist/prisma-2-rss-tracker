@@ -31,15 +31,15 @@ export const OneListItem = ({
   return (
     <Link href={`/${isFeed ? `feed` : `bundle`}/${item.id}`}>
       <div
-        className={`grid grid-cols-6 rounded py-2 px-2 ${isSelected ? `border-4 border-red-300` : `border-2`} bg-${
+        className={`grid grid-cols-6 rounded py-2 px-2 ${isSelected ? `border-2 border-red-500` : `border-2`} bg-${
           isFeed ? 'green' : 'purple'
         }-100`}
       >
-        <div className="col-span-5">
+        <div className="col-span-4">
           <h4 className="font-bold">{item.name}</h4>
           {!isFeed ? <p>{item['description']}</p> : null}
         </div>
-        <div className="col-span-1 flex">
+        <div className="col-span-2 flex justify-end">
           <ItemLike item={item} type={type} />
           {!loading && user && item.author.auth0 === user.sub ? <ItemDelete item={item} type={type} /> : null}
         </div>
@@ -59,14 +59,14 @@ export const OneListItem = ({
           </div>
         </div>
         {useSelected ? (
-          <div className="grid grid-cols-2 gap-4 col-span-6 py-2">
+          <div className="gap-4 col-span-6 py-2">
             {isSelected ? (
               <p
                 onClick={e => {
                   e.preventDefault();
                   setSelected({ id: null, feeds: [] });
                 }}
-                className="flex rounded align-middle bg-blue-100 p-2 z-10"
+                className={`flex rounded align-middle bg-${isFeed ? 'green' : 'purple'}-100 p-2 z-10`}
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -85,7 +85,7 @@ export const OneListItem = ({
                   e.preventDefault();
                   setSelected({ id: item.id, feeds: isFeed ? [item['url']] : item['feeds'].map(feed => feed.url) });
                 }}
-                className="flex rounded align-middle bg-blue-100 p-2 z-10"
+                className={`flex rounded align-middle bg-${isFeed ? 'green' : 'purple'}-400 p-2 z-10`}
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"

@@ -29,7 +29,6 @@ export const NewItem = ({ type }: { type: ItemType }) => {
     return <p>Loading</p>;
   }
 
-  console.log(currentItem);
   return (
     <>
       <form
@@ -61,7 +60,7 @@ export const NewItem = ({ type }: { type: ItemType }) => {
           setItem(initialState);
         }}
       >
-        <div className="grid grid-cols-12 gap-4 rounded-md border mt-8 py-2 px-2">
+        <div className="grid grid-cols-12 gap-4 rounded-md border my-4 py-2 px-2">
           <h3 className="col-span-12 text-lg font-medium py-2">{isFeed ? `New Feed` : `New Bundle`}</h3>
 
           <div className="col-span-6">
