@@ -64,9 +64,8 @@ export const OneListItem = ({
               <p
                 onClick={e => {
                   e.preventDefault();
-                  setSelected({ id: null, feeds: [] });
                 }}
-                className={`flex rounded align-middle bg-${isFeed ? 'green' : 'purple'}-100 p-2 z-10`}
+                className={`flex rounded align-middle bg-${isFeed ? 'green' : 'purple'}-400 p-2 z-10`}
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"

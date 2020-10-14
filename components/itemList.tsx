@@ -1,5 +1,5 @@
 import { useQuery } from '@apollo/client';
-import { Dispatch, SetStateAction } from 'react';
+import { Dispatch, SetStateAction, useEffect } from 'react';
 import { BUNDLES_QUERY, FEEDS_QUERY } from '../utils/api/graphql/queries';
 import { BundleObject, FeedObject, ItemType, SelectedFeedState } from '../utils/types';
 import { NotifyError } from './notifyError';
@@ -19,13 +19,22 @@ export const ItemList = ({
 }) => {
   const isFeed = type === ItemType.FeedType;
   const { loading, error, data } = useQuery(isFeed ? FEEDS_QUERY : BUNDLES_QUERY);
+  const { feeds, bundles } = data || {};
+  const itemList = isFeed ? feeds : bundles;
+
+  useEffect(() => {
+    (async () => {
+      if (useSelected && itemList && itemList.length > 0 && selected.id === null) {
+        console.log('a');
+        const firstItem = itemList[0];
+        await setSelected({ id: firstItem.id, feeds: isFeed ? [firstItem['url']] : firstItem['feeds'].map(feed => feed.url) });
+      }
+    })();
+  });
 
   if (loading) {
     return <NotifyLoading />;
   }
-
-  const { feeds, bundles } = data || {};
-  const itemList = isFeed ? feeds : bundles;
 
   if (error || !itemList) {
     return <NotifyError />;

@@ -28,7 +28,7 @@ export const ArticleList = ({ rssFeeds }: { rssFeeds: string[] }) => {
         setGet(o => ({ ...o, error, loading: false }));
       }
     })();
-  }, []);
+  }, [rssFeeds]);
 
   if (loading) {
     return <p>Loading</p>;
@@ -48,7 +48,7 @@ export const ArticleList = ({ rssFeeds }: { rssFeeds: string[] }) => {
       <h3 className="py-4 font-medium">Articles</h3>
       <div className="grid grid-cols-1 gap-4">
         {currentArticles.map(oneArticle => (
-          <OneArticle article={oneArticle} key={oneArticle.guid} />
+          <OneArticle article={oneArticle} key={oneArticle.title} />
         ))}
         <Pagination
           innerClass="rounded py-2 px-2 flex"
