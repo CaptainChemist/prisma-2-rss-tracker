@@ -27,14 +27,9 @@ const Index = () => {
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
-              className={`h-6 w-6 text-${showNewState ? `gray` : `blue`}-500 mt-4 mr-1`}
+              className={`h-6 w-6 text-${showNewState ? `gray` : `blue`}-500 mt-4`}
             >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"
-              />
+               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
             </svg>
             <h3 className={`grid-cols-1 justify-start flex text-lg font-medium py-4 text-${showNewState ? `gray` : `blue`}-500`}>
               New Bundle

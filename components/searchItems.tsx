@@ -72,11 +72,11 @@ export const SearchItems = ({
           }}
         />
       </div>
-      <div className="grid grid-cols-4 gap-1 flex m-2">
+      <div className="grid grid-cols-3 gap-2 flex m-2">
         {search !== '' ? (
           <BadgeList fieldName={fieldName} action={ActionType.ADD} setItem={setItem} item={dummyNewItem} />
         ) : called ? (
-          <p>No matches</p>
+          <p className="text-gray-400">No matches</p>
         ) : null}
       </div>
     </div>

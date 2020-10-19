@@ -3,7 +3,9 @@ import { AuthorObject } from '../utils/types';
 export const ProfilePic = ({ author }: { author: AuthorObject }) => (
   <>
     {author.picture ? (
-      <img className="rounded w-6 h-6" src={author.picture} />
+      <div className="rounded-full">
+      <img className="rounded-full p-0.5 w-8 h-8 border-2 border-gray-300" src={author.picture} />
+      </div>
     ) : (
       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="w-6 h-6 text-gray-500">
         <path

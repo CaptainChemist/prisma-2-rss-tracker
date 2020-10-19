@@ -71,7 +71,7 @@ export const NewItem = ({ type }: { type: ItemType }) => {
           <div className="col-span-6">
             <div className="py-2">
               <label className="block py-2">Tags:</label>
-              <div className="grid grid-cols-4 gap-1">
+              <div className="grid grid-cols-3 gap-2">
                 <BadgeList fieldName={BadgeFieldName.tags} action={ActionType.CREATE} setItem={setItem} item={currentItem} />
               </div>
             </div>
@@ -89,7 +89,7 @@ export const NewItem = ({ type }: { type: ItemType }) => {
               <>
                 <div className="py-2">
                   <label className="block py-4">Feeds:</label>
-                  <div className="grid grid-cols-4 gap-1">
+                  <div className="grid grid-cols-3 gap-2">
                     <BadgeList fieldName={BadgeFieldName.feeds} action={ActionType.CREATE} setItem={setItem} item={currentItem} />
                   </div>
                 </div>

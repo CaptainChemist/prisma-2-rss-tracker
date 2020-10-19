@@ -20,6 +20,6 @@ export const BadgeList = ({
       ))}
     </>
   ) : (
-    <p>None found</p>
+    <p className="text-gray-400">None found</p>
   );
 };
