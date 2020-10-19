@@ -31,7 +31,7 @@ export const OneListItem = ({
   return (
     <Link href={`/${isFeed ? `feed` : `bundle`}/${item.id}`}>
       <div>
-        <div className={`grid grid-cols-6 p-4 rounded-lg rounded-b-none border-t-4 border-l-4 border-r-4 ${isSelected ? `border-${isFeed ? 'green' : 'purple'}-400` : `border-gray-300`}`}>
+        <div className={`grid grid-cols-6 p-4 rounded-lg ${useSelected? 'rounded-b-none': 'border-b-4'} border-t-4 border-l-4 border-r-4 ${isSelected ? `border-${isFeed ? 'green' : 'purple'}-400` : `border-gray-300`}`}>
           <div className="col-span-4">
             <h4 className="font-bold">{item.name}</h4>
             {!isFeed ? <p>{item['description']}</p> : null}
