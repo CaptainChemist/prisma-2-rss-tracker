@@ -1,0 +1,65 @@
+{
+  "version": "0.3.14-fixed",
+  "steps": [
+    {
+      "tag": "CreateField",
+      "model": "Feed",
+      "field": "savedArticles",
+      "type": "SavedArticle",
+      "arity": "List"
+    },
+    {
+      "tag": "CreateField",
+      "model": "SavedArticle",
+      "field": "feed",
+      "type": "Feed",
+      "arity": "Required"
+    },
+    {
+      "tag": "CreateDirective",
+      "location": {
+        "path": {
+          "tag": "Field",
+          "model": "SavedArticle",
+          "field": "feed"
+        },
+        "directive": "relation"
+      }
+    },
+    {
+      "tag": "CreateArgument",
+      "location": {
+        "tag": "Directive",
+        "path": {
+          "tag": "Field",
+          "model": "SavedArticle",
+          "field": "feed"
+        },
+        "directive": "relation"
+      },
+      "argument": "fields",
+      "value": "[feedId]"
+    },
+    {
+      "tag": "CreateArgument",
+      "location": {
+        "tag": "Directive",
+        "path": {
+          "tag": "Field",
+          "model": "SavedArticle",
+          "field": "feed"
+        },
+        "directive": "relation"
+      },
+      "argument": "references",
+      "value": "[id]"
+    },
+    {
+      "tag": "CreateField",
+      "model": "SavedArticle",
+      "field": "feedId",
+      "type": "Int",
+      "arity": "Required"
+    }
+  ]
+}

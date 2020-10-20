@@ -1,6 +1,6 @@
 datasource db {
   provider = "postgres"
-  url      = env("DATABASE_URL")
+  url = "***"
 }
 
 generator client {
@@ -8,15 +8,14 @@ generator client {
 }
 
 model Feed {
-  id            Int            @id @default(autoincrement())
-  name          String
-  url           String         @unique
-  bundles       Bundle[]
-  author        User?          @relation(name: "FeedAuthor", fields: [authorId], references: [id])
-  authorId      Int?
-  tags          FeedTag[]
-  likes         User[]         @relation(name: "FeedUserLikes")
-  savedArticles SavedArticle[]
+  id       Int       @id @default(autoincrement())
+  name     String
+  url      String    @unique
+  bundles  Bundle[]
+  author   User?     @relation(name: "FeedAuthor", fields: [authorId], references: [id])
+  authorId Int?
+  tags     FeedTag[]
+  likes    User[]    @relation(name: "FeedUserLikes")
 }
 
 model Bundle {
@@ -48,9 +47,7 @@ model SavedArticle {
   author   User?  @relation(fields: [authorId], references: [id])
   contents Json
   url      String @unique
-  feed     Feed   @relation(fields: [feedId], references: [id])
   authorId Int?
-  feedId   Int
 }
 
 model BundleTag {
