@@ -25,7 +25,6 @@ export const ItemList = ({
   useEffect(() => {
     (async () => {
       if (useSelected && itemList && itemList.length > 0 && selected.id === null) {
-        console.log('a');
         const firstItem = itemList[0];
         await setSelected({ id: firstItem.id, feeds: isFeed ? [firstItem['url']] : firstItem['feeds'].map(feed => feed.url) });
       }
@@ -42,7 +41,7 @@ export const ItemList = ({
 
   return (
     <>
-      <div className="grid grid-cols-3 gap-4">
+      <div className="grid lg:grid-cols-3 md:grid-cols-2 gap-4">
         {itemList.length > 0 ? (
           itemList.map((item: FeedObject | BundleObject) => (
             <OneListItem item={item} type={type} key={item.id} useSelected={useSelected} selected={selected} setSelected={setSelected} />
