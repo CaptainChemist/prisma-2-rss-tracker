@@ -1,6 +1,6 @@
 datasource db {
   provider = "postgres"
-  url      = "***"
+  url = "***"
 }
 
 generator client {
@@ -43,9 +43,9 @@ model User {
 }
 
 model SavedArticle {
-  id       Int    @id @default(autoincrement())
-  author   User?  @relation(fields: [authorId], references: [id])
-  url      String
+  id       Int   @id @default(autoincrement())
+  author   User? @relation(fields: [authorId], references: [id])
+  contents Json
   authorId Int?
 }
 
