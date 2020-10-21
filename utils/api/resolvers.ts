@@ -39,10 +39,10 @@ export const resolvers = {
   Query: {
     feed: (parent, { data: { id } }, { prisma }) => prisma.feed.findOne({ where: { id } }),
     bundle: (parent, { data: { id } }, { prisma }) => prisma.bundle.findOne({ where: { id } }),
-    savedArticle: (parent, { data: { url, id } }, { prisma }) => prisma.savedArticle.findOne({ where: { url, id } }),
+    savedArticle: (parent, { data: { url, id } }, { prisma }) => prisma.savedArticle.findOne({ where: { url, id} }),
     feeds: (parent, args, { prisma }) => prisma.feed.findMany(),
     bundles: (parent, args, { prisma }) => prisma.bundle.findMany(),
-    savedArticles: (parent, args, { prisma, user:{id} }) => prisma.savedArticle.findMany({authorId: id}),
+    savedArticles: (parent, args, { prisma, user:{id: authorId} }) =>  prisma.savedArticle.findMany({ where: { authorId: authorId? authorId: null }}),
     me: (parent, args, { prisma, user: { id } }) => prisma.user.findOne({ where: { id } }),
     feedTags: (parent, args, { prisma }) => prisma.feedTag.findMany(),
     bundleTags: (parent, args, { prisma }) => prisma.bundleTag.findMany(),

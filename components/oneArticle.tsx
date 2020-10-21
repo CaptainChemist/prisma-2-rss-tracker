@@ -50,7 +50,7 @@ export const OneArticle = ({ article, feed }:{article, feed: Feed}) => {
             }
           } 
         }}
-        className="col-span-1 flex items-center justify-center z-10">
+        className="col-span-1 flex items-center justify-center z-10 cursor-pointer">
             <Heart size={8} liked={!_.isNull(savedArticle)} loading={loading}/>
         </div>
         <div className="col-span-10">
