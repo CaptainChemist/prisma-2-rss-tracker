@@ -67,3 +67,20 @@ export const BUNDLE_FRAGMENT = gql`
   ${BUNDLE_TAG_FRAGMENT}
   ${AUTHOR_FRAGMENT}
 `;
+
+export const SAVED_ARTICLE_FRAGMENT = gql`
+  fragment SavedArticleFragment on SavedArticle {
+    id
+    contents
+    url
+    author {
+      ...AuthorFragment
+    }
+    feed {
+      ...FeedFragment
+    }
+
+  }
+  ${AUTHOR_FRAGMENT}
+  ${FEED_FRAGMENT}
+`

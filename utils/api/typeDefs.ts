@@ -1,6 +1,8 @@
 import { gql } from 'apollo-server-micro';
 
 export const typeDefs = gql`
+  scalar JSON
+
   type Feed {
     id: Int
     name: String
@@ -9,6 +11,7 @@ export const typeDefs = gql`
     author: User
     tags: [FeedTag]
     likes: [User]
+    savedArticles: [SavedArticle]
   }
   type Bundle {
     id: Int
@@ -34,6 +37,8 @@ export const typeDefs = gql`
     id: Int
     author: User
     url: String
+    contents: JSON
+    feed: Feed
   }
   type BundleTag {
     id: Int
@@ -66,7 +71,6 @@ export const typeDefs = gql`
     tags: NestedBundleTagCreateInput
     feeds: NestedBundleFeedCreateInput
   }
-
   input NestedBundleTagCreateInput {
     create: [BundleTagCreateInput]
     connect: [BundleTagWhereUniqueInput]
@@ -88,7 +92,12 @@ export const typeDefs = gql`
     url: String
   }
   input SavedArticleCreateInput {
+    feed: NestedFeedCreateInput
+    contents: JSON
     url: String
+  }
+  input NestedFeedCreateInput {
+    connect: FeedWhereUniqueInput
   }
   input UserCreateInput {
     auth0: String
@@ -107,24 +116,28 @@ export const typeDefs = gql`
   input FindBundleTagsInput {
     search: String
   }
-
   input FindFeedsInput {
     search: String
   }
-
   input FeedInput {
     id: Int
   }
   input BundleInput {
     id: Int
   }
+  input SavedArticleInput {
+    url: String
+    id: Int
+  }
+
 
   type Query {
     feed(data: FeedInput): Feed
     bundle(data: BundleInput): Bundle
+    savedArticle(data: SavedArticleInput): SavedArticle
     feeds: [Feed]
     bundles: [Bundle]
-    savedArticles: [SavedArticle]
+    savedArticles: [SavedArticle] 
     me: [User]
     feedTags: [FeedTag]
     bundleTags: [BundleTag]
@@ -141,5 +154,6 @@ export const typeDefs = gql`
     likeFeed(data: LikeFeedInput): Feed
     deleteBundle(data: BundleInput): Bundle
     deleteFeed(data: FeedInput): Feed
+    deleteSavedArticle(data: SavedArticleInput): SavedArticle
   }
 `;

@@ -26,7 +26,7 @@ export const ItemList = ({
     (async () => {
       if (useSelected && itemList && itemList.length > 0 && selected.id === null) {
         const firstItem = itemList[0];
-        await setSelected({ id: firstItem.id, feeds: isFeed ? [firstItem['url']] : firstItem['feeds'].map(feed => feed.url) });
+        await setSelected({ id: firstItem.id, feeds: isFeed ? [firstItem] : firstItem['feeds'] });
       }
     })();
   });

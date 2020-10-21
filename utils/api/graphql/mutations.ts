@@ -43,6 +43,15 @@ export const CREATE_FEED_MUTATION = gql`
   }
 `;
 
+export const CREATE_SAVED_ARTICLE_MUTATION = gql`
+  mutation createSavedArticleMutation($data: SavedArticleCreateInput) {
+    createSavedArticle(data: $data) {
+      id
+    }
+  }
+`;
+
+
 export const DELETE_BUNDLE_MUTATION = gql`
   mutation deleteBundleMutation($data: BundleInput) {
     deleteBundle(data: $data) {
@@ -54,6 +63,14 @@ export const DELETE_BUNDLE_MUTATION = gql`
 export const DELETE_FEED_MUTATION = gql`
   mutation deleteFeedMutation($data: FeedInput) {
     deleteFeed(data: $data) {
+      id
+    }
+  }
+`;
+
+export const DELETE_SAVED_ARTICLE_MUTATION = gql`
+  mutation deleteSavedArticleMutation($data: SavedArticleInput) {
+    deleteSavedArticle(data: $data) {
       id
     }
   }

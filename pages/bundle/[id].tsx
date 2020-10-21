@@ -1,5 +1,5 @@
 import { useQuery } from '@apollo/client';
-import { ArticleList } from '../../components/articleList';
+import { GenerateArticleList } from '../../components/generateArticleList';
 import { NotifyError } from '../../components/notifyError';
 import { Layout } from '../../components/layout';
 import { OneListItem } from '../../components/oneListItem';
@@ -40,7 +40,7 @@ const Bundle = ({ id }) => {
           <p>None are present. Why not add one?</p>
         )}
       </div>
-      <ArticleList rssFeeds={bundle.feeds.map(feed => feed.url)} />
+      <GenerateArticleList feeds={bundle.feeds} />
     </Layout>
   );
 };

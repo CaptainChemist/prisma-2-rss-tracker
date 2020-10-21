@@ -63,7 +63,9 @@ export const OneListItem = ({
                 onClick={e => {
                   e.preventDefault();
                 }}
-                className={`flex rounded-lg rounded-t-none align-middle bg-${isFeed ? 'green' : 'purple'}-400 p-4 z-10 text-white`}
+                className={`flex rounded-lg rounded-t-none align-middle 
+                ${isSelected ? `bg-${isFeed ? 'green' : 'purple'}-400` : `bg-gray-300`}
+                p-4 z-10 text-white`}
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -80,9 +82,11 @@ export const OneListItem = ({
               <p
                 onClick={e => {
                   e.preventDefault();
-                  setSelected({ id: item.id, feeds: isFeed ? [item['url']] : item['feeds'].map(feed => feed.url) });
+                  setSelected({ id: item.id, feeds: isFeed ? [item] : item['feeds'] });
                 }}
-                className={`flex rounded-lg rounded-t-none align-middle bg-${isFeed ? 'green' : 'purple'}-400 p-4 z-10 text-white`}
+                className={`flex rounded-lg rounded-t-none align-middle 
+                ${isSelected ? `bg-${isFeed ? 'green' : 'purple'}-400` : `bg-gray-300`} 
+                p-4 z-10 text-white`}
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"

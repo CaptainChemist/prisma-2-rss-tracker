@@ -1,3 +1,4 @@
+import { GraphQLJSONObject } from 'graphql-type-json';
 import { verifyOwnership } from './verifyOwnership';
 
 const createFieldResolver = (modelName, parName) => ({
@@ -11,11 +12,13 @@ const createFieldResolver = (modelName, parName) => ({
 });
 
 export const resolvers = {
+  JSON: GraphQLJSONObject,
   Feed: {
     ...createFieldResolver('feed', 'author'),
     ...createFieldResolver('feed', 'bundles'),
     ...createFieldResolver('feed', 'likes'),
     ...createFieldResolver('feed', 'tags'),
+    ...createFieldResolver('feed', 'savedArticles'),
   },
   Bundle: {
     ...createFieldResolver('bundle', 'author'),
@@ -25,6 +28,7 @@ export const resolvers = {
   },
   SavedArticle: {
     ...createFieldResolver('savedArticle', 'author'),
+    ...createFieldResolver('savedArticle', 'feed'),
   },
   BundleTag: {
     ...createFieldResolver('bundleTag', 'bundles'),
@@ -35,11 +39,10 @@ export const resolvers = {
   Query: {
     feed: (parent, { data: { id } }, { prisma }) => prisma.feed.findOne({ where: { id } }),
     bundle: (parent, { data: { id } }, { prisma }) => prisma.bundle.findOne({ where: { id } }),
+    savedArticle: (parent, { data: { url, id } }, { prisma }) => prisma.savedArticle.findOne({ where: { url, id } }),
     feeds: (parent, args, { prisma }) => prisma.feed.findMany(),
-    // need to only return public and private by the current user
     bundles: (parent, args, { prisma }) => prisma.bundle.findMany(),
-    //need to only return those by current user
-    savedArticles: (parent, args, { prisma }) => prisma.savedArticle.findMany(),
+    savedArticles: (parent, args, { prisma, user:{id} }) => prisma.savedArticle.findMany({authorId: id}),
     me: (parent, args, { prisma, user: { id } }) => prisma.user.findOne({ where: { id } }),
     feedTags: (parent, args, { prisma }) => prisma.feedTag.findMany(),
     bundleTags: (parent, args, { prisma }) => prisma.bundleTag.findMany(),
@@ -91,6 +94,11 @@ export const resolvers = {
       await verifyOwnership(feed, user);
       await prisma.feed.delete({ where: { id: feed.id } });
       return feed;
+    },
+    deleteSavedArticle: async (parent, { data: { id } }, { prisma, user }) => {
+      const savedArticle = await prisma.savedArticle.findOne({ where: { id }, include: { author: true } });
+      await verifyOwnership(savedArticle, user);
+      return prisma.savedArticle.delete({ where: { id: savedArticle.id } });
     },
   },
 };

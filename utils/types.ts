@@ -1,3 +1,5 @@
+import { Feed } from "@prisma/client";
+
 export enum ActionType {
   ADD = 'ADD',
   CREATE = 'CREATE',
@@ -80,5 +82,5 @@ export type BundleObject = {
 
 export type SelectedFeedState = {
   id: number;
-  feeds: string[];
+  feeds: Feed[];
 };
