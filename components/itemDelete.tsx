@@ -72,7 +72,7 @@ export const ItemDelete = ({ item, type }: { item: FeedObject | BundleObject; ty
           e.preventDefault();
           setVisibility(true);
         }}
-        className="flex col-span-1 py-2 z-10"
+        className="flex col-span-1 py-2 px-1 z-10"
       >
         {deleteItemLoading || loading ? (
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="h-6 w-6 text-gray-500 animate-spin">

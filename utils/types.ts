@@ -83,4 +83,5 @@ export type BundleObject = {
 export type SelectedFeedState = {
   id: number;
   feeds: Feed[];
+  editMode: boolean;
 };

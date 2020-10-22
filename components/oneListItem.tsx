@@ -6,6 +6,7 @@ import { ItemDelete } from './itemDelete';
 import { useFetchUser } from '../utils/user';
 import { BadgeList } from './badgeList';
 import { Dispatch, SetStateAction } from 'react';
+import { ItemEdit } from './itemEdit';
 
 export const OneListItem = ({
   item,
@@ -27,6 +28,8 @@ export const OneListItem = ({
   if (loading) {
     return <p>Loading</p>;
   }
+  const canManipulate = !loading && user && item.author.auth0 === user.sub && useSelected
+
 
   return (
     <Link href={`/${isFeed ? `feed` : `bundle`}/${item.id}`}>
@@ -38,7 +41,8 @@ export const OneListItem = ({
           </div>
           <div className="col-span-2 flex justify-end">
             <ItemLike item={item} type={type} />
-            {!loading && user && item.author.auth0 === user.sub ? <ItemDelete item={item} type={type} /> : null}
+            {canManipulate ? <ItemEdit item={item} type={type} selected={selected} setSelected={setSelected} />: null}
+            {canManipulate ? <ItemDelete item={item} type={type} /> : null}
           </div>
 
           <div className="flex col-span-6 py-0 space-x-2">{item.author ? <ProfilePic author={item.author} /> : null}</div>
@@ -82,7 +86,7 @@ export const OneListItem = ({
               <p
                 onClick={e => {
                   e.preventDefault();
-                  setSelected({ id: item.id, feeds: isFeed ? [item] : item['feeds'] });
+                  setSelected({ id: item.id, feeds: isFeed ? [item] : item['feeds'], editMode: false });
                 }}
                 className={`flex rounded-lg rounded-t-none align-middle 
                 ${isSelected ? `bg-${isFeed ? 'green' : 'purple'}-400` : `bg-gray-300`} 

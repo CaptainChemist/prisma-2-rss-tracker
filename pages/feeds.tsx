@@ -6,9 +6,9 @@ import { useFetchUser } from '../utils/user';
 import { useState } from 'react';
 import { GenerateArticleList } from '../components/generateArticleList';
 
-const Index = () => {
+const FeedsPage = () => {
   const { user, loading } = useFetchUser();
-  const initialSelected: SelectedFeedState = { id: null, feeds: [] };
+  const initialSelected: SelectedFeedState = { id: null, feeds: [], editMode: false };
   const [selected, setSelected] = useState(initialSelected);
   const [showNewState, setNewState] = useState(false);
 
@@ -46,4 +46,4 @@ const Index = () => {
     </Layout>
   );
 };
-export default Index;
+export default FeedsPage;

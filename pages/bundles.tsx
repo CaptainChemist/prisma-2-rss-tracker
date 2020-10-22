@@ -5,12 +5,10 @@ import { ItemType, SelectedFeedState } from '../utils/types';
 import { ItemList } from '../components/itemList';
 import { useFetchUser } from '../utils/user';
 import { GenerateArticleList } from '../components/generateArticleList';
-import { Feed } from '@prisma/client';
 
-
-const Index = () => {
+const BundlesPage = () => {
   const { user, loading } = useFetchUser();
-  const initialSelected: SelectedFeedState = { id: null, feeds: [] };
+  const initialSelected: SelectedFeedState = { id: null, feeds: [], editMode: false };
   const [selected, setSelected] = useState(initialSelected);
   const [showNewState, setNewState] = useState(false);
 
@@ -48,5 +46,5 @@ const Index = () => {
     </Layout>
   );
 };
-export default Index;
+export default BundlesPage;
 

@@ -4,8 +4,8 @@ import { ItemList } from '../components/itemList';
 import { Layout } from '../components/layout';
 import { ItemType, SelectedFeedState } from '../utils/types';
 
-const Index = () => {
-  const initialSelected: SelectedFeedState = { id: null, feeds: [] };
+const IndexPage = () => {
+  const initialSelected: SelectedFeedState = { id: null, feeds: [], editMode: false };
   const [selected, setSelected] = useState(initialSelected);
 
   return (
@@ -16,4 +16,4 @@ const Index = () => {
     </Layout>
   );
 };
-export default Index;
+export default IndexPage;
