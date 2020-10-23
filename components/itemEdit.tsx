@@ -20,7 +20,7 @@ export const ItemEdit = ({
         <div 
         onClick={e=> {
             e.stopPropagation() 
-            setSelected({ id: item.id, feeds: isFeed ? [item] : item['feeds'], editMode: selected.editMode ? false : true });
+            setSelected({ id: item.id, feeds: isFeed ? [item] : item['feeds'], editMode: selected.editMode ? false : true, newMode: false });
         }}
         className="flex py-2 mx-1 z-10">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"

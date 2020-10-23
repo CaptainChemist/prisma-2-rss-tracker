@@ -14,12 +14,14 @@ export const OneListItem = ({
   selected,
   setSelected,
   useSelected = false,
+  allowEdits = false
 }: {
   type: ItemType;
   item: FeedObject | BundleObject;
   selected?: SelectedFeedState;
   setSelected?: Dispatch<SetStateAction<SelectedFeedState>>;
   useSelected?: boolean;
+  allowEdits?: boolean;
 }) => {
   const isFeed = type === ItemType.FeedType;
   const isSelected = useSelected && selected && selected.id === item.id;
@@ -28,7 +30,7 @@ export const OneListItem = ({
   if (loading) {
     return <p>Loading</p>;
   }
-  const canManipulate = !loading && user && item.author.auth0 === user.sub && useSelected
+  const canManipulate = !loading && user && item.author.auth0 === user.sub && useSelected && allowEdits
 
 
   return (
@@ -86,7 +88,7 @@ export const OneListItem = ({
               <p
                 onClick={e => {
                   e.preventDefault();
-                  setSelected({ id: item.id, feeds: isFeed ? [item] : item['feeds'], editMode: false });
+                  setSelected({ id: item.id, feeds: isFeed ? [item] : item['feeds'], editMode: false, newMode: false });
                 }}
                 className={`flex rounded-lg rounded-t-none align-middle 
                 ${isSelected ? `bg-${isFeed ? 'green' : 'purple'}-400` : `bg-gray-300`} 

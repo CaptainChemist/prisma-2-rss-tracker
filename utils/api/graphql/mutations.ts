@@ -34,10 +34,25 @@ export const CREATE_BUNDLE_MUTATION = gql`
     }
   }
 `;
+export const UPDATE_BUNDLE_MUTATION = gql`
+  mutation updateBundleMutation($data: BundleUpdateInput) {
+    updateBundle(data: $data) {
+      id
+    }
+  }
+`;
 
 export const CREATE_FEED_MUTATION = gql`
   mutation createFeedMutation($data: FeedCreateInput) {
     createFeed(data: $data) {
+      id
+    }
+  }
+`;
+
+export const UPDATE_FEED_MUTATION = gql`
+  mutation updateFeedMutation($data: FeedUpdateInput) {
+    updateFeed(data: $data) {
       id
     }
   }

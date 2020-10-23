@@ -84,4 +84,5 @@ export type SelectedFeedState = {
   id: number;
   feeds: Feed[];
   editMode: boolean;
+  newMode: boolean;
 };

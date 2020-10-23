@@ -8,9 +8,8 @@ import { GenerateArticleList } from '../components/generateArticleList';
 
 const FeedsPage = () => {
   const { user, loading } = useFetchUser();
-  const initialSelected: SelectedFeedState = { id: null, feeds: [], editMode: false };
+  const initialSelected: SelectedFeedState = { id: null, feeds: [], editMode: false, newMode: false };
   const [selected, setSelected] = useState(initialSelected);
-  const [showNewState, setNewState] = useState(false);
 
   return (
     <Layout>
@@ -21,27 +20,27 @@ const FeedsPage = () => {
             <svg
               onClick={e => {
                 e.persist();
-                setNewState(currState => !currState);
+                setSelected(currState => ({...currState, newMode: !currState.newMode, editMode: false}));
               }}
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
-              className={`h-6 w-6 text-${showNewState ? `gray` : `blue`}-500 mt-4`}
+              className={`h-6 w-6 text-${selected.newMode ? `gray` : `blue`}-500 mt-4`}
             >
-              {showNewState? 
+              {selected.newMode? 
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />:
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
               }
             </svg>
-            <h3 className={`grid-cols-1 justify-start flex text-lg font-medium py-4 text-${showNewState ? `gray` : `blue`}-500`}>
+            <h3 className={`grid-cols-1 justify-start flex text-lg font-medium py-4 text-${selected.newMode ? `gray` : `blue`}-500`}>
               New Feed
             </h3>
           </div>
         ) : null}
       </div>
-      {showNewState && user ? <NewItem type={ItemType.FeedType} /> : null}
-      <ItemList type={ItemType.FeedType} useSelected={true} selected={selected} setSelected={setSelected} />
+      {(selected.editMode || selected.newMode) && user ? <NewItem type={ItemType.FeedType} selected={selected} setSelected={setSelected} /> : null}
+      <ItemList type={ItemType.FeedType} useSelected={true} allowEdits={true} selected={selected} setSelected={setSelected} />
       {selected.feeds.length > 0 ? <GenerateArticleList feeds={selected.feeds} /> : <h3 className="py-4 font-medium">No Feed Selected</h3>}
     </Layout>
   );

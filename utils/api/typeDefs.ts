@@ -55,9 +55,20 @@ export const typeDefs = gql`
     name: String
     tags: NestedFeedTagCreateInput
   }
+  input FeedUpdateInput {
+    id: Int
+    url: String
+    name: String
+    tags: NestedFeedTagUpdateInput
+  }
   input NestedFeedTagCreateInput {
     create: [FeedTagCreateInput]
     connect: [FeedTagWhereUniqueInput]
+  }
+  input NestedFeedTagUpdateInput {
+    create: [FeedTagCreateInput]
+    connect: [FeedTagWhereUniqueInput]
+    disconnect: [FeedTagWhereUniqueInput]
   }
   input FeedTagCreateInput {
     name: String
@@ -71,13 +82,30 @@ export const typeDefs = gql`
     tags: NestedBundleTagCreateInput
     feeds: NestedBundleFeedCreateInput
   }
+  input BundleUpdateInput {
+    id: Int
+    name: String
+    description: String
+    tags: NestedBundleTagUpdateInput
+    feeds: NestedBundleFeedUpdateInput
+  }
   input NestedBundleTagCreateInput {
     create: [BundleTagCreateInput]
     connect: [BundleTagWhereUniqueInput]
   }
+  input NestedBundleTagUpdateInput {
+    create: [BundleTagCreateInput]
+    connect: [BundleTagWhereUniqueInput]
+    disconnect: [BundleTagWhereUniqueInput]
+  }
   input NestedBundleFeedCreateInput {
     create: [FeedCreateInput]
     connect: [FeedWhereUniqueInput]
+  }
+  input NestedBundleFeedUpdateInput {
+    create: [FeedCreateInput]
+    connect: [FeedWhereUniqueInput]
+    disconnect: [FeedWhereUniqueInput]
   }
   input FeedTagWhereUniqueInput {
     id: Int
@@ -155,5 +183,7 @@ export const typeDefs = gql`
     deleteBundle(data: BundleInput): Bundle
     deleteFeed(data: FeedInput): Feed
     deleteSavedArticle(data: SavedArticleInput): SavedArticle
+    updateBundle(data: BundleUpdateInput): Bundle
+    updateFeed(data: FeedUpdateInput): Feed
   }
 `;

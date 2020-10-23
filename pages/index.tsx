@@ -5,7 +5,7 @@ import { Layout } from '../components/layout';
 import { ItemType, SelectedFeedState } from '../utils/types';
 
 const IndexPage = () => {
-  const initialSelected: SelectedFeedState = { id: null, feeds: [], editMode: false };
+  const initialSelected: SelectedFeedState = { id: null, feeds: [], editMode: false, newMode: false };
   const [selected, setSelected] = useState(initialSelected);
 
   return (

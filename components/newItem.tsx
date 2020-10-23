@@ -1,21 +1,28 @@
-import { useMutation } from '@apollo/client';
-import { useState } from 'react';
-import { CREATE_BUNDLE_MUTATION, CREATE_FEED_MUTATION } from '../utils/api/graphql/mutations';
+import { useMutation, useQuery } from '@apollo/client';
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import { CREATE_BUNDLE_MUTATION, CREATE_FEED_MUTATION, UPDATE_BUNDLE_MUTATION, UPDATE_FEED_MUTATION } from '../utils/api/graphql/mutations';
 import {
   BUNDLES_QUERY,
+  BUNDLE_QUERY,
   FEEDS_QUERY,
+  FEED_QUERY,
   FIND_BUNDLE_TAGS_QUERY,
   FIND_FEEDS_QUERY,
   FIND_FEED_TAGS_QUERY,
 } from '../utils/api/graphql/queries';
-import { ActionType, BadgeFieldName, BundleState, FeedState, ItemType, SearchQueryName } from '../utils/types';
+import { ActionType, BadgeFieldName, BundleState, FeedState, ItemType, SearchQueryName, SelectedFeedState } from '../utils/types';
 import { GenerateInputField } from './generateInputField';
 import { SearchItems } from './searchItems';
 import { BadgeList } from './badgeList';
+import { prepareNewUpdateObj } from '../utils/prepareUpdateObj';
 
 type NewItemState = FeedState | BundleState;
 
-export const NewItem = ({ type }: { type: ItemType }) => {
+export const NewItem = ({ type, setSelected, selected }: { 
+  type: ItemType; 
+  setSelected?: Dispatch<SetStateAction<SelectedFeedState>>;
+  selected: SelectedFeedState;
+}) => {
   const isFeed = type === ItemType.FeedType;
   const initialFeed: FeedState = { name: '', url: '', tags: [] };
   const initialBundle: BundleState = { name: '', description: '', tags: [], feeds: [] };
@@ -23,41 +30,51 @@ export const NewItem = ({ type }: { type: ItemType }) => {
   const inputFields = isFeed ? ['name', 'url'] : ['name', 'description'];
 
   const [currentItem, setItem] = useState<NewItemState>(initialState);
-  const [createItemMutation, { loading }] = useMutation(isFeed ? CREATE_FEED_MUTATION : CREATE_BUNDLE_MUTATION);
+  const [createItemMutation, { loading: createLoading }] = useMutation(isFeed ? CREATE_FEED_MUTATION : CREATE_BUNDLE_MUTATION);
+  const [updateItemMutation, { loading: updateLoading }] = useMutation(isFeed ? UPDATE_FEED_MUTATION : UPDATE_BUNDLE_MUTATION);
 
-  if (loading) {
+  const variables = {data: {id: selected.id}}
+  const {loading: itemQueryLoading, error: itemQueryError, data: itemQueryData } = useQuery(isFeed? FEED_QUERY : BUNDLE_QUERY, {variables})
+  const {bundle, feed} = itemQueryData || {}
+  const item = isFeed ? feed: bundle
+
+  useEffect(()=> {
+    (async ()=> {
+      if(item && selected.editMode){
+        const {__typename, likes, author, ...cleanedItem } = item
+        setItem({ ...cleanedItem })
+      } else {
+        setItem(initialState)
+      }
+    })()
+  }, [itemQueryData])
+
+  if (createLoading || updateLoading || itemQueryLoading) {
     return <p>Loading</p>;
   }
 
   return (
     <>
       <form
-        onSubmit={e => {
+        onSubmit={ e => {
           e.preventDefault();
-          const tags =
-            'tags' in currentItem
-              ? {
-                  tags: {
-                    connect: currentItem.tags.map(({ id }) => ({ id })).filter(({ id }) => id !== undefined),
-                    create: currentItem.tags.filter(({ id }) => id === undefined),
-                  },
-                }
-              : {};
-          const feeds =
-            'feeds' in currentItem
-              ? {
-                  feeds: {
-                    connect: currentItem.feeds.map(({ id }) => ({ id })).filter(({ id }) => id !== undefined),
-                  },
-                }
-              : {};
+          const data = prepareNewUpdateObj(item, currentItem, isFeed, selected.editMode)
 
-          const data = { ...currentItem, ...tags, ...feeds };
-          createItemMutation({
-            refetchQueries: [{ query: isFeed ? FEEDS_QUERY : BUNDLES_QUERY }],
-            variables: { data },
-          });
+          if(selected.editMode){
+            updateItemMutation({
+              refetchQueries: [{ query: isFeed ? FEEDS_QUERY : BUNDLES_QUERY }],
+              variables: { data },
+            });
+          } else {
+            createItemMutation({
+              refetchQueries: [{ query: isFeed ? FEEDS_QUERY : BUNDLES_QUERY }],
+              variables: { data },
+            });
+          }
+
           setItem(initialState);
+          setSelected(currState =>({...currState, editMode: false, newMode: false}))
+
         }}
       >
         <div className="grid grid-cols-12 gap-4 rounded-md border my-4 py-2 px-2">
