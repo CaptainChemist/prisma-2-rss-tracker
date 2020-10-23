@@ -11,7 +11,7 @@ export const ItemList = ({
   selected,
   setSelected,
   useSelected = false,
-  allowEdits = false
+  allowEdits = false,
 }: {
   type: ItemType;
   selected?: SelectedFeedState;
@@ -46,7 +46,15 @@ export const ItemList = ({
       <div className="grid lg:grid-cols-3 md:grid-cols-2 gap-4">
         {itemList.length > 0 ? (
           itemList.map((item: FeedObject | BundleObject) => (
-            <OneListItem item={item} type={type} key={item.id} useSelected={useSelected} allowEdits={allowEdits} selected={selected} setSelected={setSelected} />
+            <OneListItem
+              item={item}
+              type={type}
+              key={item.id}
+              useSelected={useSelected}
+              allowEdits={allowEdits}
+              selected={selected}
+              setSelected={setSelected}
+            />
           ))
         ) : (
           <p>None are present. Why not add one?</p>

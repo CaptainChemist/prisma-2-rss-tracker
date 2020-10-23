@@ -32,7 +32,7 @@ export const ItemLike = ({ item, type }: { item: FeedObject | BundleObject; type
       className="flex py-2 mx-1 z-10"
     >
       <p>{item.likes.length} </p>
-      <Heart size={6} liked={hasMatch} loading={likeItemLoading || loading}/>
+      <Heart size={6} liked={hasMatch} loading={likeItemLoading || loading} />
     </div>
   );
 };

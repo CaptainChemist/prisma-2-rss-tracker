@@ -4,6 +4,7 @@ import { DELETE_BUNDLE_MUTATION, DELETE_FEED_MUTATION } from '../utils/api/graph
 import { BUNDLES_QUERY, FEEDS_QUERY } from '../utils/api/graphql/queries';
 import { BundleObject, FeedObject, ItemType } from '../utils/types';
 import { useFetchUser } from '../utils/user';
+import { Delete, Spin } from './svg';
 
 export const ItemDelete = ({ item, type }: { item: FeedObject | BundleObject; type: ItemType }) => {
   const isFeed = type === ItemType.FeedType;
@@ -18,7 +19,7 @@ export const ItemDelete = ({ item, type }: { item: FeedObject | BundleObject; ty
           <div className="flex items-end justify-center min-h-screen px-4 pb-20 text-center sm:block sm:p-0">
             <div className="fixed inset-0 transition-opacity">
               <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
-              <span className="hidden sm:inline-block sm:align-middle sm:h-screen"></span>&#8203;
+              <span className="hidden sm:inline-block sm:align-middle sm:h-screen"></span>
               <div
                 className="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full"
                 role="dialog"
@@ -75,28 +76,9 @@ export const ItemDelete = ({ item, type }: { item: FeedObject | BundleObject; ty
         className="flex col-span-1 py-2 px-1 z-10"
       >
         {deleteItemLoading || loading ? (
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="h-6 w-6 text-gray-500 animate-spin">
-            <path
-              fillRule="evenodd"
-              d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z"
-              clipRule="evenodd"
-            />
-          </svg>
+          <Spin className="h-6 w-6 text-gray-500 animate-spin" />
         ) : (
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            className={`h-6 w-6 text-red-500`}
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"
-            />
-          </svg>
+          <Delete className="h-6 w-6 text-red-500" />
         )}
       </div>
     </>

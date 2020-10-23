@@ -1,6 +1,11 @@
 import { useMutation, useQuery } from '@apollo/client';
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
-import { CREATE_BUNDLE_MUTATION, CREATE_FEED_MUTATION, UPDATE_BUNDLE_MUTATION, UPDATE_FEED_MUTATION } from '../utils/api/graphql/mutations';
+import {
+  CREATE_BUNDLE_MUTATION,
+  CREATE_FEED_MUTATION,
+  UPDATE_BUNDLE_MUTATION,
+  UPDATE_FEED_MUTATION,
+} from '../utils/api/graphql/mutations';
 import {
   BUNDLES_QUERY,
   BUNDLE_QUERY,
@@ -18,8 +23,12 @@ import { prepareNewUpdateObj } from '../utils/prepareUpdateObj';
 
 type NewItemState = FeedState | BundleState;
 
-export const NewItem = ({ type, setSelected, selected }: { 
-  type: ItemType; 
+export const NewItem = ({
+  type,
+  setSelected,
+  selected,
+}: {
+  type: ItemType;
   setSelected?: Dispatch<SetStateAction<SelectedFeedState>>;
   selected: SelectedFeedState;
 }) => {
@@ -33,21 +42,23 @@ export const NewItem = ({ type, setSelected, selected }: {
   const [createItemMutation, { loading: createLoading }] = useMutation(isFeed ? CREATE_FEED_MUTATION : CREATE_BUNDLE_MUTATION);
   const [updateItemMutation, { loading: updateLoading }] = useMutation(isFeed ? UPDATE_FEED_MUTATION : UPDATE_BUNDLE_MUTATION);
 
-  const variables = {data: {id: selected.id}}
-  const {loading: itemQueryLoading, error: itemQueryError, data: itemQueryData } = useQuery(isFeed? FEED_QUERY : BUNDLE_QUERY, {variables})
-  const {bundle, feed} = itemQueryData || {}
-  const item = isFeed ? feed: bundle
+  const variables = { data: { id: selected.id } };
+  const { loading: itemQueryLoading, error: itemQueryError, data: itemQueryData } = useQuery(isFeed ? FEED_QUERY : BUNDLE_QUERY, {
+    variables,
+  });
+  const { bundle, feed } = itemQueryData || {};
+  const item = isFeed ? feed : bundle;
 
-  useEffect(()=> {
-    (async ()=> {
-      if(item && selected.editMode){
-        const {__typename, likes, author, ...cleanedItem } = item
-        setItem({ ...cleanedItem })
+  useEffect(() => {
+    (async () => {
+      if (item && selected.editMode) {
+        const { __typename, likes, author, ...cleanedItem } = item;
+        setItem({ ...cleanedItem });
       } else {
-        setItem(initialState)
+        setItem(initialState);
       }
-    })()
-  }, [itemQueryData])
+    })();
+  }, [itemQueryData]);
 
   if (createLoading || updateLoading || itemQueryLoading) {
     return <p>Loading</p>;
@@ -56,25 +67,19 @@ export const NewItem = ({ type, setSelected, selected }: {
   return (
     <>
       <form
-        onSubmit={ e => {
+        onSubmit={e => {
           e.preventDefault();
-          const data = prepareNewUpdateObj(item, currentItem, isFeed, selected.editMode)
+          const data = prepareNewUpdateObj(item, currentItem, isFeed, selected.editMode);
 
-          if(selected.editMode){
-            updateItemMutation({
-              refetchQueries: [{ query: isFeed ? FEEDS_QUERY : BUNDLES_QUERY }],
-              variables: { data },
-            });
-          } else {
-            createItemMutation({
-              refetchQueries: [{ query: isFeed ? FEEDS_QUERY : BUNDLES_QUERY }],
-              variables: { data },
-            });
-          }
+          const mutationPayload = {
+            refetchQueries: [{ query: isFeed ? FEEDS_QUERY : BUNDLES_QUERY }],
+            variables: { data },
+          };
+
+          selected.editMode ? updateItemMutation(mutationPayload) : createItemMutation(mutationPayload);
 
           setItem(initialState);
-          setSelected(currState =>({...currState, editMode: false, newMode: false}))
-
+          setSelected(currState => ({ ...currState, editMode: false, newMode: false }));
         }}
       >
         <div className="grid grid-cols-12 gap-4 rounded-md border my-4 py-2 px-2">
@@ -105,13 +110,13 @@ export const NewItem = ({ type, setSelected, selected }: {
             {isFeed ? null : (
               <>
                 <div className="py-2">
-                  <label className="block py-4">Feeds:</label>
+                  <label className="block py-2">Feeds:</label>
                   <div className="grid grid-cols-3 gap-2">
                     <BadgeList fieldName={BadgeFieldName.feeds} action={ActionType.CREATE} setItem={setItem} item={currentItem} />
                   </div>
                 </div>
                 <div className="py-2">
-                  <label className="block py-4">Add New Feed:</label>
+                  <label className="block py-2">Add New Feed:</label>
                   <SearchItems
                     queryName={SearchQueryName.findFeeds}
                     query={FIND_FEEDS_QUERY}
