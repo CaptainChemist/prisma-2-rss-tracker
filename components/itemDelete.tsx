@@ -45,7 +45,7 @@ export const ItemDelete = ({ item, type }: { item: FeedObject | BundleObject; ty
                         setVisibility(false);
                       }}
                       type="button"
-                      className="inline-flex justify-center w-full rounded-md border border-transparent px-4 py-2 bg-red-500 text-base leading-6 font-medium text-white shadow-sm hover:bg-red-500 focus:outline-none focus:border-red-700 focus:shadow-outline-red transition ease-in-out duration-150 sm:text-sm sm:leading-5"
+                      className="font-bold py-2 px-6 rounded text-white bg-red-500 text-white w-full"
                     >
                       Delete
                     </button>
@@ -57,7 +57,7 @@ export const ItemDelete = ({ item, type }: { item: FeedObject | BundleObject; ty
                         setVisibility(false);
                       }}
                       type="button"
-                      className="inline-flex justify-center w-full rounded-md border border-gray-300 px-4 py-2 bg-white text-base leading-6 font-medium text-gray-700 shadow-sm hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue transition ease-in-out duration-150 sm:text-sm sm:leading-5"
+                      className="font-bold py-2 px-6 rounded bg-white text-gray-700 rounded border-4 border-gray-300 w-full"
                     >
                       Cancel
                     </button>

@@ -7,7 +7,7 @@ import { useFetchUser } from '../utils/user';
 import { BadgeList } from './badgeList';
 import { Dispatch, SetStateAction } from 'react';
 import { ItemEdit } from './itemEdit';
-import { DoubleArrowDown, DoubleArrowRight } from './svg';
+import { DoubleArrowDown, DoubleArrowRight, WaitingClock } from './svg';
 
 export const OneListItem = ({
   item,
@@ -29,7 +29,7 @@ export const OneListItem = ({
   const { user, loading } = useFetchUser();
 
   if (loading) {
-    return <p>Loading</p>;
+    return <WaitingClock className="h-10 w-10 text-gray-500 m-auto" />;
   }
   const canManipulate = !loading && user && item.author.auth0 === user.sub && useSelected && allowEdits;
 

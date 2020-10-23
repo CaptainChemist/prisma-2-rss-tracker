@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react';
 import * as _ from 'lodash';
 import { Feed } from '@prisma/client';
 import { ArticleList } from './articleList';
+import { NotifyError } from './notifyError';
+import { NotifyLoading } from './notifyLoading';
 const Parser = require('rss-parser');
 const parser = new Parser();
 
@@ -17,7 +19,7 @@ export const GenerateArticleList = ({ feeds }: { feeds: Feed[] }) => {
           await Promise.all(
             feeds.map(async oneFeed => {
               const { items } = await parser.parseURL(CORS_PROXY + oneFeed.url);
-              return items.map(o => ({...o, feed: oneFeed }));
+              return items.map(o => ({ ...o, feed: oneFeed }));
             })
           ),
           (sum, n) => [...sum, ...n]
@@ -30,14 +32,12 @@ export const GenerateArticleList = ({ feeds }: { feeds: Feed[] }) => {
   }, [feeds]);
 
   if (loading) {
-    return <p>Loading</p>;
+    return <NotifyLoading />;
   }
 
   if (error) {
-    return <p>Error</p>;
+    return <NotifyError />;
   }
 
-  return (
-    <ArticleList articleList={data} />
-  );
+  return <ArticleList articleList={data} />;
 };

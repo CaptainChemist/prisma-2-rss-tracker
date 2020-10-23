@@ -20,7 +20,12 @@ export const ItemEdit = ({
     <div
       onClick={e => {
         e.stopPropagation();
-        setSelected({ id: item.id, feeds: isFeed ? [item] : item['feeds'], editMode: selected.editMode ? false : true, newMode: false });
+        setSelected(currState => ({
+          id: item.id,
+          feeds: isFeed ? [item] : item['feeds'],
+          editMode: !selected.editMode || currState.id !== item.id ? true : false,
+          newMode: false,
+        }));
       }}
       className="flex py-2 mx-1 z-10"
     >

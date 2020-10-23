@@ -13,7 +13,7 @@ export const GenerateInputField = ({
   <div className="py-2">
     <label className="block py-2">{name.charAt(0).toUpperCase() + name.slice(1)}:</label>
     <input
-      className="shadow rounded w-full py-2 px-3"
+      className="border-4 rounded w-full py-2 px-3"
       value={currentItem[name]}
       onChange={e => {
         e.persist();

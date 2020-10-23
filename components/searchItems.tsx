@@ -39,13 +39,13 @@ export const SearchItems = ({
       <div className="flex">
         {loading ? <Spin className="h-6 w-6 text-gray-500 animate-spin" /> : <Search className="mt-3 mr-2 w-6 h-6 text-gray-500" />}
         <input
-          className="shadow rounded w-full py-2 px-3"
+          className="border-4 rounded w-full py-2 px-3"
           value={search}
-          onChange={async e => {
+          onChange={e => {
             e.persist();
             if (e.target.value !== search) {
               setSearch(() => e.target.value);
-              await findItemsQuery({ variables: { data: { search: e.target.value } } });
+              findItemsQuery({ variables: { data: { search: e.target.value } } });
             }
           }}
         />
