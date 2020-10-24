@@ -24,7 +24,7 @@ export const OneArticle = ({ article, feed }: { article; feed: Feed }) => {
       <div
         onClick={e => {
           e.stopPropagation();
-          if (user) {
+          if (user && !loading) {
             if (savedArticle) {
               deleteSavedArticleMutation({
                 variables: {
@@ -32,7 +32,23 @@ export const OneArticle = ({ article, feed }: { article; feed: Feed }) => {
                     id: savedArticle.id,
                   },
                 },
-                refetchQueries: [{ query: SAVED_ARTICLE_QUERY, variables }, { query: SAVED_ARTICLES_QUERY }],
+                update: async (store, { data: { deleteSavedArticle } }) => {
+                  try {
+                    await store.writeQuery({
+                      query: SAVED_ARTICLE_QUERY,
+                      variables: { data: { url: _.get(deleteSavedArticle, 'url') } },
+                      data: { savedArticle: null },
+                    });
+                  } catch (e) {}
+
+                  try {
+                    const { savedArticles } = store.readQuery({ query: SAVED_ARTICLES_QUERY });
+                    await store.writeQuery({
+                      query: SAVED_ARTICLES_QUERY,
+                      data: { savedArticles: savedArticles.filter(o => o.id !== deleteSavedArticle.id) },
+                    });
+                  } catch (e) {}
+                },
               });
             } else {
               createdSavedArticleMutation({
@@ -47,7 +63,23 @@ export const OneArticle = ({ article, feed }: { article; feed: Feed }) => {
                     },
                   },
                 },
-                refetchQueries: [{ query: SAVED_ARTICLE_QUERY, variables }, { query: SAVED_ARTICLES_QUERY }],
+                update: async (store, { data: { createSavedArticle } }) => {
+                  try {
+                    await store.writeQuery({
+                      query: SAVED_ARTICLE_QUERY,
+                      variables: { data: { url: _.get(createSavedArticle, 'url') } },
+                      data: { savedArticle: createSavedArticle },
+                    });
+                  } catch (e) {}
+
+                  try {
+                    const { savedArticles } = store.readQuery({ query: SAVED_ARTICLES_QUERY });
+                    await store.writeQuery({
+                      query: SAVED_ARTICLES_QUERY,
+                      data: { savedArticles: [...savedArticles, createSavedArticle] },
+                    });
+                  } catch (e) {}
+                },
               });
             }
           }

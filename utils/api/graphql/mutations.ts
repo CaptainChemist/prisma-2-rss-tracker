@@ -1,5 +1,5 @@
 import { gql } from '@apollo/client';
-import { BUNDLE_FRAGMENT, FEED_FRAGMENT } from './fragments';
+import { BUNDLE_FRAGMENT, FEED_FRAGMENT, SAVED_ARTICLE_FRAGMENT } from './fragments';
 
 export const LIKE_BUNDLE_MUTATION = gql`
   mutation likeBundleMutation($data: LikeBundleInput) {
@@ -30,42 +30,74 @@ export const LIKE_FEED_MUTATION = gql`
 export const CREATE_BUNDLE_MUTATION = gql`
   mutation createBundleMutation($data: BundleCreateInput) {
     createBundle(data: $data) {
-      id
+      ...BundleFragment
+      feeds {
+        ...FeedFragment
+        bundles {
+          ...BundleFragment
+        }
+      }
     }
   }
+  ${FEED_FRAGMENT}
+  ${BUNDLE_FRAGMENT}
 `;
 export const UPDATE_BUNDLE_MUTATION = gql`
   mutation updateBundleMutation($data: BundleUpdateInput) {
     updateBundle(data: $data) {
-      id
+      ...BundleFragment
+      feeds {
+        ...FeedFragment
+        bundles {
+          ...BundleFragment
+        }
+      }
     }
   }
+  ${FEED_FRAGMENT}
+  ${BUNDLE_FRAGMENT}
 `;
 
 export const CREATE_FEED_MUTATION = gql`
   mutation createFeedMutation($data: FeedCreateInput) {
     createFeed(data: $data) {
-      id
+      ...FeedFragment
+      bundles {
+        ...BundleFragment
+        feeds {
+          ...FeedFragment
+        }
+      }
     }
   }
+  ${FEED_FRAGMENT}
+  ${BUNDLE_FRAGMENT}
 `;
 
 export const UPDATE_FEED_MUTATION = gql`
   mutation updateFeedMutation($data: FeedUpdateInput) {
     updateFeed(data: $data) {
-      id
+      ...FeedFragment
+      bundles {
+        ...BundleFragment
+        feeds {
+          ...FeedFragment
+        }
+      }
     }
   }
+  ${FEED_FRAGMENT}
+  ${BUNDLE_FRAGMENT}
 `;
 
 export const CREATE_SAVED_ARTICLE_MUTATION = gql`
   mutation createSavedArticleMutation($data: SavedArticleCreateInput) {
     createSavedArticle(data: $data) {
-      id
+      ...SavedArticleFragment
     }
   }
+  ${SAVED_ARTICLE_FRAGMENT}
 `;
-
 
 export const DELETE_BUNDLE_MUTATION = gql`
   mutation deleteBundleMutation($data: BundleInput) {
@@ -87,6 +119,7 @@ export const DELETE_SAVED_ARTICLE_MUTATION = gql`
   mutation deleteSavedArticleMutation($data: SavedArticleInput) {
     deleteSavedArticle(data: $data) {
       id
+      url
     }
   }
 `;

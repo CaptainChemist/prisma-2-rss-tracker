@@ -4,6 +4,7 @@ import * as React from 'react';
 import { BundleObject, FeedObject, ItemType } from '../utils/types';
 import { LIKE_BUNDLE_MUTATION, LIKE_FEED_MUTATION } from '../utils/api/graphql/mutations';
 import { Heart } from './heart';
+import { BUNDLES_QUERY, FEEDS_QUERY } from '../utils/api/graphql/queries';
 
 export const ItemLike = ({ item, type }: { item: FeedObject | BundleObject; type: ItemType }) => {
   const isFeed = type === ItemType.FeedType;

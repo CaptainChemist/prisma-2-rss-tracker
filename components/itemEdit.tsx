@@ -14,7 +14,6 @@ export const ItemEdit = ({
   setSelected?: Dispatch<SetStateAction<SelectedFeedState>>;
 }) => {
   const isFeed = type === ItemType.FeedType;
-  console.log(selected);
 
   return (
     <div

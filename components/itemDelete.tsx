@@ -40,7 +40,17 @@ export const ItemDelete = ({ item, type }: { item: FeedObject | BundleObject; ty
                               id: item.id,
                             },
                           },
-                          refetchQueries: [{ query: isFeed ? FEEDS_QUERY : BUNDLES_QUERY }],
+                          update: (store, { data: { deleteFeed, deleteBundle } }) => {
+                            try {
+                              const data = store.readQuery({ query: isFeed ? FEEDS_QUERY : BUNDLES_QUERY });
+                              const currentItems = data[isFeed ? 'feeds' : 'bundles'];
+
+                              const deleteItem = isFeed ? deleteFeed : deleteBundle;
+                              const updatedArray = currentItems.filter(o => o.id !== deleteItem.id);
+                              const newData = { [isFeed ? 'feeds' : 'bundles']: updatedArray };
+                              store.writeQuery({ query: isFeed ? FEEDS_QUERY : BUNDLES_QUERY, data: newData });
+                            } catch (e) {}
+                          },
                         });
                         setVisibility(false);
                       }}

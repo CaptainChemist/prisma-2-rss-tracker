@@ -20,9 +20,8 @@ import { GenerateInputField } from './generateInputField';
 import { SearchItems } from './searchItems';
 import { BadgeList } from './badgeList';
 import { prepareNewUpdateObj } from '../utils/prepareUpdateObj';
-import { NotifyLoading } from './notifyLoading';
-import { NotifyError } from './notifyError';
 import { ErrorSign, WaitingClock } from './svg';
+import * as _ from 'lodash';
 
 type NewItemState = FeedState | BundleState;
 
@@ -81,12 +80,30 @@ export const NewItem = ({
           e.preventDefault();
           const data = prepareNewUpdateObj(item, currentItem, isFeed, selected.editMode);
 
-          const mutationPayload = {
-            refetchQueries: [{ query: isFeed ? FEEDS_QUERY : BUNDLES_QUERY }],
-            variables: { data },
-          };
+          selected.editMode
+            ? updateItemMutation({ variables: { data } })
+            : createItemMutation({
+                variables: { data },
+                update: async (store, { data: { createFeed, createBundle } }) => {
+                  const createItem = isFeed ? createFeed : createBundle;
+                  try {
+                    await store.writeQuery({
+                      query: isFeed ? FEED_QUERY : BUNDLE_QUERY,
+                      variables: { data: { id: _.get(createItem, 'id') } },
+                      data: { [isFeed ? 'feed' : 'bundle']: createItem },
+                    });
+                  } catch (e) {}
 
-          selected.editMode ? updateItemMutation(mutationPayload) : createItemMutation(mutationPayload);
+                  try {
+                    const { feeds, bundles } = store.readQuery({ query: isFeed ? FEEDS_QUERY : BUNDLES_QUERY });
+                    const currentItems = isFeed ? feeds : bundles;
+                    await store.writeQuery({
+                      query: isFeed ? FEEDS_QUERY : BUNDLES_QUERY,
+                      data: { [isFeed ? 'feeds' : 'bundles']: [...currentItems, createItem] },
+                    });
+                  } catch (e) {}
+                },
+              });
 
           setItem(initialState);
           setSelected(currState => ({ ...currState, editMode: false, newMode: false }));
