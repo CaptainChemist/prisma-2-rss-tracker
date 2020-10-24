@@ -15,7 +15,16 @@ import {
   FIND_FEEDS_QUERY,
   FIND_FEED_TAGS_QUERY,
 } from '../utils/api/graphql/queries';
-import { ActionType, BadgeFieldName, BundleState, FeedState, ItemType, SearchQueryName, SelectedFeedState } from '../utils/types';
+import {
+  ActionType,
+  BadgeFieldName,
+  BundleState,
+  FeedState,
+  ItemType,
+  NewItemState,
+  SearchQueryName,
+  SelectedFeedState,
+} from '../utils/types';
 import { GenerateInputField } from './generateInputField';
 import { SearchItems } from './searchItems';
 import { BadgeList } from './badgeList';
@@ -23,9 +32,7 @@ import { prepareNewUpdateObj } from '../utils/prepareUpdateObj';
 import { ErrorSign, WaitingClock } from './svg';
 import * as _ from 'lodash';
 
-type NewItemState = FeedState | BundleState;
-
-export const NewItem = ({
+export const NewEditItem = ({
   type,
   setSelected,
   selected,

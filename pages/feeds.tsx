@@ -1,5 +1,5 @@
 import { ItemList } from '../components/itemList';
-import { NewItem } from '../components/newItem';
+import { NewEditItem } from '../components/newEditItem';
 import { Layout } from '../components/layout';
 import { ItemType, SelectedFeedState } from '../utils/types';
 import { useFetchUser } from '../utils/user';
@@ -36,7 +36,7 @@ const FeedsPage = () => {
         ) : null}
       </div>
       {(selected.editMode || selected.newMode) && user ? (
-        <NewItem type={ItemType.FeedType} selected={selected} setSelected={setSelected} />
+        <NewEditItem type={ItemType.FeedType} selected={selected} setSelected={setSelected} />
       ) : null}
       <ItemList type={ItemType.FeedType} useSelected={true} allowEdits={true} selected={selected} setSelected={setSelected} />
       {selected.feeds.length > 0 ? (

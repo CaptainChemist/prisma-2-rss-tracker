@@ -1,4 +1,4 @@
-import { Feed } from "@prisma/client";
+import { Feed } from '@prisma/client';
 
 export enum ActionType {
   ADD = 'ADD',
@@ -86,3 +86,5 @@ export type SelectedFeedState = {
   editMode: boolean;
   newMode: boolean;
 };
+
+export type NewItemState = FeedState | BundleState;

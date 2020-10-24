@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction } from 'react';
-import { ActionType, BadgeFieldName, BundleState, FeedObject, FeedState } from '../utils/types';
+import { ActionType, BadgeFieldName, BundleState, FeedState } from '../utils/types';
 import { OneBadge } from './oneBadge';
 
 export const BadgeList = ({
