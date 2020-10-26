@@ -2,12 +2,16 @@ import { ApolloServer } from 'apollo-server-micro';
 import Cors from 'micro-cors';
 import { makeExecutableSchema } from 'graphql-tools';
 
+import { context } from '../../utils/api/context';
 import { typeDefs } from '../../utils/api/typeDefs';
 import { resolvers } from '../../utils/api/resolvers';
+import { applyMiddleware } from 'graphql-middleware';
+import { permissions } from '../../utils/api/permissions';
+import { log } from '../../utils/api/log';
 
 const cors = Cors();
 
-const schema = makeExecutableSchema({ typeDefs, resolvers });
+const schema = applyMiddleware(makeExecutableSchema({ typeDefs, resolvers }), permissions, log);
 
 export const config = {
   api: {
@@ -17,6 +21,7 @@ export const config = {
 
 const handler = new ApolloServer({
   schema,
+  context,
 }).createHandler({
   path: '/api/graphql',
 });
