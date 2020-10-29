@@ -116,7 +116,7 @@ export const DELETE_FEED_MUTATION = gql`
 `;
 
 export const DELETE_SAVED_ARTICLE_MUTATION = gql`
-  mutation deleteSavedArticleMutation($data: SavedArticleInput) {
+  mutation deleteSavedArticleMutation($data: DeleteSavedArticleInput) {
     deleteSavedArticle(data: $data) {
       id
       url

@@ -155,9 +155,10 @@ export const typeDefs = gql`
   }
   input SavedArticleInput {
     url: String
+  }
+  input DeleteSavedArticleInput {
     id: Int
   }
-
 
   type Query {
     feed(data: FeedInput): Feed
@@ -165,7 +166,7 @@ export const typeDefs = gql`
     savedArticle(data: SavedArticleInput): SavedArticle
     feeds: [Feed]
     bundles: [Bundle]
-    savedArticles: [SavedArticle] 
+    savedArticles: [SavedArticle]
     me: [User]
     feedTags: [FeedTag]
     bundleTags: [BundleTag]
@@ -182,7 +183,7 @@ export const typeDefs = gql`
     likeFeed(data: LikeFeedInput): Feed
     deleteBundle(data: BundleInput): Bundle
     deleteFeed(data: FeedInput): Feed
-    deleteSavedArticle(data: SavedArticleInput): SavedArticle
+    deleteSavedArticle(data: DeleteSavedArticleInput): SavedArticle
     updateBundle(data: BundleUpdateInput): Bundle
     updateFeed(data: FeedUpdateInput): Feed
   }
