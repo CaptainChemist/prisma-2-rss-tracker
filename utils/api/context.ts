@@ -17,7 +17,9 @@ if (process.env.NODE_ENV === 'production') {
 
 export const context = async ({ req }) => {
   try {
-    const { user: auth0User } = await auth0.getSession(req);
+    // const { user: auth0User } = await auth0.getSession(req);
+    // Comment this out after the frontend is built
+    const auth0User = { nickname: 'faker', sub: '1', picture: '/blank.png' };
 
     let user = await prisma.user.findOne({ where: { auth0: auth0User.sub } });
 
