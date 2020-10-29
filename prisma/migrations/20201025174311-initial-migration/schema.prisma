@@ -1,0 +1,66 @@
+datasource db {
+  provider = "postgres"
+  url = "***"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Feed {
+  id            String         @id 
+  name          String
+  url           String         @unique
+  bundles       Bundle[]
+  author        User?          @relation(name: "FeedAuthor", fields: [authorId], references: [id])
+  authorId      String?
+  tags          FeedTag[]
+  likes         User[]         @relation(name: "FeedUserLikes")
+  savedArticles SavedArticle[]
+}
+
+model Bundle {
+  id          String      @id
+  feeds       Feed[]
+  name        String
+  description String      @default("")
+  author      User?       @relation(name: "BundleAuthor", fields: [authorId], references: [id])
+  authorId    String?
+  tags        BundleTag[]
+  likes       User[]      @relation(name: "BundleUserLikes")
+}
+
+model User {
+  id            String         @id 
+  auth0         String         @unique
+  nickname      String?
+  picture       String?
+  bundles       Bundle[]       @relation("BundleAuthor")
+  feeds         Feed[]         @relation("FeedAuthor")
+  savedArticles SavedArticle[]
+  feedLikes     Feed[]         @relation(name: "FeedUserLikes")
+  bundleLikes   Bundle[]       @relation(name: "BundleUserLikes")
+
+}
+
+model SavedArticle {
+  id       String @id
+  author   User?  @relation(fields: [authorId], references: [id])
+  contents Json
+  url      String @unique
+  feed     Feed   @relation(fields: [feedId], references: [id])
+  authorId String?
+  feedId   String
+}
+
+model BundleTag {
+  id      String   @id
+  name    String   @unique
+  bundles Bundle[]
+}
+
+model FeedTag {
+  id    String @id
+  name  String @unique
+  feeds Feed[]
+}
