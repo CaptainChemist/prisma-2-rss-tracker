@@ -1,3 +1,5 @@
+import { Feed } from '@prisma/client';
+
 export enum ItemType {
   BundleType = 'BundleType',
   FeedType = 'FeedType',
@@ -33,4 +35,11 @@ export type AuthorObject = {
 export type TagObject = {
   name: string;
   id: string;
+};
+
+export type SelectedFeedState = {
+  id: string;
+  feeds: Feed[];
+  editMode: boolean;
+  newMode: boolean;
 };
