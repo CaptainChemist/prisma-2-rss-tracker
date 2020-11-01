@@ -71,3 +71,9 @@ export enum ActionType {
 }
 
 export type NewItemState = FeedState | BundleState;
+
+export enum SearchQueryName {
+  findFeedTags = 'findFeedTags',
+  findBundleTags = 'findBundleTags',
+  findFeeds = 'findFeeds',
+}
