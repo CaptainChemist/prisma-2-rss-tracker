@@ -69,3 +69,5 @@ export enum ActionType {
   CREATE = 'CREATE',
   NONE = 'NONE',
 }
+
+export type NewItemState = FeedState | BundleState;
