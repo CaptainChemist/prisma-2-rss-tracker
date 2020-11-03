@@ -1,8 +1,10 @@
 import Link from 'next/link';
-import { BundleObject, FeedObject, ItemType, SelectedFeedState } from '../utils/types';
+import { ActionType, BadgeFieldName, BundleObject, FeedObject, ItemType, SelectedFeedState } from '../utils/types';
 import { useFetchUser } from '../utils/user';
 import { Dispatch, SetStateAction } from 'react';
 import { DoubleArrowDown, DoubleArrowRight, WaitingClock } from './svg';
+import { BadgeList } from './badgeList';
+import { ProfilePic } from './profilePic';
 
 export const OneListItem = ({
   item,
@@ -42,18 +44,18 @@ export const OneListItem = ({
             <p>actions</p>
           </div>
 
-          <div className="flex col-span-6 py-0 space-x-2">{item.author ? <p>profile pic</p> : null}</div>
+          <div className="flex col-span-6 py-0 space-x-2">{item.author ? <ProfilePic author={item.author} /> : null}</div>
 
           <div className="col-span-6 py-2">
             <h3>Tags</h3>
             <div className="grid grid-cols-3 gap-2">
-              <p>tags...</p>
+              <BadgeList fieldName={BadgeFieldName.tags} action={ActionType.NONE} item={item} />
             </div>
           </div>
           <div className="col-span-6 py-2">
             <h3>{isFeed ? 'Bundles' : 'Feeds'}</h3>
             <div className="grid grid-cols-3 gap-2">
-              <p>child items...</p>
+              <BadgeList fieldName={isFeed ? BadgeFieldName.bundles : BadgeFieldName.feeds} action={ActionType.NONE} item={item} />
             </div>
           </div>
         </div>

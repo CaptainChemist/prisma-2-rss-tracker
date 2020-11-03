@@ -43,3 +43,29 @@ export type SelectedFeedState = {
   editMode: boolean;
   newMode: boolean;
 };
+
+export type BundleState = {
+  name: string;
+  description: string;
+  tags: TagObject[];
+  feeds: FeedState[];
+};
+
+export type FeedState = {
+  id?: number;
+  name: string;
+  url: string;
+  tags: TagObject[];
+};
+
+export enum BadgeFieldName {
+  tags = 'tags',
+  feeds = 'feeds',
+  bundles = 'bundles',
+}
+
+export enum ActionType {
+  ADD = 'ADD',
+  CREATE = 'CREATE',
+  NONE = 'NONE',
+}
