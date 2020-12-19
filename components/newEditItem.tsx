@@ -1,8 +1,20 @@
 import { useMutation, useQuery } from '@apollo/client';
-import { Dispatch, SetStateAction, useState } from 'react';
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import * as _ from 'lodash';
-import { CREATE_BUNDLE_MUTATION, CREATE_FEED_MUTATION } from '../utils/api/graphql/mutations';
-import { FIND_BUNDLE_TAGS_QUERY, FIND_FEEDS_QUERY, FIND_FEED_TAGS_QUERY, ME_QUERY } from '../utils/api/graphql/queries';
+import {
+  CREATE_BUNDLE_MUTATION,
+  CREATE_FEED_MUTATION,
+  UPDATE_BUNDLE_MUTATION,
+  UPDATE_FEED_MUTATION,
+} from '../utils/api/graphql/mutations';
+import {
+  BUNDLE_QUERY,
+  FEED_QUERY,
+  FIND_BUNDLE_TAGS_QUERY,
+  FIND_FEEDS_QUERY,
+  FIND_FEED_TAGS_QUERY,
+  ME_QUERY,
+} from '../utils/api/graphql/queries';
 import { prepareNewUpdateObj } from '../utils/prepareUpdateObj';
 import {
   ActionType,
@@ -42,10 +54,32 @@ export const NewEditItem = ({
   );
   const { data: meData, loading: meLoading, error: meError } = useQuery(ME_QUERY);
 
-  if (createLoading) {
+  const [updateItemMutation, { loading: updateLoading, error: updateError }] = useMutation(
+    isFeed ? UPDATE_FEED_MUTATION : UPDATE_BUNDLE_MUTATION
+  );
+
+  const variables = { data: { id: selected.id ? selected.id : '' } };
+  const { loading: itemQueryLoading, error: itemQueryError, data: itemQueryData } = useQuery(isFeed ? FEED_QUERY : BUNDLE_QUERY, {
+    variables,
+  });
+  const { bundle, feed } = itemQueryData || {};
+  const item = isFeed ? feed : bundle;
+
+  useEffect(() => {
+    (async () => {
+      if (item && selected.editMode) {
+        const { __typename, likes, author, ...cleanedItem } = item;
+        setItem({ ...cleanedItem });
+      } else {
+        setItem(initialState);
+      }
+    })();
+  }, [itemQueryData]);
+
+  if (createLoading || updateLoading || itemQueryLoading) {
     return <WaitingClock className="my-20 h-10 w-10 text-gray-500 m-auto" />;
   }
-  if (createError) {
+  if (createError || updateError || itemQueryError) {
     return <ErrorSign className="my-20 h-10 w-10 text-gray-500 m-auto" />;
   }
 
@@ -54,12 +88,20 @@ export const NewEditItem = ({
       <form
         onSubmit={e => {
           e.preventDefault();
-          const data = prepareNewUpdateObj(currentItem);
-          createItemMutation({
-            variables: { data },
-            optimisticResponse: optimisticCache(isFeed, 'create', data, currentItem, meData),
-            update: updateCache(isFeed, 'create'),
-          });
+          const data = prepareNewUpdateObj(item, currentItem, isFeed, selected.editMode);
+
+          selected.editMode
+            ? updateItemMutation({
+                variables: { data },
+                optimisticResponse: optimisticCache(isFeed, 'update', data, currentItem, meData),
+                update: updateCache(isFeed, 'update'),
+              })
+            : createItemMutation({
+                variables: { data },
+                optimisticResponse: optimisticCache(isFeed, 'create', data, currentItem, meData),
+                update: updateCache(isFeed, 'create'),
+              });
+
           setItem(initialState);
           setSelected(currState => ({ ...currState, editMode: false, newMode: false }));
         }}

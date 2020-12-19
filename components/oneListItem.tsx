@@ -5,6 +5,7 @@ import { Dispatch, SetStateAction } from 'react';
 import { DoubleArrowDown, DoubleArrowRight, WaitingClock } from './svg';
 import { BadgeList } from './badgeList';
 import { ProfilePic } from './profilePic';
+import { ItemEdit } from './itemEdit';
 
 export const OneListItem = ({
   item,
@@ -28,6 +29,9 @@ export const OneListItem = ({
   if (loading) {
     return <WaitingClock className="h-10 w-10 text-gray-500 m-auto" />;
   }
+
+  const canManipulate = !loading && user && item.author.auth0 === user.sub && useSelected && allowEdits;
+
   return (
     <Link href={`/${isFeed ? `feed` : `bundle`}/${item.id}`}>
       <div>
@@ -41,7 +45,7 @@ export const OneListItem = ({
             {!isFeed ? <p>{item['description']}</p> : null}
           </div>
           <div className="col-span-2 flex justify-end">
-            <p>actions</p>
+            {canManipulate ? <ItemEdit item={item} type={type} selected={selected} setSelected={setSelected} /> : null}
           </div>
 
           <div className="flex col-span-6 py-0 space-x-2">{item.author ? <ProfilePic author={item.author} /> : null}</div>
