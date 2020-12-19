@@ -3,6 +3,7 @@ import * as _ from 'lodash';
 import { Feed } from '@prisma/client';
 import { NotifyError } from './notifyError';
 import { NotifyLoading } from './notifyLoading';
+import { ArticleList } from './articleList';
 const Parser = require('rss-parser');
 const parser = new Parser();
 
@@ -38,7 +39,5 @@ export const GenerateArticleList = ({ feeds }: { feeds: Feed[] }) => {
     return <NotifyError />;
   }
 
-  console.log(data);
-
-  return <p>Generate Article List</p>;
+  return <ArticleList articleList={data} />;
 };
