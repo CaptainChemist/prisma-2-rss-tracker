@@ -4,6 +4,7 @@ import { Layout } from '../components/layout';
 import { ItemType, SelectedFeedState } from '../utils/types';
 import { useFetchUser } from '../utils/user';
 import { useState } from 'react';
+import { GenerateArticleList } from '../components/generateArticleList';
 import { Minus, Plus } from '../components/svg';
 
 const FeedsPage = () => {
@@ -38,6 +39,11 @@ const FeedsPage = () => {
         <NewEditItem type={ItemType.FeedType} selected={selected} setSelected={setSelected} />
       ) : null}
       <ItemList type={ItemType.FeedType} useSelected={true} allowEdits={true} selected={selected} setSelected={setSelected} />
+      {selected.feeds.length > 0 ? (
+        <GenerateArticleList feeds={selected.feeds} />
+      ) : (
+        <h3 className="py-4 font-medium">No Feed Selected</h3>
+      )}
     </Layout>
   );
 };

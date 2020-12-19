@@ -1,4 +1,5 @@
 import { useQuery } from '@apollo/client';
+import { GenerateArticleList } from '../../components/generateArticleList';
 import { Layout } from '../../components/layout';
 import { NotifyError } from '../../components/notifyError';
 import { NotifyLoading } from '../../components/notifyLoading';
@@ -39,6 +40,7 @@ const Feed = ({ id }) => {
           <p>This feed does not belong to any bundles.</p>
         )}
       </div>
+      <GenerateArticleList feeds={[feed]} />
     </Layout>
   );
 };

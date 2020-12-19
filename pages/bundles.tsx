@@ -4,6 +4,7 @@ import { Layout } from '../components/layout';
 import { ItemType, SelectedFeedState } from '../utils/types';
 import { ItemList } from '../components/itemList';
 import { useFetchUser } from '../utils/user';
+import { GenerateArticleList } from '../components/generateArticleList';
 import { Minus, Plus } from '../components/svg';
 
 const BundlesPage = () => {
@@ -38,6 +39,11 @@ const BundlesPage = () => {
         <NewEditItem type={ItemType.BundleType} selected={selected} setSelected={setSelected} />
       ) : null}
       <ItemList type={ItemType.BundleType} useSelected={true} allowEdits={true} selected={selected} setSelected={setSelected} />
+      {selected.feeds.length > 0 ? (
+        <GenerateArticleList feeds={selected.feeds} />
+      ) : (
+        <h3 className="py-4 font-medium">No Bundle Selected</h3>
+      )}
     </Layout>
   );
 };

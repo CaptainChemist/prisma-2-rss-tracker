@@ -5,6 +5,7 @@ import { OneListItem } from '../../components/oneListItem';
 import { BUNDLE_QUERY } from '../../utils/api/graphql/queries';
 import { FeedObject, ItemType } from '../../utils/types';
 import { NotifyLoading } from '../../components/notifyLoading';
+import { GenerateArticleList } from '../../components/generateArticleList';
 
 const Bundle = ({ id }) => {
   const { loading, error, data } = useQuery(BUNDLE_QUERY, { variables: { data: { id: id } } });
@@ -39,6 +40,7 @@ const Bundle = ({ id }) => {
           <p>None are present. Why not add one?</p>
         )}
       </div>
+      <GenerateArticleList feeds={bundle.feeds} />
     </Layout>
   );
 };
