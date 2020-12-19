@@ -6,6 +6,7 @@ import { DoubleArrowDown, DoubleArrowRight, WaitingClock } from './svg';
 import { BadgeList } from './badgeList';
 import { ProfilePic } from './profilePic';
 import { ItemEdit } from './itemEdit';
+import { ItemDelete } from './itemDelete';
 
 export const OneListItem = ({
   item,
@@ -46,6 +47,7 @@ export const OneListItem = ({
           </div>
           <div className="col-span-2 flex justify-end">
             {canManipulate ? <ItemEdit item={item} type={type} selected={selected} setSelected={setSelected} /> : null}
+            {canManipulate ? <ItemDelete item={item} type={type} /> : null}
           </div>
 
           <div className="flex col-span-6 py-0 space-x-2">{item.author ? <ProfilePic author={item.author} /> : null}</div>
