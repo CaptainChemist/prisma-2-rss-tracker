@@ -34,7 +34,9 @@ const BundlesPage = () => {
           </div>
         ) : null}
       </div>
-      {(selected.editMode || selected.newMode) && user ? <NewEditItem type={ItemType.BundleType} /> : null}
+      {(selected.editMode || selected.newMode) && user ? (
+        <NewEditItem type={ItemType.BundleType} selected={selected} setSelected={setSelected} />
+      ) : null}
       <ItemList type={ItemType.BundleType} useSelected={true} allowEdits={true} selected={selected} setSelected={setSelected} />
     </Layout>
   );

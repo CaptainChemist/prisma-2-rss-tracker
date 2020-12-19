@@ -1,14 +1,35 @@
-import { useMutation } from '@apollo/client';
-import { useState } from 'react';
+import { useMutation, useQuery } from '@apollo/client';
+import { Dispatch, SetStateAction, useState } from 'react';
+import * as _ from 'lodash';
 import { CREATE_BUNDLE_MUTATION, CREATE_FEED_MUTATION } from '../utils/api/graphql/mutations';
-import { FIND_BUNDLE_TAGS_QUERY, FIND_FEEDS_QUERY, FIND_FEED_TAGS_QUERY } from '../utils/api/graphql/queries';
-import { ActionType, BadgeFieldName, BundleState, FeedState, ItemType, NewItemState, SearchQueryName } from '../utils/types';
+import { FIND_BUNDLE_TAGS_QUERY, FIND_FEEDS_QUERY, FIND_FEED_TAGS_QUERY, ME_QUERY } from '../utils/api/graphql/queries';
+import { prepareNewUpdateObj } from '../utils/prepareUpdateObj';
+import {
+  ActionType,
+  BadgeFieldName,
+  BundleState,
+  FeedState,
+  ItemType,
+  NewItemState,
+  SearchQueryName,
+  SelectedFeedState,
+} from '../utils/types';
 import { BadgeList } from './badgeList';
 import { GenerateInputField } from './generateInputField';
 import { SearchItems } from './searchItems';
 import { ErrorSign, WaitingClock } from './svg';
+import { optimisticCache } from '../utils/optimisticCache';
+import { updateCache } from '../utils/update';
 
-export const NewEditItem = ({ type }: { type: ItemType }) => {
+export const NewEditItem = ({
+  type,
+  setSelected,
+  selected,
+}: {
+  type: ItemType;
+  setSelected?: Dispatch<SetStateAction<SelectedFeedState>>;
+  selected: SelectedFeedState;
+}) => {
   const isFeed = type === ItemType.FeedType;
   const initialFeed: FeedState = { name: '', url: '', tags: [] };
   const initialBundle: BundleState = { name: '', description: '', tags: [], feeds: [] };
@@ -19,6 +40,7 @@ export const NewEditItem = ({ type }: { type: ItemType }) => {
   const [createItemMutation, { loading: createLoading, error: createError }] = useMutation(
     isFeed ? CREATE_FEED_MUTATION : CREATE_BUNDLE_MUTATION
   );
+  const { data: meData, loading: meLoading, error: meError } = useQuery(ME_QUERY);
 
   if (createLoading) {
     return <WaitingClock className="my-20 h-10 w-10 text-gray-500 m-auto" />;
@@ -32,6 +54,14 @@ export const NewEditItem = ({ type }: { type: ItemType }) => {
       <form
         onSubmit={e => {
           e.preventDefault();
+          const data = prepareNewUpdateObj(currentItem);
+          createItemMutation({
+            variables: { data },
+            optimisticResponse: optimisticCache(isFeed, 'create', data, currentItem, meData),
+            update: updateCache(isFeed, 'create'),
+          });
+          setItem(initialState);
+          setSelected(currState => ({ ...currState, editMode: false, newMode: false }));
         }}
       >
         <div className="grid grid-cols-12 gap-4 rounded-md border-4 my-4 py-2 px-4">

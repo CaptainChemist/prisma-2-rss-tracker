@@ -34,7 +34,9 @@ const FeedsPage = () => {
           </div>
         ) : null}
       </div>
-      {(selected.editMode || selected.newMode) && user ? <NewEditItem type={ItemType.FeedType} /> : null}
+      {(selected.editMode || selected.newMode) && user ? (
+        <NewEditItem type={ItemType.FeedType} selected={selected} setSelected={setSelected} />
+      ) : null}
       <ItemList type={ItemType.FeedType} useSelected={true} allowEdits={true} selected={selected} setSelected={setSelected} />
     </Layout>
   );
