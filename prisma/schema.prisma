@@ -1,56 +1,55 @@
-datasource db {
-  provider = "postgres"
-  url      = env("DATABASE_URL")
-}
-
 generator client {
   provider = "prisma-client-js"
 }
 
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
 model Feed {
-  id            String         @id 
+  id            String         @id
   name          String
   url           String         @unique
-  bundles       Bundle[]
-  author        User?          @relation(name: "FeedAuthor", fields: [authorId], references: [id])
   authorId      String?
-  tags          FeedTag[]
-  likes         User[]         @relation(name: "FeedUserLikes")
+  author        User?          @relation("FeedAuthor", fields: [authorId], references: [id])
   savedArticles SavedArticle[]
+  bundles       Bundle[]
+  tags          FeedTag[]
+  likes         User[]         @relation("FeedUserLikes")
 }
 
 model Bundle {
   id          String      @id
-  feeds       Feed[]
   name        String
   description String      @default("")
-  author      User?       @relation(name: "BundleAuthor", fields: [authorId], references: [id])
   authorId    String?
+  author      User?       @relation("BundleAuthor", fields: [authorId], references: [id])
   tags        BundleTag[]
-  likes       User[]      @relation(name: "BundleUserLikes")
+  feeds       Feed[]
+  likes       User[]      @relation("BundleUserLikes")
 }
 
 model User {
-  id            String         @id 
+  id            String         @id
   auth0         String         @unique
   nickname      String?
   picture       String?
   bundles       Bundle[]       @relation("BundleAuthor")
   feeds         Feed[]         @relation("FeedAuthor")
   savedArticles SavedArticle[]
-  feedLikes     Feed[]         @relation(name: "FeedUserLikes")
-  bundleLikes   Bundle[]       @relation(name: "BundleUserLikes")
-
+  bundleLikes   Bundle[]       @relation("BundleUserLikes")
+  feedLikes     Feed[]         @relation("FeedUserLikes")
 }
 
 model SavedArticle {
-  id       String @id
-  author   User?  @relation(fields: [authorId], references: [id])
+  id       String  @id
   contents Json
   url      String
-  feed     Feed   @relation(fields: [feedId], references: [id])
   authorId String?
   feedId   String
+  author   User?   @relation(fields: [authorId], references: [id])
+  feed     Feed    @relation(fields: [feedId], references: [id])
 }
 
 model BundleTag {

@@ -1,9 +1,8 @@
-import { GraphQLJSONObject } from 'graphql-type-json';
 import { verifyOwnership } from './verifyOwnership';
 
 const createFieldResolver = (modelName, parName) => ({
   [parName]: async ({ id }, args, { prisma }) => {
-    const modelResponse = await prisma[modelName].findOne({
+    const modelResponse = await prisma[modelName].findUnique({
       where: { id },
       include: { [parName]: true },
     });
@@ -12,7 +11,6 @@ const createFieldResolver = (modelName, parName) => ({
 });
 
 export const resolvers = {
-  JSON: GraphQLJSONObject,
   Feed: {
     ...createFieldResolver('feed', 'author'),
     ...createFieldResolver('feed', 'bundles'),
@@ -38,8 +36,8 @@ export const resolvers = {
   },
   Query: {
     hello: (parent, args, context) => `hi!`,
-    feed: (parent, { data: { id } }, { prisma }) => prisma.feed.findOne({ where: { id } }),
-    bundle: (parent, { data: { id } }, { prisma }) => prisma.bundle.findOne({ where: { id } }),
+    feed: (parent, { data: { id } }, { prisma }) => prisma.feed.findUnique({ where: { id } }),
+    bundle: (parent, { data: { id } }, { prisma }) => prisma.bundle.findUnique({ where: { id } }),
     feeds: (parent, args, { prisma }) => prisma.feed.findMany(),
     bundles: (parent, args, { prisma }) => prisma.bundle.findMany(),
     feedTags: (parent, args, { prisma }) => prisma.feedTag.findMany(),
@@ -53,7 +51,7 @@ export const resolvers = {
     },
     savedArticles: (parent, args, { prisma, user: { id: authorId } }) =>
       prisma.savedArticle.findMany({ where: { authorId: authorId ? authorId : null } }),
-    me: (parent, args, { prisma, user: { id } }) => prisma.user.findOne({ where: { id } }),
+    me: (parent, args, { prisma, user: { id } }) => prisma.user.findUnique({ where: { id } }),
   },
   Mutation: {
     clearAll: async (parent, args, { prisma }) => {
@@ -94,12 +92,12 @@ export const resolvers = {
       });
     },
     updateFeed: async (parent, { data: { id, ...feedUpdate } }, { prisma, user }) => {
-      const feed = await prisma.feed.findOne({ where: { id }, include: { author: true } });
+      const feed = await prisma.feed.findUnique({ where: { id }, include: { author: true } });
       await verifyOwnership(feed, user);
       return prisma.feed.update({ where: { id }, data: { ...feedUpdate } });
     },
     updateBundle: async (parent, { data: { id, ...bundleUpdate } }, { prisma, user }) => {
-      const bundle = await prisma.bundle.findOne({ where: { id }, include: { author: true } });
+      const bundle = await prisma.bundle.findUnique({ where: { id }, include: { author: true } });
       await verifyOwnership(bundle, user);
       return prisma.bundle.update({ where: { id }, data: { ...bundleUpdate } });
     },
@@ -108,19 +106,19 @@ export const resolvers = {
       return prisma.savedArticle.create({ data: { ...data, ...author } });
     },
     deleteBundle: async (parent, { data: { id } }, { prisma, user }) => {
-      const bundle = await prisma.bundle.findOne({ where: { id }, include: { author: true, likes: true } });
+      const bundle = await prisma.bundle.findUnique({ where: { id }, include: { author: true, likes: true } });
       await verifyOwnership(bundle, user);
       await prisma.bundle.delete({ where: { id: bundle.id } });
       return bundle;
     },
     deleteFeed: async (parent, { data: { id } }, { prisma, user }) => {
-      const feed = await prisma.feed.findOne({ where: { id }, include: { author: true, likes: true } });
+      const feed = await prisma.feed.findUnique({ where: { id }, include: { author: true, likes: true } });
       await verifyOwnership(feed, user);
       await prisma.feed.delete({ where: { id: feed.id } });
       return feed;
     },
     deleteSavedArticle: async (parent, { data: { id } }, { prisma, user }) => {
-      const savedArticle = await prisma.savedArticle.findOne({ where: { id }, include: { author: true } });
+      const savedArticle = await prisma.savedArticle.findUnique({ where: { id }, include: { author: true } });
       await verifyOwnership(savedArticle, user);
       return prisma.savedArticle.delete({ where: { id: savedArticle.id } });
     },
