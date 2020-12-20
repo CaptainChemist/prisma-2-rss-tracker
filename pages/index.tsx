@@ -12,7 +12,11 @@ const IndexPage = () => {
     <Layout>
       <h3 className="grid-cols-1 justify-start flex text-lg font-medium py-4">Home Page</h3>
       <ItemList type={ItemType.BundleType} useSelected={true} selected={selected} setSelected={setSelected} />
-      {selected.feeds.length > 0 ? <GenerateArticleList feeds={selected.feeds} /> : <h3 className="py-4 font-medium">No Bundle Selected</h3>}
+      {selected.feeds.length > 0 ? (
+        <GenerateArticleList feeds={selected.feeds} />
+      ) : (
+        <h3 className="py-4 font-medium">No Bundle Selected</h3>
+      )}
     </Layout>
   );
 };

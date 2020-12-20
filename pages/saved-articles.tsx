@@ -1,40 +1,38 @@
-import { useQuery } from "@apollo/client";
-import { ArticleList } from "../components/articleList";
-import { Layout } from "../components/layout";
-import { NotifyError } from "../components/notifyError";
-import { NotifyLoading } from "../components/notifyLoading";
-import { SAVED_ARTICLES_QUERY } from "../utils/api/graphql/queries";
+import { useQuery } from '@apollo/client';
+import { ArticleList } from '../components/articleList';
+import { Layout } from '../components/layout';
+import { NotifyError } from '../components/notifyError';
+import { NotifyLoading } from '../components/notifyLoading';
+import { SAVED_ARTICLES_QUERY } from '../utils/api/graphql/queries';
 
 const SavedArticles = () => {
-    const { loading, error, data } = useQuery(SAVED_ARTICLES_QUERY);
+  const { loading, error, data } = useQuery(SAVED_ARTICLES_QUERY);
 
-    if (loading) {
-      return (
-        <Layout>
-          <NotifyLoading />
-        </Layout>
-      );
-    }
-  
-    const { savedArticles } = data || {};
-
-    if (error || !savedArticles) {
-      return (
-        <Layout>
-          <NotifyError />
-        </Layout>
-      );
-    }
-
-    const articleList = savedArticles.map(({contents, feed})=> ({...contents, ...feed}))
-
+  if (loading) {
     return (
-        <Layout>
-          <ArticleList articleList={articleList} />
-        </Layout>
-      );
+      <Layout>
+        <NotifyLoading />
+      </Layout>
+    );
+  }
 
+  const { savedArticles } = data || {};
 
-}
+  if (error || !savedArticles) {
+    return (
+      <Layout>
+        <NotifyError />
+      </Layout>
+    );
+  }
 
-export default SavedArticles
+  const articleList = savedArticles.map(({ contents, feed }) => ({ ...contents, ...feed }));
+
+  return (
+    <Layout>
+      <ArticleList articleList={articleList} />
+    </Layout>
+  );
+};
+
+export default SavedArticles;

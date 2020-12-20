@@ -1,143 +1,109 @@
 import { gql } from 'apollo-server-micro';
 
 export const typeDefs = gql`
-  scalar JSON
-
   type Feed {
-    id: Int
+    id: String
     name: String
     url: String
-    bundles: [Bundle]
     author: User
     tags: [FeedTag]
+    bundles: [Bundle]
     likes: [User]
     savedArticles: [SavedArticle]
   }
   type Bundle {
-    id: Int
+    id: String
     name: String
     description: String
-    feeds: [Feed]
     author: User
     tags: [BundleTag]
+    feeds: [Feed]
     likes: [User]
   }
   type User {
-    id: Int
+    id: String
     auth0: String
     nickname: String
     picture: String
     bundles: [Bundle]
     feeds: [Feed]
-    savedArticles: [SavedArticle]
     feedLikes: [Feed]
     bundleLikes: [Bundle]
   }
-  type SavedArticle {
-    id: Int
-    author: User
-    url: String
-    contents: JSON
-    feed: Feed
-  }
   type BundleTag {
-    id: Int
+    id: String
     name: String
     bundles: [Bundle]
   }
   type FeedTag {
-    id: Int
+    id: String
     name: String
     feeds: [Feed]
   }
+
+  input FeedInput {
+    id: String
+  }
+  input BundleInput {
+    id: String
+  }
+
   input FeedCreateInput {
+    id: String
     url: String
     name: String
     tags: NestedFeedTagCreateInput
-  }
-  input FeedUpdateInput {
-    id: Int
-    url: String
-    name: String
-    tags: NestedFeedTagUpdateInput
   }
   input NestedFeedTagCreateInput {
     create: [FeedTagCreateInput]
     connect: [FeedTagWhereUniqueInput]
   }
-  input NestedFeedTagUpdateInput {
-    create: [FeedTagCreateInput]
-    connect: [FeedTagWhereUniqueInput]
-    disconnect: [FeedTagWhereUniqueInput]
-  }
   input FeedTagCreateInput {
+    id: String
     name: String
   }
-  input BundleTagCreateInput {
+  input FeedTagWhereUniqueInput {
+    id: String
     name: String
   }
+
   input BundleCreateInput {
+    id: String
     name: String
     description: String
     tags: NestedBundleTagCreateInput
     feeds: NestedBundleFeedCreateInput
   }
-  input BundleUpdateInput {
-    id: Int
-    name: String
-    description: String
-    tags: NestedBundleTagUpdateInput
-    feeds: NestedBundleFeedUpdateInput
-  }
   input NestedBundleTagCreateInput {
     create: [BundleTagCreateInput]
     connect: [BundleTagWhereUniqueInput]
   }
-  input NestedBundleTagUpdateInput {
-    create: [BundleTagCreateInput]
-    connect: [BundleTagWhereUniqueInput]
-    disconnect: [BundleTagWhereUniqueInput]
+  input BundleTagCreateInput {
+    id: String
+    name: String
+  }
+  input BundleTagWhereUniqueInput {
+    id: String
+    name: String
   }
   input NestedBundleFeedCreateInput {
     create: [FeedCreateInput]
     connect: [FeedWhereUniqueInput]
   }
-  input NestedBundleFeedUpdateInput {
-    create: [FeedCreateInput]
-    connect: [FeedWhereUniqueInput]
-    disconnect: [FeedWhereUniqueInput]
-  }
-  input FeedTagWhereUniqueInput {
-    id: Int
-    name: String
-  }
-  input BundleTagWhereUniqueInput {
-    id: Int
-    name: String
-  }
   input FeedWhereUniqueInput {
-    id: Int
+    id: String
     url: String
   }
-  input SavedArticleCreateInput {
-    feed: NestedFeedCreateInput
-    contents: JSON
-    url: String
-  }
-  input NestedFeedCreateInput {
-    connect: FeedWhereUniqueInput
-  }
-  input UserCreateInput {
-    auth0: String
-  }
+
   input LikeBundleInput {
-    bundleId: Int
+    bundleId: String
     likeState: Boolean
   }
   input LikeFeedInput {
-    feedId: Int
+    feedId: String
     likeState: Boolean
   }
+
   input FindFeedTagsInput {
     search: String
   }
@@ -147,44 +113,87 @@ export const typeDefs = gql`
   input FindFeedsInput {
     search: String
   }
-  input FeedInput {
-    id: Int
+
+  input FeedUpdateInput {
+    id: String
+    url: String
+    name: String
+    tags: NestedFeedTagUpdateInput
   }
-  input BundleInput {
-    id: Int
+  input NestedFeedTagUpdateInput {
+    create: [FeedTagCreateInput]
+    connect: [FeedTagWhereUniqueInput]
+    disconnect: [FeedTagWhereUniqueInput]
+  }
+  input BundleUpdateInput {
+    id: String
+    name: String
+    description: String
+    tags: NestedBundleTagUpdateInput
+    feeds: NestedBundleFeedUpdateInput
+  }
+  input NestedBundleTagUpdateInput {
+    create: [BundleTagCreateInput]
+    connect: [BundleTagWhereUniqueInput]
+    disconnect: [BundleTagWhereUniqueInput]
+  }
+  input NestedBundleFeedUpdateInput {
+    create: [FeedCreateInput]
+    connect: [FeedWhereUniqueInput]
+    disconnect: [FeedWhereUniqueInput]
+  }
+
+  scalar JSON
+  type SavedArticle {
+    id: String
+    author: User
+    url: String
+    contents: JSON
+    feed: Feed
   }
   input SavedArticleInput {
     url: String
   }
+  input SavedArticleCreateInput {
+    id: String
+    feed: NestedFeedCreateInput
+    contents: JSON
+    url: String
+  }
+  input NestedFeedCreateInput {
+    connect: FeedWhereUniqueInput
+  }
+
   input DeleteSavedArticleInput {
-    id: Int
+    id: String
   }
 
   type Query {
+    hello: String
     feed(data: FeedInput): Feed
     bundle(data: BundleInput): Bundle
-    savedArticle(data: SavedArticleInput): SavedArticle
     feeds: [Feed]
     bundles: [Bundle]
-    savedArticles: [SavedArticle]
-    me: [User]
     feedTags: [FeedTag]
     bundleTags: [BundleTag]
     findFeedTags(data: FindFeedTagsInput): [FeedTag]
     findBundleTags(data: FindBundleTagsInput): [BundleTag]
     findFeeds(data: FindFeedsInput): [Feed]
+    savedArticle(data: SavedArticleInput): SavedArticle
+    savedArticles: [SavedArticle]
+    me: User
   }
   type Mutation {
+    clearAll: String
     createFeed(data: FeedCreateInput): Feed
     createBundle(data: BundleCreateInput): Bundle
-    createSavedArticle(data: SavedArticleCreateInput): SavedArticle
-    createUser(data: UserCreateInput): User
     likeBundle(data: LikeBundleInput): Bundle
     likeFeed(data: LikeFeedInput): Feed
+    updateBundle(data: BundleUpdateInput): Bundle
+    updateFeed(data: FeedUpdateInput): Feed
+    createSavedArticle(data: SavedArticleCreateInput): SavedArticle
     deleteBundle(data: BundleInput): Bundle
     deleteFeed(data: FeedInput): Feed
     deleteSavedArticle(data: DeleteSavedArticleInput): SavedArticle
-    updateBundle(data: BundleUpdateInput): Bundle
-    updateFeed(data: FeedUpdateInput): Feed
   }
 `;

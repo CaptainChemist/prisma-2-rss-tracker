@@ -17,15 +17,13 @@ export const Nav = () => {
         </li>
       </div>
       <div className="col-span-3 flex justify-end">
-        {user? 
-        (
+        {user ? (
           <li className="sm:mr-6">
-          <Link href="/saved-articles">
-            <a className="p-2 text-center block hover:blue-700 text-blue-500">Saved Articles</a>
-          </Link>
-        </li>
-        )
-        :null}
+            <Link href="/saved-articles">
+              <a className="p-2 text-center block hover:blue-700 text-blue-500">Saved Articles</a>
+            </Link>
+          </li>
+        ) : null}
         <li className="sm:mr-6">
           <Link href="/bundles">
             <a className="p-2 text-center block hover:blue-700 text-blue-500">Bundles</a>

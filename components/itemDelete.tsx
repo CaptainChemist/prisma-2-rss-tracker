@@ -8,8 +8,9 @@ import { Delete, Spin } from './svg';
 
 export const ItemDelete = ({ item, type }: { item: FeedObject | BundleObject; type: ItemType }) => {
   const isFeed = type === ItemType.FeedType;
-  const [deleteItemMutation, { loading: deleteItemLoading }] = useMutation(isFeed ? DELETE_FEED_MUTATION : DELETE_BUNDLE_MUTATION);
+  const __typename = isFeed ? 'Feed' : 'Bundle';
   const [modalVisibility, setVisibility] = useState(false);
+  const [deleteItemMutation, { loading: deleteItemLoading }] = useMutation(isFeed ? DELETE_FEED_MUTATION : DELETE_BUNDLE_MUTATION);
   const { user, loading } = useFetchUser();
 
   return (
@@ -38,6 +39,13 @@ export const ItemDelete = ({ item, type }: { item: FeedObject | BundleObject; ty
                           variables: {
                             data: {
                               id: item.id,
+                            },
+                          },
+                          optimisticResponse: {
+                            __typename: 'Mutation',
+                            [`delete${__typename}`]: {
+                              id: item.id,
+                              __typename,
                             },
                           },
                           update: (store, { data: { deleteFeed, deleteBundle } }) => {
@@ -85,7 +93,7 @@ export const ItemDelete = ({ item, type }: { item: FeedObject | BundleObject; ty
         }}
         className="flex col-span-1 py-2 px-1 z-10"
       >
-        {deleteItemLoading || loading ? (
+        {deleteItemLoading || loading || !user ? (
           <Spin className="h-6 w-6 text-gray-500 animate-spin" />
         ) : (
           <Delete className="h-6 w-6 text-red-500" />

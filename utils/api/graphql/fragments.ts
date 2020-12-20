@@ -79,8 +79,7 @@ export const SAVED_ARTICLE_FRAGMENT = gql`
     feed {
       ...FeedFragment
     }
-
   }
   ${AUTHOR_FRAGMENT}
   ${FEED_FRAGMENT}
-`
+`;

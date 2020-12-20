@@ -1,42 +1,47 @@
 import { Feed } from '@prisma/client';
 
-export enum ActionType {
-  ADD = 'ADD',
-  CREATE = 'CREATE',
-  NONE = 'NONE',
-}
-
-export enum TagType {
-  FeedTag = 'FeedTag',
-  BundleTag = 'BundleTag',
-}
-
 export enum ItemType {
   BundleType = 'BundleType',
   FeedType = 'FeedType',
 }
 
-export enum SearchType {
-  FeedTag = 'FeedTag',
-  BundleTag = 'BundleTag',
-  FeedType = 'FeedType',
-}
+export type FeedObject = {
+  id: string;
+  name: string;
+  url: string;
+  tags: TagObject[];
+  bundles: BundleObject[];
+  author: AuthorObject;
+  likes: AuthorObject[];
+};
 
-export enum SearchQueryName {
-  findFeedTags = 'findFeedTags',
-  findBundleTags = 'findBundleTags',
-  findFeeds = 'findFeeds',
-}
+export type BundleObject = {
+  id: string;
+  name: string;
+  description: string;
+  tags: TagObject[];
+  feeds: FeedObject[];
+  author: AuthorObject;
+  likes: AuthorObject[];
+};
 
-export enum BadgeFieldName {
-  tags = 'tags',
-  feeds = 'feeds',
-  bundles = 'bundles',
-}
+export type AuthorObject = {
+  id: string;
+  auth0: string;
+  picture: string;
+  nickname: string;
+};
 
 export type TagObject = {
   name: string;
-  id: number;
+  id: string;
+};
+
+export type SelectedFeedState = {
+  id: string;
+  feeds: Feed[];
+  editMode: boolean;
+  newMode: boolean;
 };
 
 export type BundleState = {
@@ -53,38 +58,22 @@ export type FeedState = {
   tags: TagObject[];
 };
 
-export type AuthorObject = {
-  id: string;
-  auth0: string;
-  picture: string;
-  nickname: string;
-};
+export enum BadgeFieldName {
+  tags = 'tags',
+  feeds = 'feeds',
+  bundles = 'bundles',
+}
 
-export type FeedObject = {
-  id: number;
-  name: string;
-  url: string;
-  tags: TagObject[];
-  bundles: BundleObject[];
-  author: AuthorObject;
-  likes: AuthorObject[];
-};
-
-export type BundleObject = {
-  id: number;
-  name: string;
-  description: string;
-  tags: TagObject[];
-  feeds: FeedObject[];
-  author: AuthorObject;
-  likes: AuthorObject[];
-};
-
-export type SelectedFeedState = {
-  id: number;
-  feeds: Feed[];
-  editMode: boolean;
-  newMode: boolean;
-};
+export enum ActionType {
+  ADD = 'ADD',
+  CREATE = 'CREATE',
+  NONE = 'NONE',
+}
 
 export type NewItemState = FeedState | BundleState;
+
+export enum SearchQueryName {
+  findFeedTags = 'findFeedTags',
+  findBundleTags = 'findBundleTags',
+  findFeeds = 'findFeeds',
+}

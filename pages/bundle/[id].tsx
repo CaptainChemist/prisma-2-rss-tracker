@@ -1,14 +1,14 @@
 import { useQuery } from '@apollo/client';
-import { GenerateArticleList } from '../../components/generateArticleList';
 import { NotifyError } from '../../components/notifyError';
 import { Layout } from '../../components/layout';
 import { OneListItem } from '../../components/oneListItem';
 import { BUNDLE_QUERY } from '../../utils/api/graphql/queries';
 import { FeedObject, ItemType } from '../../utils/types';
 import { NotifyLoading } from '../../components/notifyLoading';
+import { GenerateArticleList } from '../../components/generateArticleList';
 
 const Bundle = ({ id }) => {
-  const { loading, error, data } = useQuery(BUNDLE_QUERY, { variables: { data: { id: parseInt(id) } } });
+  const { loading, error, data } = useQuery(BUNDLE_QUERY, { variables: { data: { id: id } } });
 
   if (loading) {
     return (

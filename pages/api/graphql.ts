@@ -1,11 +1,11 @@
 import { ApolloServer } from 'apollo-server-micro';
 import Cors from 'micro-cors';
-import { applyMiddleware } from 'graphql-middleware';
 import { makeExecutableSchema } from 'graphql-tools';
 
 import { context } from '../../utils/api/context';
 import { typeDefs } from '../../utils/api/typeDefs';
 import { resolvers } from '../../utils/api/resolvers';
+import { applyMiddleware } from 'graphql-middleware';
 import { permissions } from '../../utils/api/permissions';
 import { log } from '../../utils/api/log';
 

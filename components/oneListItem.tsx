@@ -1,13 +1,13 @@
-import { ProfilePic } from './profilePic';
 import Link from 'next/link';
-import { ItemLike } from './itemLike';
 import { ActionType, BadgeFieldName, BundleObject, FeedObject, ItemType, SelectedFeedState } from '../utils/types';
-import { ItemDelete } from './itemDelete';
 import { useFetchUser } from '../utils/user';
-import { BadgeList } from './badgeList';
 import { Dispatch, SetStateAction } from 'react';
-import { ItemEdit } from './itemEdit';
 import { DoubleArrowDown, DoubleArrowRight, WaitingClock } from './svg';
+import { BadgeList } from './badgeList';
+import { ProfilePic } from './profilePic';
+import { ItemEdit } from './itemEdit';
+import { ItemDelete } from './itemDelete';
+import { ItemLike } from './itemLike';
 
 export const OneListItem = ({
   item,
@@ -31,6 +31,7 @@ export const OneListItem = ({
   if (loading) {
     return <WaitingClock className="h-10 w-10 text-gray-500 m-auto" />;
   }
+
   const canManipulate = !loading && user && item.author.auth0 === user.sub && useSelected && allowEdits;
 
   return (

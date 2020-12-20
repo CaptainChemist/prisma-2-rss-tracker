@@ -1,66 +1,65 @@
-datasource db {
-  provider = "postgres"
-  url      = env("DATABASE_URL")
-}
-
 generator client {
   provider = "prisma-client-js"
 }
 
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
 model Feed {
-  id            Int            @id @default(autoincrement())
+  id            String         @id
   name          String
   url           String         @unique
-  bundles       Bundle[]
-  author        User?          @relation(name: "FeedAuthor", fields: [authorId], references: [id])
-  authorId      Int?
-  tags          FeedTag[]
-  likes         User[]         @relation(name: "FeedUserLikes")
+  authorId      String?
+  author        User?          @relation("FeedAuthor", fields: [authorId], references: [id])
   savedArticles SavedArticle[]
+  bundles       Bundle[]
+  tags          FeedTag[]
+  likes         User[]         @relation("FeedUserLikes")
 }
 
 model Bundle {
-  id          Int         @id @default(autoincrement())
-  feeds       Feed[]
+  id          String      @id
   name        String
   description String      @default("")
-  author      User?       @relation(name: "BundleAuthor", fields: [authorId], references: [id])
-  authorId    Int?
+  authorId    String?
+  author      User?       @relation("BundleAuthor", fields: [authorId], references: [id])
   tags        BundleTag[]
-  likes       User[]      @relation(name: "BundleUserLikes")
+  feeds       Feed[]
+  likes       User[]      @relation("BundleUserLikes")
 }
 
 model User {
-  id            Int            @id @default(autoincrement())
+  id            String         @id
   auth0         String         @unique
   nickname      String?
   picture       String?
   bundles       Bundle[]       @relation("BundleAuthor")
   feeds         Feed[]         @relation("FeedAuthor")
   savedArticles SavedArticle[]
-  feedLikes     Feed[]         @relation(name: "FeedUserLikes")
-  bundleLikes   Bundle[]       @relation(name: "BundleUserLikes")
-
+  bundleLikes   Bundle[]       @relation("BundleUserLikes")
+  feedLikes     Feed[]         @relation("FeedUserLikes")
 }
 
 model SavedArticle {
-  id       Int    @id @default(autoincrement())
-  author   User?  @relation(fields: [authorId], references: [id])
+  id       String  @id
   contents Json
   url      String
-  feed     Feed   @relation(fields: [feedId], references: [id])
-  authorId Int?
-  feedId   Int
+  authorId String?
+  feedId   String
+  author   User?   @relation(fields: [authorId], references: [id])
+  feed     Feed    @relation(fields: [feedId], references: [id])
 }
 
 model BundleTag {
-  id      Int      @id @default(autoincrement())
+  id      String   @id
   name    String   @unique
   bundles Bundle[]
 }
 
 model FeedTag {
-  id    Int    @id @default(autoincrement())
+  id    String @id
   name  String @unique
   feeds Feed[]
 }

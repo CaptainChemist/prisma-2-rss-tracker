@@ -1,5 +1,12 @@
 import { gql } from '@apollo/client';
-import { BUNDLE_FRAGMENT, BUNDLE_TAG_FRAGMENT, FEED_FRAGMENT, FEED_TAG_FRAGMENT, SAVED_ARTICLE_FRAGMENT } from './fragments';
+import {
+  AUTHOR_FRAGMENT,
+  BUNDLE_FRAGMENT,
+  BUNDLE_TAG_FRAGMENT,
+  FEED_FRAGMENT,
+  FEED_TAG_FRAGMENT,
+  SAVED_ARTICLE_FRAGMENT,
+} from './fragments';
 
 export const BUNDLES_QUERY = gql`
   query {
@@ -91,19 +98,28 @@ export const FIND_BUNDLE_TAGS_QUERY = gql`
 `;
 
 export const SAVED_ARTICLES_QUERY = gql`
-  query savedArticlesQuery { 
+  query savedArticlesQuery {
     savedArticles {
       ...SavedArticleFragment
     }
   }
   ${SAVED_ARTICLE_FRAGMENT}
-`
+`;
 
 export const SAVED_ARTICLE_QUERY = gql`
-  query savedArticlesQuery($data: SavedArticleInput) { 
+  query savedArticleQuery($data: SavedArticleInput) {
     savedArticle(data: $data) {
       ...SavedArticleFragment
     }
   }
   ${SAVED_ARTICLE_FRAGMENT}
-`
+`;
+
+export const ME_QUERY = gql`
+  query meQuery {
+    me {
+      ...AuthorFragment
+    }
+  }
+  ${AUTHOR_FRAGMENT}
+`;

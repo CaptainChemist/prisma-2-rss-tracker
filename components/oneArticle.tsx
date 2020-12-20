@@ -1,22 +1,24 @@
 import { useMutation, useQuery } from '@apollo/client';
 import { Feed } from '@prisma/client';
 import stripHtml from 'string-strip-html';
-import { CREATE_SAVED_ARTICLE_MUTATION, DELETE_SAVED_ARTICLE_MUTATION } from '../utils/api/graphql/mutations';
-import { SAVED_ARTICLES_QUERY, SAVED_ARTICLE_QUERY } from '../utils/api/graphql/queries';
-import { useFetchUser } from '../utils/user';
-import { Heart } from './heart';
+import { ME_QUERY, SAVED_ARTICLE_QUERY } from '../utils/api/graphql/queries';
 import * as _ from 'lodash';
-import { SingleArrowRight } from './svg';
+import { HeartOutline, SingleArrowRight } from './svg';
+import { useFetchUser } from '../utils/user';
+import { CREATE_SAVED_ARTICLE_MUTATION, DELETE_SAVED_ARTICLE_MUTATION } from '../utils/api/graphql/mutations';
+import { v4 as uuidv4 } from 'uuid';
+import { updateSavedArticleCache } from '../utils/update';
 
 export const OneArticle = ({ article, feed }: { article; feed: Feed }) => {
   const cleanedContent = stripHtml(article.content);
   const [createdSavedArticleMutation, { loading: createSavedArticleLoading }] = useMutation(CREATE_SAVED_ARTICLE_MUTATION);
   const [deleteSavedArticleMutation, { loading: deleteSavedArticleLoading }] = useMutation(DELETE_SAVED_ARTICLE_MUTATION);
   const { user, loading: userLoading } = useFetchUser();
+  const { data: meData, loading: userLoadingQuery } = useQuery(ME_QUERY);
 
   const variables = { data: { url: article.link } };
   const { loading: savedArticleLoading, error, data } = useQuery(SAVED_ARTICLE_QUERY, { variables });
-  const loading = createSavedArticleLoading || deleteSavedArticleLoading || savedArticleLoading || userLoading;
+  const loading = createSavedArticleLoading || deleteSavedArticleLoading || savedArticleLoading || userLoading || userLoadingQuery;
   const savedArticle = _.get(data, 'savedArticle');
 
   return (
@@ -26,59 +28,48 @@ export const OneArticle = ({ article, feed }: { article; feed: Feed }) => {
           e.stopPropagation();
           if (user && !loading) {
             if (savedArticle) {
+              const deletedSavedArticle = { data: { id: savedArticle.id } };
               deleteSavedArticleMutation({
-                variables: {
-                  data: {
-                    id: savedArticle.id,
-                  },
-                },
-                update: async (store, { data: { deleteSavedArticle } }) => {
-                  try {
-                    await store.writeQuery({
-                      query: SAVED_ARTICLE_QUERY,
-                      variables: { data: { url: _.get(deleteSavedArticle, 'url') } },
-                      data: { savedArticle: null },
-                    });
-                  } catch (e) {}
-
-                  try {
-                    const { savedArticles } = store.readQuery({ query: SAVED_ARTICLES_QUERY });
-                    await store.writeQuery({
-                      query: SAVED_ARTICLES_QUERY,
-                      data: { savedArticles: savedArticles.filter(o => o.id !== deleteSavedArticle.id) },
-                    });
-                  } catch (e) {}
+                variables: deletedSavedArticle,
+                update: updateSavedArticleCache('delete'),
+                optimisticResponse: () => {
+                  return {
+                    __typename: 'Mutation',
+                    ['deleteSavedArticle']: {
+                      ...deletedSavedArticle.data,
+                      __typename: 'SavedArticle',
+                    },
+                  };
                 },
               });
             } else {
-              createdSavedArticleMutation({
-                variables: {
-                  data: {
-                    url: article.link,
-                    contents: article,
-                    feed: {
-                      connect: {
-                        id: feed.id,
-                      },
+              const newSavedArticle = {
+                data: {
+                  id: uuidv4(),
+                  url: article.link,
+                  contents: article,
+                  feed: {
+                    connect: {
+                      id: feed.id,
                     },
                   },
                 },
-                update: async (store, { data: { createSavedArticle } }) => {
-                  try {
-                    await store.writeQuery({
-                      query: SAVED_ARTICLE_QUERY,
-                      variables: { data: { url: _.get(createSavedArticle, 'url') } },
-                      data: { savedArticle: createSavedArticle },
-                    });
-                  } catch (e) {}
+              };
+              createdSavedArticleMutation({
+                variables: newSavedArticle,
+                update: updateSavedArticleCache('create'),
+                optimisticResponse: () => {
+                  const user = _.get(meData, 'me');
 
-                  try {
-                    const { savedArticles } = store.readQuery({ query: SAVED_ARTICLES_QUERY });
-                    await store.writeQuery({
-                      query: SAVED_ARTICLES_QUERY,
-                      data: { savedArticles: [...savedArticles, createSavedArticle] },
-                    });
-                  } catch (e) {}
+                  return {
+                    __typename: 'Mutation',
+                    ['createSavedArticle']: {
+                      ...newSavedArticle.data,
+                      user,
+                      feed,
+                      __typename: 'SavedArticle',
+                    },
+                  };
                 },
               });
             }
@@ -86,7 +77,7 @@ export const OneArticle = ({ article, feed }: { article; feed: Feed }) => {
         }}
         className="col-span-1 flex items-center justify-center z-10 cursor-pointer"
       >
-        <Heart size={8} liked={!_.isNull(savedArticle)} loading={loading} />
+        <HeartOutline className={`h-8 w-8 ${!_.isNull(savedArticle) ? `text-red-500` : `text-gray-500`} inline-block align-middle`} />
       </div>
       <div className="col-span-10">
         <h4 className="font-bold">{article.title}</h4>

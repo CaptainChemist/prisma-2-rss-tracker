@@ -1,5 +1,6 @@
 import { useMutation, useQuery } from '@apollo/client';
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import * as _ from 'lodash';
 import {
   CREATE_BUNDLE_MUTATION,
   CREATE_FEED_MUTATION,
@@ -7,14 +8,14 @@ import {
   UPDATE_FEED_MUTATION,
 } from '../utils/api/graphql/mutations';
 import {
-  BUNDLES_QUERY,
   BUNDLE_QUERY,
-  FEEDS_QUERY,
   FEED_QUERY,
   FIND_BUNDLE_TAGS_QUERY,
   FIND_FEEDS_QUERY,
   FIND_FEED_TAGS_QUERY,
+  ME_QUERY,
 } from '../utils/api/graphql/queries';
+import { prepareNewUpdateObj } from '../utils/prepareUpdateObj';
 import {
   ActionType,
   BadgeFieldName,
@@ -25,12 +26,12 @@ import {
   SearchQueryName,
   SelectedFeedState,
 } from '../utils/types';
+import { BadgeList } from './badgeList';
 import { GenerateInputField } from './generateInputField';
 import { SearchItems } from './searchItems';
-import { BadgeList } from './badgeList';
-import { prepareNewUpdateObj } from '../utils/prepareUpdateObj';
 import { ErrorSign, WaitingClock } from './svg';
-import * as _ from 'lodash';
+import { optimisticCache } from '../utils/optimisticCache';
+import { updateCache } from '../utils/update';
 
 export const NewEditItem = ({
   type,
@@ -51,11 +52,13 @@ export const NewEditItem = ({
   const [createItemMutation, { loading: createLoading, error: createError }] = useMutation(
     isFeed ? CREATE_FEED_MUTATION : CREATE_BUNDLE_MUTATION
   );
+  const { data: meData, loading: meLoading, error: meError } = useQuery(ME_QUERY);
+
   const [updateItemMutation, { loading: updateLoading, error: updateError }] = useMutation(
     isFeed ? UPDATE_FEED_MUTATION : UPDATE_BUNDLE_MUTATION
   );
 
-  const variables = { data: { id: selected.id } };
+  const variables = { data: { id: selected.id ? selected.id : '' } };
   const { loading: itemQueryLoading, error: itemQueryError, data: itemQueryData } = useQuery(isFeed ? FEED_QUERY : BUNDLE_QUERY, {
     variables,
   });
@@ -88,28 +91,14 @@ export const NewEditItem = ({
           const data = prepareNewUpdateObj(item, currentItem, isFeed, selected.editMode);
 
           selected.editMode
-            ? updateItemMutation({ variables: { data } })
+            ? updateItemMutation({
+                variables: { data },
+                optimisticResponse: optimisticCache(isFeed, 'update', data, currentItem, meData),
+              })
             : createItemMutation({
                 variables: { data },
-                update: async (store, { data: { createFeed, createBundle } }) => {
-                  const createItem = isFeed ? createFeed : createBundle;
-                  try {
-                    await store.writeQuery({
-                      query: isFeed ? FEED_QUERY : BUNDLE_QUERY,
-                      variables: { data: { id: _.get(createItem, 'id') } },
-                      data: { [isFeed ? 'feed' : 'bundle']: createItem },
-                    });
-                  } catch (e) {}
-
-                  try {
-                    const { feeds, bundles } = store.readQuery({ query: isFeed ? FEEDS_QUERY : BUNDLES_QUERY });
-                    const currentItems = isFeed ? feeds : bundles;
-                    await store.writeQuery({
-                      query: isFeed ? FEEDS_QUERY : BUNDLES_QUERY,
-                      data: { [isFeed ? 'feeds' : 'bundles']: [...currentItems, createItem] },
-                    });
-                  } catch (e) {}
-                },
+                optimisticResponse: optimisticCache(isFeed, 'create', data, currentItem, meData),
+                update: updateCache(isFeed, 'create'),
               });
 
           setItem(initialState);

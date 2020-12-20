@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import fetch from "isomorphic-unfetch";
+import { useState, useEffect } from 'react';
+import fetch from 'isomorphic-unfetch';
 
 interface MyWindow extends Window {
   __user: any;
@@ -7,13 +7,13 @@ interface MyWindow extends Window {
 
 declare var window: MyWindow;
 
-export async function fetchUser(cookie = "") {
-  if (typeof window !== "undefined" && window.__user) {
+export async function fetchUser(cookie = '') {
+  if (typeof window !== 'undefined' && window.__user) {
     return window.__user;
   }
 
   const res = await fetch(
-    "/api/me",
+    '/api/me',
     cookie
       ? {
           headers: {
@@ -29,18 +29,16 @@ export async function fetchUser(cookie = "") {
   }
 
   const json = await res.json();
-  if (typeof window !== "undefined") {
+  if (typeof window !== 'undefined') {
     window.__user = json;
   }
   return json;
 }
 // @ts-ignore
 export function useFetchUser({ required } = {}) {
-  const [loading, setLoading] = useState(
-    () => !(typeof window !== "undefined" && window.__user)
-  );
+  const [loading, setLoading] = useState(() => !(typeof window !== 'undefined' && window.__user));
   const [user, setUser] = useState(() => {
-    if (typeof window === "undefined") {
+    if (typeof window === 'undefined') {
       return null;
     }
 
@@ -55,12 +53,12 @@ export function useFetchUser({ required } = {}) {
       setLoading(true);
       let isMounted = true;
 
-      fetchUser().then((user) => {
+      fetchUser().then(user => {
         // Only set the user if the component is still mounted
         if (isMounted) {
           // When the user is not logged in but login is required
           if (required && !user) {
-            window.location.href = "/api/login";
+            window.location.href = '/api/login';
             return;
           }
           setUser(user);

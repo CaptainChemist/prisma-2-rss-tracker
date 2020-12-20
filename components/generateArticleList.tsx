@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 import * as _ from 'lodash';
 import { Feed } from '@prisma/client';
-import { ArticleList } from './articleList';
 import { NotifyError } from './notifyError';
 import { NotifyLoading } from './notifyLoading';
+import { ArticleList } from './articleList';
 const Parser = require('rss-parser');
 const parser = new Parser();
 

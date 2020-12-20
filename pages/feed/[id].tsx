@@ -8,7 +8,7 @@ import { FEED_QUERY } from '../../utils/api/graphql/queries';
 import { BundleObject, ItemType } from '../../utils/types';
 
 const Feed = ({ id }) => {
-  const { loading, error, data } = useQuery(FEED_QUERY, { variables: { data: { id: parseInt(id) } } });
+  const { loading, error, data } = useQuery(FEED_QUERY, { variables: { data: { id: id } } });
 
   if (loading) {
     return (
