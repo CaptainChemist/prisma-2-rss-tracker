@@ -94,7 +94,6 @@ export const NewEditItem = ({
             ? updateItemMutation({
                 variables: { data },
                 optimisticResponse: optimisticCache(isFeed, 'update', data, currentItem, meData),
-                update: updateCache(isFeed, 'update'),
               })
             : createItemMutation({
                 variables: { data },

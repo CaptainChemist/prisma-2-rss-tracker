@@ -7,6 +7,7 @@ import { BadgeList } from './badgeList';
 import { ProfilePic } from './profilePic';
 import { ItemEdit } from './itemEdit';
 import { ItemDelete } from './itemDelete';
+import { ItemLike } from './itemLike';
 
 export const OneListItem = ({
   item,
@@ -46,6 +47,7 @@ export const OneListItem = ({
             {!isFeed ? <p>{item['description']}</p> : null}
           </div>
           <div className="col-span-2 flex justify-end">
+            <ItemLike item={item} type={type} />
             {canManipulate ? <ItemEdit item={item} type={type} selected={selected} setSelected={setSelected} /> : null}
             {canManipulate ? <ItemDelete item={item} type={type} /> : null}
           </div>
