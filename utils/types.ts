@@ -1,4 +1,4 @@
-import { Feed } from '@prisma/client';
+import { BundleTag, Feed, FeedTag, User } from '@prisma/client';
 
 export enum ItemType {
   BundleType = 'BundleType',
@@ -6,35 +6,23 @@ export enum ItemType {
 }
 
 export type FeedObject = {
-  id: string;
+  id?: string;
   name: string;
   url: string;
-  tags: TagObject[];
-  bundles: BundleObject[];
-  author: AuthorObject;
-  likes: AuthorObject[];
+  tags: FeedTag[];
+  bundles?: BundleObject[];
+  author?: User;
+  likes?: User[];
 };
 
 export type BundleObject = {
-  id: string;
+  id?: string;
   name: string;
   description: string;
-  tags: TagObject[];
+  tags: BundleTag[];
   feeds: FeedObject[];
-  author: AuthorObject;
-  likes: AuthorObject[];
-};
-
-export type AuthorObject = {
-  id: string;
-  auth0: string;
-  picture: string;
-  nickname: string;
-};
-
-export type TagObject = {
-  name: string;
-  id: string;
+  author?: User;
+  likes?: User[];
 };
 
 export type SelectedFeedState = {
@@ -42,20 +30,6 @@ export type SelectedFeedState = {
   feeds: Feed[];
   editMode: boolean;
   newMode: boolean;
-};
-
-export type BundleState = {
-  name: string;
-  description: string;
-  tags: TagObject[];
-  feeds: FeedState[];
-};
-
-export type FeedState = {
-  id?: number;
-  name: string;
-  url: string;
-  tags: TagObject[];
 };
 
 export enum BadgeFieldName {
@@ -70,7 +44,7 @@ export enum ActionType {
   NONE = 'NONE',
 }
 
-export type NewItemState = FeedState | BundleState;
+export type NewItemState = FeedObject | BundleObject;
 
 export enum SearchQueryName {
   findFeedTags = 'findFeedTags',

@@ -1,6 +1,6 @@
 import { BundleTag, FeedTag } from '@prisma/client';
 import { Dispatch, SetStateAction } from 'react';
-import { ActionType, BadgeFieldName, BundleState, FeedObject, FeedState } from '../utils/types';
+import { ActionType, BadgeFieldName, BundleObject, FeedObject } from '../utils/types';
 import { Minus, Plus } from './svg';
 
 export const OneBadge = ({
@@ -12,9 +12,9 @@ export const OneBadge = ({
 }: {
   item: FeedTag | BundleTag | FeedObject;
   action: ActionType;
-  currentItem?: FeedState | BundleState;
+  currentItem?: FeedObject | BundleObject;
   fieldName: BadgeFieldName;
-  setItem?: Dispatch<SetStateAction<FeedState | BundleState>>;
+  setItem?: Dispatch<SetStateAction<FeedObject | BundleObject>>;
 }) => {
   const color = fieldName === BadgeFieldName.tags ? `blue` : fieldName === BadgeFieldName.feeds ? `green` : `purple`;
   return (

@@ -19,8 +19,8 @@ import { prepareNewUpdateObj } from '../utils/prepareUpdateObj';
 import {
   ActionType,
   BadgeFieldName,
-  BundleState,
-  FeedState,
+  BundleObject,
+  FeedObject,
   ItemType,
   NewItemState,
   SearchQueryName,
@@ -43,8 +43,8 @@ export const NewEditItem = ({
   selected: SelectedFeedState;
 }) => {
   const isFeed = type === ItemType.FeedType;
-  const initialFeed: FeedState = { name: '', url: '', tags: [] };
-  const initialBundle: BundleState = { name: '', description: '', tags: [], feeds: [] };
+  const initialFeed: FeedObject = { name: '', url: '', tags: [] };
+  const initialBundle: BundleObject = { name: '', description: '', tags: [], feeds: [] };
   const initialState: NewItemState = isFeed ? initialFeed : initialBundle;
   const inputFields = isFeed ? ['name', 'url'] : ['name', 'description'];
 

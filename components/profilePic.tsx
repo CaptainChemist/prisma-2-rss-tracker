@@ -1,7 +1,7 @@
-import { AuthorObject } from '../utils/types';
+import { User } from '@prisma/client';
 import { Question } from './svg';
 
-export const ProfilePic = ({ author }: { author: AuthorObject }) => (
+export const ProfilePic = ({ author }: { author: User }) => (
   <>
     {author.picture ? (
       <div className="rounded-full">

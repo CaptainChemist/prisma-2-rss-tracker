@@ -1,7 +1,7 @@
 import { Dispatch, SetStateAction, useState } from 'react';
 import { DocumentNode, useLazyQuery } from '@apollo/client';
 import * as _ from 'lodash';
-import { ActionType, BadgeFieldName, BundleState, FeedState, SearchQueryName } from '../utils/types';
+import { ActionType, BadgeFieldName, BundleObject, FeedObject, SearchQueryName } from '../utils/types';
 import { BadgeList } from './badgeList';
 import { Search, Spin } from './svg';
 
@@ -12,8 +12,8 @@ export const SearchItems = ({
   query,
   fieldName,
 }: {
-  currentItem: FeedState | BundleState;
-  setItem: Dispatch<SetStateAction<FeedState | BundleState>>;
+  currentItem: FeedObject | BundleObject;
+  setItem: Dispatch<SetStateAction<FeedObject | BundleObject>>;
   queryName: SearchQueryName;
   query: DocumentNode;
   fieldName: BadgeFieldName;

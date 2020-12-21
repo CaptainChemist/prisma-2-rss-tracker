@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction } from 'react';
-import { BundleState, FeedState } from '../utils/types';
+import { BundleObject, FeedObject } from '../utils/types';
 
 export const GenerateInputField = ({
   currentItem,
@@ -7,8 +7,8 @@ export const GenerateInputField = ({
   changeHandler,
 }: {
   name: string;
-  currentItem: FeedState | BundleState;
-  changeHandler: Dispatch<SetStateAction<FeedState | BundleState>>;
+  currentItem: FeedObject | BundleObject;
+  changeHandler: Dispatch<SetStateAction<FeedObject | BundleObject>>;
 }) => (
   <div className="py-2">
     <label className="block py-2">{name.charAt(0).toUpperCase() + name.slice(1)}:</label>

@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction } from 'react';
-import { ActionType, BadgeFieldName, BundleState, FeedState } from '../utils/types';
+import { ActionType, BadgeFieldName, BundleObject, FeedObject } from '../utils/types';
 import { OneBadge } from './oneBadge';
 
 export const BadgeList = ({
@@ -10,8 +10,8 @@ export const BadgeList = ({
 }: {
   fieldName: BadgeFieldName;
   action: ActionType;
-  item: FeedState | BundleState;
-  setItem?: Dispatch<SetStateAction<FeedState | BundleState>>;
+  item: FeedObject | BundleObject;
+  setItem?: Dispatch<SetStateAction<FeedObject | BundleObject>>;
 }) => {
   return item[fieldName].length > 0 ? (
     <>
